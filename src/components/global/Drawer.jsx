@@ -1,7 +1,4 @@
-import {
-  Drawer as DrawerChakra,
-  Portal,
-} from "@chakra-ui/react";
+import { Drawer as DrawerChakra, Portal } from "@chakra-ui/react";
 
 /**
  * @typedef AddPropsDrawer

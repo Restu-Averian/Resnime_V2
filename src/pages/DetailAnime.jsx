@@ -1,44 +1,52 @@
 import { lazy, useEffect } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { Button, Stack } from "@chakra-ui/react";
+import { Button, Stack, Text } from "@chakra-ui/react";
 import useFetchData from "../hooks/useFetchData";
 import Loading from "../components/global/Loading";
 import useChangeDocTitle from "../hooks/useChangeDocTitle";
 import Box from "../components/global/Box";
+import ErrorPage from "../components/global/ErrorPage";
+import imageError from "../assets/image_error.png";
 
-const CoverAnime = lazy(() =>
-  import("../components/detail-anime/cover-anime/CoverAnime")
+const CoverAnime = lazy(
+  () => import("../components/detail-anime/cover-anime/CoverAnime"),
 );
-const CharacterAnime = lazy(() =>
-  import("../components/detail-anime/character-anime/CharacterAnime")
+const CharacterAnime = lazy(
+  () => import("../components/detail-anime/character-anime/CharacterAnime"),
 );
-const DescriptionAnime = lazy(() =>
-  import("../components/detail-anime/description-anime/DescriptionAnime")
+const DescriptionAnime = lazy(
+  () => import("../components/detail-anime/description-anime/DescriptionAnime"),
 );
-const EpisodesAnime = lazy(() =>
-  import("../components/detail-anime/episodes-anime/EpisodesAnime")
+const EpisodesAnime = lazy(
+  () => import("../components/detail-anime/episodes-anime/EpisodesAnime"),
 );
-const RecommendationAnime = lazy(() =>
-  import("../components/detail-anime/recommendation-anime/RecommendationAnime")
+const RecommendationAnime = lazy(
+  () =>
+    import("../components/detail-anime/recommendation-anime/RecommendationAnime"),
 );
-const RelationsAnime = lazy(() =>
-  import("../components/detail-anime/relations-anime/RelationsAnime")
+const RelationsAnime = lazy(
+  () => import("../components/detail-anime/relations-anime/RelationsAnime"),
 );
-const TitleAnime = lazy(() =>
-  import("../components/detail-anime/title-anime/TitleAnime")
+const TitleAnime = lazy(
+  () => import("../components/detail-anime/title-anime/TitleAnime"),
 );
 
 const DetailAnime = () => {
   const { id, anime_name } = useParams();
-  const { state } = useLocation();
+  const { pathname, state } = useLocation();
 
-  const { data: detailData, loading } = useFetchData(`/info/${id}`);
+  const {
+    data: detailData,
+    loading,
+    error,
+    refetch,
+  } = useFetchData(`/anime/${id}`);
 
   useChangeDocTitle(`Resnime | ${decodeURI(anime_name)}`);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [location.pathname]);
+  }, [pathname]);
 
   return (
     <Stack direction="column" spacing={10}>
@@ -50,24 +58,40 @@ const DetailAnime = () => {
         </Link>
       )}
 
-      <Box useSuspense height={480}>
-        <CoverAnime src={detailData?.image} srcBg={detailData?.cover} />
-      </Box>
-
-      <Box useSuspense>
-        <TitleAnime data={detailData} />
-      </Box>
-
-      {loading ? (
+      {error ? (
+        <ErrorPage
+          btnAction={{
+            onClick: refetch,
+            text: "Refresh",
+          }}
+          title="Error"
+          subTitle={error}
+          src={imageError}
+        />
+      ) : loading ? (
         <Loading />
       ) : (
         <>
+          <Box useSuspense height={480}>
+            <CoverAnime src={detailData?.image} srcBg={detailData?.cover} />
+          </Box>
+
+          <Box useSuspense>
+            <TitleAnime data={detailData} />
+          </Box>
+
           <Box useSuspense>
             <DescriptionAnime data={detailData} />
           </Box>
 
           <Box showIf={detailData?.episodes?.length > 0} useSuspense>
             <EpisodesAnime data={detailData} />
+          </Box>
+
+          <Box showIf={detailData?.id && !detailData?.episodes?.length}>
+            <Text textAlign="center">
+              Episode information is currently unavailable.
+            </Text>
           </Box>
 
           <Box showIf={detailData?.relations?.length > 0} useSuspense>

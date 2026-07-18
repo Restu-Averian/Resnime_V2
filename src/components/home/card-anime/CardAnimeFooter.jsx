@@ -1,10 +1,4 @@
-import {
-  IconButton,
-  SimpleGrid,
-  Stack,
-  Tag,
-  Text,
-} from "@chakra-ui/react";
+import { IconButton, SimpleGrid, Stack, Tag, Text } from "@chakra-ui/react";
 import VideoIcon from "../../../assets/custom-icons/VideoIcon";
 import CardAnimeModal from "./CardAnimeModal";
 import { useState } from "react";

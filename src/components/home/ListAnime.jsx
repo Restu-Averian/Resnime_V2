@@ -25,7 +25,7 @@ const ListAnime = ({ titlePage, path, useExploreMore = false }) => {
   }, [page]);
 
   const { data, loading, error, refetch } = useFetchData(
-    `${path}${pageValue ? `?page=${pageValue}` : ""}`
+    `${path}${pageValue ? `?page=${pageValue}` : ""}`,
   );
 
   const arrDatas = useMemo(() => {
@@ -66,7 +66,7 @@ const ListAnime = ({ titlePage, path, useExploreMore = false }) => {
             },
             text: "Refresh",
           }}
-          title="Erorr"
+          title="Error"
           subTitle={error}
           src={imageError}
         />

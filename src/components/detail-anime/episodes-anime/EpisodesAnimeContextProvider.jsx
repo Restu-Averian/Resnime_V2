@@ -1,30 +1,19 @@
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import axios from "axios";
-import { BASE_API } from "../../../constants";
-import videoHLS from "../../../helpers/videoHLS";
+  ALLOWED_AUDIO_TYPES,
+  ALLOWED_STREAM_SERVERS,
+  buildStreamUrl,
+} from "../../../services/stream.js";
 
 /**
- * @typedef {Array} DataStreamState
- * @property {String} download
- * @property {[]} sources
- */
 /**
  * @typedef EpisodesAnimeContextData
  * @property {Object} data
- * @property {import("react").MutableRefObject<HTMLVideoElement>} videoRef
  * @property {(e:HTMLButtonElement,episodeId:Number)=>void} openModalVideo
  * @property {()=>void} closeModalVideo
  * @property {Boolean} isStreamOpen
  * @property {String} episodeValParam
- * @property {DataStreamState} dataStream
  *
  */
 
@@ -34,72 +23,90 @@ const EpisodesAnimeContext = createContext({});
 export const useEpisodeAnimeContext = () => useContext(EpisodesAnimeContext);
 
 const EpisodesAnimeContextProvider = ({ data, children }) => {
-  const navigate = useNavigate();
-
-  const videoRef = useRef();
-
   const [episodeParam, setEpisodeParam] = useSearchParams();
 
   const [isStreamOpen, setIsStreamOpen] = useState(false);
-  const [dataStream, setDataStream] = useState({
-    download: "",
-    sources: [],
-  });
+  const [audioType, setAudioType] = useState("sub");
+  const [server, setServer] = useState("hd-1");
+  const [streamError, setStreamError] = useState("");
 
   const episodeValParam = useMemo(() => {
     return episodeParam?.get("episode");
   }, [episodeParam]);
 
-  const getStreamLink = () => {
-    axios.get(`${BASE_API}/watch/${episodeValParam}`)?.then(({ data }) => {
-      if (data) {
-        videoHLS({
-          refCurrent: videoRef?.current,
-          srcVideo: data?.sources[0]?.url,
-        });
-        setDataStream((prev) => ({
-          ...prev,
-          download: data?.download,
-          sources: data?.sources,
-        }));
-      }
-    });
-  };
+  const selectedEpisode = useMemo(() => {
+    return data?.episodes?.find((episode) => episode?.id === episodeValParam);
+  }, [data, episodeValParam]);
+
+  const streamState = useMemo(() => {
+    if (!selectedEpisode) return { error: "", url: "" };
+
+    try {
+      return {
+        error: "",
+        url: buildStreamUrl({
+          malId: data?.malId || data?.id,
+          episodeNumber: selectedEpisode?.number,
+          audioType,
+          server,
+        }),
+      };
+    } catch (error) {
+      return { error: error?.message, url: "" };
+    }
+  }, [audioType, data, selectedEpisode, server]);
 
   const openModalVideo = (e, episodeId) => {
     e?.preventDefault();
     setIsStreamOpen(true);
 
-    episodeParam?.set("episode", episodeId);
-    setEpisodeParam(episodeParam);
-
-    navigate(`?episode=${episodeId}`);
+    const nextParams = new URLSearchParams(episodeParam);
+    nextParams.set("episode", episodeId);
+    setEpisodeParam(nextParams);
   };
 
   const closeModalVideo = () => {
     setIsStreamOpen(false);
 
-    episodeParam.delete("episode");
-    setEpisodeParam(episodeParam);
+    const nextParams = new URLSearchParams(episodeParam);
+    nextParams.delete("episode");
+    setEpisodeParam(nextParams);
   };
 
   useEffect(() => {
     if (episodeValParam) {
       setIsStreamOpen(true);
-      getStreamLink();
     }
   }, [episodeValParam]);
+
+  useEffect(() => {
+    setAudioType("sub");
+    setServer("hd-1");
+    setStreamError("");
+  }, [episodeValParam]);
+
+  useEffect(() => {
+    setStreamError("");
+  }, [audioType, server]);
 
   return (
     <EpisodesAnimeContext.Provider
       value={{
         data,
-        videoRef,
         openModalVideo,
         closeModalVideo,
         isStreamOpen,
         episodeValParam,
-        dataStream,
+        selectedEpisode,
+        streamUrl: streamState.url,
+        audioType,
+        server,
+        streamError: streamError || streamState.error,
+        setAudioType,
+        setServer,
+        setStreamError,
+        audioOptions: ALLOWED_AUDIO_TYPES,
+        serverOptions: ALLOWED_STREAM_SERVERS,
       }}
     >
       {children}

@@ -1,7 +1,4 @@
-import {
-  Dialog,
-  Portal,
-} from "@chakra-ui/react";
+import { Dialog, Portal } from "@chakra-ui/react";
 
 /**
  * @typedef AddPropsModal

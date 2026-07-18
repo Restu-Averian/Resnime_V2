@@ -1,9 +1,4 @@
-import {
-  Box,
-  Input,
-  InputGroup,
-  Stack,
-} from "@chakra-ui/react";
+import { Box, Input, InputGroup, Stack } from "@chakra-ui/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { Search } from "lucide-react";

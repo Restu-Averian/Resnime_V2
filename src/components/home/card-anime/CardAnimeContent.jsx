@@ -26,10 +26,9 @@ const CardAnimeContent = ({ data }) => {
             {title}
           </Heading>
         </Tooltip>
-        <Text
-          dangerouslySetInnerHTML={{ __html: data?.description }}
-          className={`description ${sm && "mobile"}`}
-        />
+        <Text className={`description ${sm && "mobile"}`} whiteSpace="pre-line">
+          {data?.description}
+        </Text>
       </Stack>
     </Stack>
   );

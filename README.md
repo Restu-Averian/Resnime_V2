@@ -1,27 +1,22 @@
 # API Used
 
-## 1. List Anime
+## 1. Anime Metadata
 
-- Trending
-  `https://march-api1.vercel.app/meta/anilist/trending?provider=gogoanime`
-- Popular
-  `https://march-api1.vercel.app/meta/anilist/popular?provider=gogoanime&perPage=20`
+Resnime uses Jikan REST API v4 for anime metadata.
 
-        a. Card
-        b. Text
+- Search: `/anime?q={query}&page={page}&limit={limit}&sfw=true`
+- Trending: `/seasons/now?page={page}&limit={limit}&sfw=true`
+- Popular: `/top/anime?filter=bypopularity&page={page}&limit={limit}`
+- Upcoming: `/seasons/upcoming?page={page}&limit={limit}&sfw=true`
+- Detail: `/anime/{malId}/full`
+- Episodes: `/anime/{malId}/episodes?page=1`
 
-## 2. Detail Anime && Recommendation
+Required environment variables are listed in `.env.example`.
 
-`https://march-api1.vercel.app/meta/anilist/info/20954?fetchFiller=true&dub=false`
+## 2. Streaming
 
-        a. Card
-        b. Text
-        c. Carousel (recommendation)
+Episode playback uses the 4Animo iframe provider:
 
-### 2.1 Streaming Anime
+`/embed/{server}/mal/{malId}/{episodeNumber}/{audioType}?k=1`
 
-`https://march-api1.vercel.app/meta/anilist/watch/koe-no-katachi-movie-episode-1?provider=gogoanime`
-
-        a. Card
-        b. Text
-        c. Library Video
+Direct download URLs are unavailable with the iframe provider.

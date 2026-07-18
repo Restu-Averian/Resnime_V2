@@ -1,6 +1,12 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { BASE_API } from "../constants";
+import { useCallback, useEffect, useState } from "react";
+import { getAnimeByPath } from "../services/animeService";
+
+const searchDebounceMs = 500;
+
+const isSearchPath = (path) =>
+  !["/trending", "/popular", "/upcoming"].some((item) =>
+    path?.startsWith(item),
+  ) && !path?.startsWith("/anime/");
 
 const useFetchData = (path) => {
   const [state, setState] = useState({
@@ -9,59 +15,57 @@ const useFetchData = (path) => {
     error: "",
   });
 
-  const refetch = () => {
-    setState((prev) => ({
-      ...prev,
-      error: "",
-    }));
-    getData();
-  };
+  const getData = useCallback(
+    async (signal) => {
+      setState((prev) => ({
+        ...prev,
+        data: [],
+        error: "",
+        loading: true,
+      }));
 
-  const getData = async () => {
-    setState((prev) => ({
-      ...prev,
-      loading: true,
-    }));
-    axios
-      .get(`${BASE_API}${path}`)
-      ?.then(({ data }) => {
-        if (data) {
+      try {
+        const data = await getAnimeByPath(path, signal);
+        setState((prev) => ({
+          ...prev,
+          data,
+        }));
+      } catch (e) {
+        if (!e?.cancelled) {
           setState((prev) => ({
             ...prev,
-            data,
+            error: e?.message,
           }));
         }
-      })
-      ?.catch((e) => {
-        setState((prev) => ({
-          ...prev,
-          error: e?.message,
-        }));
-      })
-      ?.finally(() => {
-        setState((prev) => ({
-          ...prev,
-          loading: false,
-        }));
-      });
-  };
+      } finally {
+        if (!signal?.aborted) {
+          setState((prev) => ({
+            ...prev,
+            loading: false,
+          }));
+        }
+      }
+    },
+    [path],
+  );
 
-  const clearState = () => {
-    setState((prev) => ({
-      ...prev,
-      data: [],
-      error: "",
-      loading: false,
-    }));
+  const refetch = () => {
+    const controller = new AbortController();
+    getData(controller.signal);
   };
 
   useEffect(() => {
-    getData();
+    const controller = new AbortController();
+    const timeoutId = setTimeout(
+      () => getData(controller.signal),
+      isSearchPath(path) ? searchDebounceMs : 0,
+    );
 
     return () => {
-      clearState();
+      clearTimeout(timeoutId);
+      controller.abort();
     };
-  }, [path]);
+  }, [getData, path]);
 
   return { ...state, refetch };
 };

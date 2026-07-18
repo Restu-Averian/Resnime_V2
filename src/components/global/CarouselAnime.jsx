@@ -20,7 +20,7 @@ const CarouselAnime = ({ arrDatas, customChildren }) => {
     const tempData = [];
     arrDatas?.forEach((_, idx) => {
       tempData?.push(
-        arrDatas?.slice(idx * dataPerSlide, (idx + 1) * dataPerSlide)
+        arrDatas?.slice(idx * dataPerSlide, (idx + 1) * dataPerSlide),
       );
     });
 
@@ -35,6 +35,7 @@ const CarouselAnime = ({ arrDatas, customChildren }) => {
       swipeable
       autoPlay
       showStatus={false}
+      showThumbs={false}
     >
       {dataCarousel?.map((carData) => {
         return (

@@ -1,9 +1,4 @@
-import {
-  Button,
-  Dialog,
-  Portal,
-  Stack,
-} from "@chakra-ui/react";
+import { Button, Dialog, Portal, Stack } from "@chakra-ui/react";
 
 /**
  * @typedef AddPropsAlertDialog
@@ -41,32 +36,30 @@ const AlertDialog = ({
         <Dialog.Backdrop />
         <Dialog.Positioner>
           <Dialog.Content>
-          <Dialog.Header {...headerProps}>{header}</Dialog.Header>
-          <Dialog.Body>
-            {children || "Are you sure to close ?"}
-          </Dialog.Body>
-          <Dialog.Footer>
-            {footer || (
-              <Stack justifyContent="end" direction="row">
-                <Button
-                  onClick={() => {
-                    onCancel?.();
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  colorPalette="teal"
-                  onClick={() => {
-                    onOk?.();
-                    onCancel?.();
-                  }}
-                >
-                  Ok
-                </Button>
-              </Stack>
-            )}
-          </Dialog.Footer>
+            <Dialog.Header {...headerProps}>{header}</Dialog.Header>
+            <Dialog.Body>{children || "Are you sure to close ?"}</Dialog.Body>
+            <Dialog.Footer>
+              {footer || (
+                <Stack justifyContent="end" direction="row">
+                  <Button
+                    onClick={() => {
+                      onCancel?.();
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    colorPalette="teal"
+                    onClick={() => {
+                      onOk?.();
+                      onCancel?.();
+                    }}
+                  >
+                    Ok
+                  </Button>
+                </Stack>
+              )}
+            </Dialog.Footer>
           </Dialog.Content>
         </Dialog.Positioner>
       </Portal>

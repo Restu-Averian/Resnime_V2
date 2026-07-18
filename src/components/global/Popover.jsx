@@ -1,7 +1,4 @@
-import {
-  Popover as PopoverChakra,
-  Portal,
-} from "@chakra-ui/react";
+import { Popover as PopoverChakra, Portal } from "@chakra-ui/react";
 
 /**
  * @typedef AddPropsPopover
