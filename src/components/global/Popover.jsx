@@ -1,9 +1,6 @@
 import {
-  PopoverTrigger,
   Popover as PopoverChakra,
-  PopoverContent,
-  PopoverArrow,
-  PopoverBody,
+  Portal,
 } from "@chakra-ui/react";
 
 /**
@@ -19,14 +16,21 @@ import {
  */
 const Popover = ({ content, useArrow = true, children }) => {
   return (
-    <PopoverChakra>
-      <PopoverTrigger>{children}</PopoverTrigger>
-
-      <PopoverContent>
-        <PopoverBody>{content}</PopoverBody>
-        {useArrow && <PopoverArrow />}
-      </PopoverContent>
-    </PopoverChakra>
+    <PopoverChakra.Root>
+      <PopoverChakra.Trigger asChild>{children}</PopoverChakra.Trigger>
+      <Portal>
+        <PopoverChakra.Positioner>
+          <PopoverChakra.Content>
+            <PopoverChakra.Body>{content}</PopoverChakra.Body>
+            {useArrow && (
+              <PopoverChakra.Arrow>
+                <PopoverChakra.ArrowTip />
+              </PopoverChakra.Arrow>
+            )}
+          </PopoverChakra.Content>
+        </PopoverChakra.Positioner>
+      </Portal>
+    </PopoverChakra.Root>
   );
 };
 export default Popover;

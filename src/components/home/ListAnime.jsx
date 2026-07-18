@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import useFetchData from "../../hooks/useFetchData";
 import Loading from "../global/Loading";
 import PaginationListAnime from "./PaginationListAnime";
-import { ArrowForwardIcon } from "@chakra-ui/icons";
+import { ArrowRight } from "lucide-react";
 import HomeIcon from "../../assets/custom-icons/HomeIcon";
 import CardAnime from "./card-anime/CardAnime";
 import useResponsive from "../../hooks/useResponsive";
@@ -47,11 +47,12 @@ const ListAnime = ({ titlePage, path, useExploreMore = false }) => {
         {!useExploreMore && (
           <IconButton
             borderRadius={"full"}
-            icon={<HomeIcon />}
-            colorScheme="teal"
+            colorPalette="teal"
             variant="outline"
             onClick={() => navigate("/")}
-          />
+          >
+            <HomeIcon />
+          </IconButton>
         )}
         <Text as="h2" fontSize={sm ? "2xl" : "4xl"} fontWeight="bold">
           {titlePage}
@@ -85,7 +86,7 @@ const ListAnime = ({ titlePage, path, useExploreMore = false }) => {
                     {useExploreMore && (
                       <IconButton
                         onClick={() => navigate(path)}
-                        colorScheme="teal"
+                        colorPalette="teal"
                         aria-label="More Explore"
                         size="lg"
                         variant="outline"
@@ -94,8 +95,9 @@ const ListAnime = ({ titlePage, path, useExploreMore = false }) => {
                         height={100}
                         fontSize={36}
                         margin="auto"
-                        icon={<ArrowForwardIcon />}
-                      />
+                      >
+                        <ArrowRight />
+                      </IconButton>
                     )}
                   </SimpleGrid>
                   <div>

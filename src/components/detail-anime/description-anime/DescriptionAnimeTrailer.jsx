@@ -10,7 +10,7 @@ const DescriptionAnimeTrailer = ({ data }) => {
         src={`https://www.youtube.com/embed/${data?.trailer?.id}`}
         title={data?.title?.romaji}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen
+        allowFullScreen
       />
     </CardData>
   );

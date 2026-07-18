@@ -1,11 +1,7 @@
 import {
-  AlertDialogBody,
-  AlertDialog as AlertDialogChakra,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
   Button,
+  Dialog,
+  Portal,
   Stack,
 } from "@chakra-ui/react";
 
@@ -29,49 +25,52 @@ const AlertDialog = ({
   onCancel,
   children,
   footer,
+  isOpen,
   ...props
 }) => {
   return (
-    <AlertDialogChakra
+    <Dialog.Root
       {...props}
-      onOverlayClick={() => {
-        onCancel();
-      }}
-      onEsc={() => {
-        onCancel();
+      role="alertdialog"
+      open={isOpen}
+      onOpenChange={({ open }) => {
+        if (!open) onCancel?.();
       }}
     >
-      <AlertDialogOverlay>
-        <AlertDialogContent>
-          <AlertDialogHeader {...headerProps}>{header}</AlertDialogHeader>
-          <AlertDialogBody>
+      <Portal>
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content>
+          <Dialog.Header {...headerProps}>{header}</Dialog.Header>
+          <Dialog.Body>
             {children || "Are you sure to close ?"}
-          </AlertDialogBody>
-          <AlertDialogFooter>
+          </Dialog.Body>
+          <Dialog.Footer>
             {footer || (
               <Stack justifyContent="end" direction="row">
                 <Button
                   onClick={() => {
-                    onCancel();
+                    onCancel?.();
                   }}
                 >
                   Cancel
                 </Button>
                 <Button
-                  colorScheme="teal"
+                  colorPalette="teal"
                   onClick={() => {
-                    onOk();
-                    onCancel();
+                    onOk?.();
+                    onCancel?.();
                   }}
                 >
                   Ok
                 </Button>
               </Stack>
             )}
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialogOverlay>
-    </AlertDialogChakra>
+          </Dialog.Footer>
+          </Dialog.Content>
+        </Dialog.Positioner>
+      </Portal>
+    </Dialog.Root>
   );
 };
 export default AlertDialog;

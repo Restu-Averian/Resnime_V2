@@ -1,4 +1,4 @@
-import { Card, CardBody, CardFooter, CardHeader } from "@chakra-ui/react";
+import { Card } from "@chakra-ui/react";
 import useResponsive from "../../hooks/useResponsive";
 import "../../style/card.css";
 
@@ -20,20 +20,20 @@ const CardData = ({
   const { sm } = useResponsive();
 
   return (
-    <Card
+    <Card.Root
       {...(!useDefault && {
         className: "_card",
       })}
       {...props}
     >
-      {header && <CardHeader>{header}</CardHeader>}
-      <CardBody>{children}</CardBody>
+      {header && <Card.Header>{header}</Card.Header>}
+      <Card.Body>{children}</Card.Body>
       {footer && (
-        <CardFooter {...(!sm && { py: "var(--chakra-space-5)" })} px={0}>
+        <Card.Footer {...(!sm && { py: "var(--chakra-space-5)" })} px={0}>
           {footer}
-        </CardFooter>
+        </Card.Footer>
       )}
-    </Card>
+    </Card.Root>
   );
 };
 export default CardData;

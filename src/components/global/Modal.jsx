@@ -1,11 +1,6 @@
 import {
-  ModalBody,
-  Modal as ModalChakra,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
+  Dialog,
+  Portal,
 } from "@chakra-ui/react";
 
 /**
@@ -25,20 +20,33 @@ const Modal = ({
   footer,
   showCancelButton = true,
   children,
+  isOpen,
+  onClose,
   ...props
 }) => {
   return (
-    <ModalChakra isCentered {...props}>
-      <ModalOverlay />
-      <ModalContent>
-        {header && <ModalHeader>{header}</ModalHeader>}
-        {showCancelButton && (
-          <ModalCloseButton fontSize={20} mt={18} mr={2} zIndex={999} />
-        )}
-        <ModalBody>{children}</ModalBody>
-        {footer && <ModalFooter>{footer}</ModalFooter>}
-      </ModalContent>
-    </ModalChakra>
+    <Dialog.Root
+      placement="center"
+      open={isOpen}
+      onOpenChange={({ open }) => {
+        if (!open) onClose?.();
+      }}
+      {...props}
+    >
+      <Portal>
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content>
+            {header && <Dialog.Header>{header}</Dialog.Header>}
+            {showCancelButton && (
+              <Dialog.CloseTrigger fontSize={20} mt={18} mr={2} zIndex={999} />
+            )}
+            <Dialog.Body>{children}</Dialog.Body>
+            {footer && <Dialog.Footer>{footer}</Dialog.Footer>}
+          </Dialog.Content>
+        </Dialog.Positioner>
+      </Portal>
+    </Dialog.Root>
   );
 };
 export default Modal;

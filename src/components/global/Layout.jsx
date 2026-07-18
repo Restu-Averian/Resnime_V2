@@ -2,12 +2,11 @@ import {
   Box,
   Input,
   InputGroup,
-  InputLeftElement,
   Stack,
 } from "@chakra-ui/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState } from "react";
-import { SearchIcon } from "@chakra-ui/icons";
+import { Search } from "lucide-react";
 import Image from "./Image";
 
 const Layout = ({ children }) => {
@@ -39,12 +38,10 @@ const Layout = ({ children }) => {
             <Image src="/icon.png" boxSize={20} />
           </Box>
           <Box style={{ width: "100%" }}>
-            <InputGroup>
-              <InputLeftElement>
-                <SearchIcon />
-              </InputLeftElement>
+            <InputGroup startElement={<Search size={18} />}>
               <Input
                 type="search"
+                ps={10}
                 onChange={({ target: { value } }) => {
                   setSearch(value);
                 }}

@@ -4,12 +4,12 @@ import {
   Stack,
   Tag,
   Text,
-  Tooltip,
 } from "@chakra-ui/react";
 import VideoIcon from "../../../assets/custom-icons/VideoIcon";
 import CardAnimeModal from "./CardAnimeModal";
 import { useState } from "react";
 import useResponsive from "../../../hooks/useResponsive";
+import { Tooltip } from "../../ui/tooltip";
 
 const CardAnimeFooter = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,7 +26,9 @@ const CardAnimeFooter = ({ data }) => {
     >
       <SimpleGrid columns={3} spacing={5}>
         {data?.genres?.map((genre, idx) => (
-          <Tag key={idx}>{genre}</Tag>
+          <Tag.Root key={idx}>
+            <Tag.Label>{genre}</Tag.Label>
+          </Tag.Root>
         ))}
       </SimpleGrid>
 
@@ -37,12 +39,11 @@ const CardAnimeFooter = ({ data }) => {
       </Stack>
 
       {data?.trailer?.id && (
-        <Tooltip label="Trailer" hasArrow>
+        <Tooltip content="Trailer" showArrow>
           <IconButton
             borderRadius="full"
             borderWidth={0}
-            icon={<VideoIcon />}
-            colorScheme="teal"
+            colorPalette="teal"
             size="lg"
             variant="outline"
             style={{ color: "white" }}
@@ -50,7 +51,9 @@ const CardAnimeFooter = ({ data }) => {
               e?.preventDefault();
               setIsOpen(true);
             }}
-          />
+          >
+            <VideoIcon />
+          </IconButton>
         </Tooltip>
       )}
       <CardAnimeModal
