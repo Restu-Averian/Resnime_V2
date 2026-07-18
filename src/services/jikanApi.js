@@ -146,10 +146,5 @@ export const getUpcomingAnime = (page, signal) =>
 export const getAnimeDetail = (malId, signal) =>
   request(`/anime/${malId}/full`, { signal });
 
-export const getAnimeEpisodes = (malId, page = 1, signal) =>
-  request(`/anime/${malId}/episodes`, {
-    signal,
-    params: {
-      page,
-    },
-  });
+export const getAnimeSummary = (malId, signal) =>
+  request(`/anime/${malId}`, { signal });

@@ -1,7 +1,7 @@
 import { Input, Stack } from "@chakra-ui/react";
 import useResponsive from "../../hooks/useResponsive";
 import Drawer from "./Drawer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Box from "./Box";
 
 /**
@@ -23,6 +23,10 @@ const Select = ({ listOptions, placeholder = "Select One", ...props }) => {
   const { sm } = useResponsive();
   const [openDrawer, setOpenDrawer] = useState(false);
   const [valueSelected, setValueSelected] = useState("");
+
+  useEffect(() => {
+    setValueSelected(props?.value || "");
+  }, [props?.value]);
 
   if (sm) {
     return (

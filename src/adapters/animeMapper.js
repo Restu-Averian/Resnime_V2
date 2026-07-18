@@ -64,38 +64,6 @@ const normalizeAnime = (anime) => {
   };
 };
 
-const buildGeneratedEpisodes = (anime, cover) => {
-  const total = Number(anime?.episodes);
-  if (!Number.isInteger(total) || total < 1) return [];
-
-  return Array.from({ length: total }, (_, index) => {
-    const number = index + 1;
-    return {
-      id: `${anime.mal_id}-${number}`,
-      number,
-      title: `Episode ${number}`,
-      image: cover,
-    };
-  });
-};
-
-export const adaptEpisode = (episode, anime, cover) => {
-  const number = Number(episode?.mal_id);
-  if (!Number.isInteger(number) || number < 1) return null;
-
-  return {
-    id: `${anime?.mal_id}-${number}`,
-    number,
-    title: episode?.title || `Episode ${number}`,
-    titleJapanese: episode?.title_japanese || null,
-    titleRomanji: episode?.title_romanji || null,
-    aired: episode?.aired || null,
-    filler: episode?.filler || false,
-    recap: episode?.recap || false,
-    image: cover,
-  };
-};
-
 export const adaptAnimeListResponse = (rawResponse, fallbackPage = 1) => ({
   results:
     rawResponse?.data
@@ -107,48 +75,60 @@ export const adaptAnimeListResponse = (rawResponse, fallbackPage = 1) => ({
   lastPage: rawResponse?.pagination?.last_visible_page || null,
 });
 
-export const adaptAnimeDetail = (rawAnime, rawEpisodes) => {
+export const adaptAnimeDetail = (
+  rawAnime,
+  streaming = {},
+  rawRelationAnime = [],
+) => {
   const anime = normalizeAnime(rawAnime);
   const cover = getCover(rawAnime);
-  const fetchedEpisodes =
-    rawEpisodes?.data
-      ?.map((episode) => adaptEpisode(episode, rawAnime, cover))
-      .filter(Boolean) || [];
+  const relationAnimeById = new Map(
+    rawRelationAnime
+      .filter((relationAnime) => relationAnime?.mal_id)
+      .map((relationAnime) => [
+        relationAnime.mal_id,
+        normalizeAnime(relationAnime),
+      ]),
+  );
 
   return {
     ...anime,
     cover,
-    episodes: fetchedEpisodes.length
-      ? fetchedEpisodes
-      : buildGeneratedEpisodes(rawAnime, cover),
+    episodes: Array.isArray(streaming?.episodes) ? streaming.episodes : [],
+    streamingStatus: streaming?.status || "unavailable",
+    streamingError: streaming?.error || "",
     relations:
       rawAnime?.relations
         ?.flatMap((relation) =>
-          relation?.entry?.map((entry) => ({
-            id: entry?.mal_id,
-            malId: entry?.mal_id,
-            title: {
-              romaji: entry?.name || titleFallback,
-              english: entry?.name || titleFallback,
-              native: null,
-            },
-            image: placeholderImage,
-            cover: placeholderImage,
-            description: "",
-            genres: [],
-            type: entry?.type || "",
-            status: "",
-            totalEpisodes: "Unknown",
-            averageScore: null,
-            score: null,
-            releaseDate: "",
-            season: "",
-            studios: [],
-            trailer: null,
-            relationType: relation?.relation || "",
-            recommendations: [],
-            characters: [],
-          })),
+          relation?.entry?.map((entry) => {
+            const hydratedAnime = relationAnimeById.get(entry?.mal_id);
+
+            return {
+              id: entry?.mal_id,
+              malId: entry?.mal_id,
+              title: {
+                romaji: entry?.name || titleFallback,
+                english: entry?.name || titleFallback,
+                native: hydratedAnime?.title?.native || null,
+              },
+              image: hydratedAnime?.image || placeholderImage,
+              cover: hydratedAnime?.cover || placeholderImage,
+              description: hydratedAnime?.description || "",
+              genres: hydratedAnime?.genres || [],
+              type: entry?.type || "",
+              status: hydratedAnime?.status || "",
+              totalEpisodes: hydratedAnime?.totalEpisodes || "Unknown",
+              averageScore: hydratedAnime?.averageScore || null,
+              score: hydratedAnime?.score || null,
+              releaseDate: hydratedAnime?.releaseDate || "",
+              season: hydratedAnime?.season || "",
+              studios: hydratedAnime?.studios || [],
+              trailer: hydratedAnime?.trailer || null,
+              relationType: relation?.relation || "",
+              recommendations: [],
+              characters: [],
+            };
+          }),
         )
         .filter((anime) => anime?.id) || [],
     recommendations: [],

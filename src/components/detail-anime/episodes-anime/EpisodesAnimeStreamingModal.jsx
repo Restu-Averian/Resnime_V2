@@ -1,4 +1,4 @@
-import { Heading, Stack, Text } from "@chakra-ui/react";
+import { Button, Heading, Stack, Text } from "@chakra-ui/react";
 import formatWord from "../../../helpers/formatWord";
 import { useEpisodeAnimeContext } from "./EpisodesAnimeContextProvider";
 import { useEffect, useMemo, useState } from "react";
@@ -17,19 +17,34 @@ const EpisodesAnimeStreamingModal = () => {
     selectedEpisode,
     streamUrl,
     serverOptions,
+    audioOptions,
+    audioType,
+    server,
+    setAudioType,
     setServer,
     streamError,
     setStreamError,
     data,
   } = useEpisodeAnimeContext();
 
+  console.log("streamUrl", streamUrl);
+
   const listServers = useMemo(
     () =>
       serverOptions?.map((option) => ({
-        label: option.toUpperCase(),
-        value: option,
+        label: option.label,
+        value: option.value,
       })),
     [serverOptions],
+  );
+
+  const listAudioTypes = useMemo(
+    () =>
+      audioOptions?.map((option) => ({
+        label: option === "dub" ? "Dub" : "Sub",
+        value: option,
+      })),
+    [audioOptions],
   );
 
   const episodeName = useMemo(() => {
@@ -56,7 +71,7 @@ const EpisodesAnimeStreamingModal = () => {
 
       const payload = parseData(event.data);
       if (payload?.type === "error" || payload?.event === "error") {
-        setStreamError("The selected stream failed to play.");
+        setStreamError("This server could not play the episode.");
       }
     };
 
@@ -79,11 +94,40 @@ const EpisodesAnimeStreamingModal = () => {
     >
       <Stack direction="column" spacing={5}>
         {streamError ? (
-          <Text color="red.300">{streamError}</Text>
+          <Stack direction="column" spacing={3}>
+            <Text color="red.300">{streamError}</Text>
+            <Text>Try another server.</Text>
+            <Stack direction="row" spacing={3}>
+              <Button
+                size="sm"
+                onClick={() => {
+                  setStreamError("");
+                }}
+              >
+                Retry current server
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => {
+                  const currentIndex = serverOptions.findIndex(
+                    (option) => option.value === server,
+                  );
+                  const nextIndex =
+                    currentIndex === -1
+                      ? 0
+                      : (currentIndex + 1) % serverOptions.length;
+                  setServer(serverOptions[nextIndex]?.value || "hd-1");
+                }}
+              >
+                Try next server
+              </Button>
+            </Stack>
+          </Stack>
         ) : streamUrl ? (
           <iframe
+            key={`${selectedEpisode?.embedId}-${server}-${audioType}`}
             src={streamUrl}
-            title={`${data?.title?.romaji || "Anime"} ${episodeName}`}
+            title={`${data?.title?.romaji || "Anime"} ${episodeName} - ${server}`}
             width="100%"
             style={{ aspectRatio: "16 / 9", border: 0 }}
             allow="autoplay; fullscreen; picture-in-picture"
@@ -94,10 +138,19 @@ const EpisodesAnimeStreamingModal = () => {
           <Text>Preparing player...</Text>
         )}
         <Stack direction="row" spacing={5}>
+          {listAudioTypes?.length > 1 && (
+            <Select
+              placeholder="Audio"
+              listOptions={listAudioTypes}
+              value={audioType}
+              onChange={setAudioType}
+            />
+          )}
           {listServers?.length > 1 && (
             <Select
               placeholder="Server"
               listOptions={listServers}
+              value={server}
               onChange={setServer}
             />
           )}

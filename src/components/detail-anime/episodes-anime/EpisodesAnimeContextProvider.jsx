@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   ALLOWED_AUDIO_TYPES,
-  ALLOWED_STREAM_SERVERS,
+  STREAM_SERVERS,
   buildStreamUrl,
 } from "../../../services/stream.js";
 
@@ -45,8 +45,7 @@ const EpisodesAnimeContextProvider = ({ data, children }) => {
       return {
         error: "",
         url: buildStreamUrl({
-          malId: data?.malId || data?.id,
-          episodeNumber: selectedEpisode?.number,
+          embedId: selectedEpisode?.embedId,
           audioType,
           server,
         }),
@@ -105,8 +104,10 @@ const EpisodesAnimeContextProvider = ({ data, children }) => {
         setAudioType,
         setServer,
         setStreamError,
-        audioOptions: ALLOWED_AUDIO_TYPES,
-        serverOptions: ALLOWED_STREAM_SERVERS,
+        audioOptions: ALLOWED_AUDIO_TYPES.filter(
+          (option) => option === "sub" || selectedEpisode?.dub,
+        ),
+        serverOptions: STREAM_SERVERS,
       }}
     >
       {children}

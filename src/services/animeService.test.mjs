@@ -3,6 +3,7 @@ import {
   adaptAnimeDetail,
   adaptAnimeListResponse,
 } from "../adapters/animeMapper.js";
+import { mapAnimoEpisode } from "./animoService.js";
 import { buildStreamUrl } from "./stream.js";
 
 const rawAnime = {
@@ -95,32 +96,90 @@ const detail = adaptAnimeDetail(rawAnime);
 assert.equal(detail.cover, "https://example.com/trailer-cover.jpg");
 assert.deepEqual(detail.studios, ["Toei Animation"]);
 assert.equal(detail.season, "Fall");
-assert.equal(detail.episodes.length, 2);
-assert.deepEqual(detail.episodes[0], {
-  id: "21-1",
-  number: 1,
-  title: "Episode 1",
-  image: "https://example.com/trailer-cover.jpg",
-});
+assert.equal(detail.episodes.length, 0);
 assert.equal(detail.relations[0].relationType, "Side story");
+assert.equal(detail.relations[0].image, "/placeholder.png");
 assert.equal(detail.recommendations.length, 0);
 assert.equal(detail.characters.length, 0);
 
+const detailWithHydratedRelation = adaptAnimeDetail(rawAnime, {}, [
+  {
+    mal_id: 22,
+    title: "One Piece Movie",
+    images: {
+      webp: {
+        large_image_url: "https://example.com/one-piece-movie.webp",
+      },
+    },
+  },
+]);
+
 assert.equal(
-  buildStreamUrl({
-    malId: 21,
-    episodeNumber: 1,
-  }),
-  "https://cdn.4animo.xyz/embed/hd-1/mal/21/1/sub?k=1",
+  detailWithHydratedRelation.relations[0].image,
+  "https://example.com/one-piece-movie.webp",
 );
 
-assert.throws(() => buildStreamUrl({ malId: "x", episodeNumber: 1 }));
-assert.throws(() => buildStreamUrl({ malId: 21, episodeNumber: 0 }));
-assert.throws(() =>
-  buildStreamUrl({ malId: 21, episodeNumber: 1, audioType: "raw" }),
+const unavailableDetail = adaptAnimeDetail(rawAnime, {
+  status: "unavailable",
+  episodes: [],
+});
+
+assert.equal(unavailableDetail.streamingStatus, "unavailable");
+assert.equal(unavailableDetail.episodes.length, 0);
+
+const errorDetail = adaptAnimeDetail(rawAnime, {
+  status: "error",
+  error: "Unable to check streaming availability.",
+  episodes: [],
+});
+
+assert.equal(errorDetail.streamingStatus, "error");
+assert.equal(
+  errorDetail.streamingError,
+  "Unable to check streaming availability.",
 );
-assert.throws(() =>
-  buildStreamUrl({ malId: 21, episodeNumber: 1, server: "hd-2" }),
+
+assert.equal(
+  buildStreamUrl({
+    embedId: 2142,
+  }),
+  "https://cdn.4animo.xyz/embed/hd-1/in/2142/sub",
+);
+
+assert.throws(() => buildStreamUrl({ embedId: "x" }));
+assert.throws(() => buildStreamUrl({ embedId: 0 }));
+assert.throws(() => buildStreamUrl({ embedId: 2142, audioType: "raw" }));
+assert.equal(
+  buildStreamUrl({ embedId: 2142, server: "hd-2" }),
+  "https://cdn.4animo.xyz/embed/hd-2/in/2142/sub",
+);
+
+assert.deepEqual(
+  mapAnimoEpisode({
+    number: 1,
+    titles: {
+      en: "I'm Luffy! The Man Who's Gonna Be King of the Pirates!",
+    },
+    filler: false,
+    thumbnail: "https://cdnanimo.xyz/episode/1.jpg",
+    sub: true,
+    dub: true,
+    embed_id: "2142",
+    ani: "21/1",
+    mal: "21/1",
+  }),
+  {
+    id: "2142",
+    embedId: 2142,
+    number: 1,
+    title: "I'm Luffy! The Man Who's Gonna Be King of the Pirates!",
+    filler: false,
+    malId: "21/1",
+    anilistId: "21/1",
+    sub: true,
+    dub: true,
+    image: "https://cdnanimo.xyz/episode/1.jpg",
+  },
 );
 
 console.log("anime service checks passed");

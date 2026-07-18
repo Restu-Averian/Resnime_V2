@@ -88,9 +88,31 @@ const DetailAnime = () => {
             <EpisodesAnime data={detailData} />
           </Box>
 
-          <Box showIf={detailData?.id && !detailData?.episodes?.length}>
+          <Box
+            showIf={
+              detailData?.id &&
+              !detailData?.episodes?.length &&
+              detailData?.streamingStatus === "error"
+            }
+          >
+            <Stack align="center" spacing={3}>
+              <Text textAlign="center">
+                {detailData?.streamingError ||
+                  "Unable to check streaming availability."}
+              </Text>
+              <Button onClick={refetch}>Retry</Button>
+            </Stack>
+          </Box>
+
+          <Box
+            showIf={
+              detailData?.id &&
+              !detailData?.episodes?.length &&
+              detailData?.streamingStatus !== "error"
+            }
+          >
             <Text textAlign="center">
-              Episode information is currently unavailable.
+              Streaming is currently unavailable for this anime.
             </Text>
           </Box>
 

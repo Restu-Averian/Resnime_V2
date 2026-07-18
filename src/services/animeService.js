@@ -4,12 +4,13 @@ import {
 } from "../adapters/animeMapper.js";
 import {
   getAnimeDetail as getJikanAnimeDetail,
-  getAnimeEpisodes,
+  getAnimeSummary,
   getCurrentSeasonAnime,
   getPopularAnime as getJikanPopularAnime,
   getUpcomingAnime as getJikanUpcomingAnime,
   searchAnime as searchJikanAnime,
 } from "./jikanApi.js";
+import { getAnimoEpisodes } from "./animoService.js";
 
 const getPage = (searchParams) => {
   const page = Number(searchParams.get("page"));
@@ -22,6 +23,34 @@ const toValidMalId = (id) => {
     throw new Error("Anime not found.");
   }
   return malId;
+};
+
+const getRelationIds = (anime) => [
+  ...new Set(
+    anime?.relations
+      ?.flatMap((relation) => relation?.entry?.map((entry) => entry?.mal_id))
+      .filter((id) => Number.isInteger(Number(id)) && Number(id) > 0) || [],
+  ),
+];
+
+const getRelationAnime = async (anime, signal) => {
+  const relationIds = getRelationIds(anime);
+  if (!relationIds.length) return [];
+
+  const results = await Promise.allSettled(
+    relationIds.map((relationId) => getAnimeSummary(relationId, signal)),
+  );
+
+  return results
+    .map((result) => {
+      if (result.status !== "fulfilled") {
+        if (result.reason?.cancelled) throw result.reason;
+        return null;
+      }
+
+      return result.value?.data || null;
+    })
+    .filter(Boolean);
 };
 
 export const getTrendingAnime = async (page, signal) => {
@@ -63,16 +92,35 @@ export const getAnimeDetail = async (id, signal) => {
     throw new Error("Anime not found.");
   }
 
-  let episodes = null;
-  if (Number(anime?.episodes) > 0) {
-    try {
-      episodes = await getAnimeEpisodes(malId, 1, signal);
-    } catch (error) {
-      if (error?.cancelled) throw error;
-    }
+  let streaming = {
+    status: "unavailable",
+    episodes: [],
+    error: "",
+  };
+  let relations = [];
+
+  try {
+    streaming = await getAnimoEpisodes(
+      malId,
+      anime?.title_english || anime?.title,
+      signal,
+    );
+  } catch (error) {
+    if (error?.cancelled) throw error;
+    streaming = {
+      status: "error",
+      episodes: [],
+      error: error?.message || "Unable to check streaming availability.",
+    };
   }
 
-  return adaptAnimeDetail(anime, episodes);
+  try {
+    relations = await getRelationAnime(anime, signal);
+  } catch (error) {
+    if (error?.cancelled) throw error;
+  }
+
+  return adaptAnimeDetail(anime, streaming, relations);
 };
 
 export const getAnimeByPath = (path, signal) => {
