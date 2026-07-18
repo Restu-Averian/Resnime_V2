@@ -48,7 +48,7 @@ const EpisodesAnimeContextProvider = ({ data, children }) => {
 
   const episodeValParam = useMemo(() => {
     return episodeParam?.get("episode");
-  }, [episodeParam?.get("episode")]);
+  }, [episodeParam]);
 
   const getStreamLink = () => {
     axios.get(`${BASE_API}/watch/${episodeValParam}`)?.then(({ data }) => {
