@@ -11,7 +11,7 @@ const EpisodesAnimeList = () => {
 
   return (
     <CardData useDefault header={<Heading>Episodes</Heading>}>
-      <SimpleGrid columns={sm ? 2 : 3} spacing={5}>
+      <SimpleGrid columns={sm ? 2 : 3} gap={5}>
         {data?.episodes?.map((episode) => {
           return (
             <BgImage

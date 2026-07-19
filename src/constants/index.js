@@ -1,4 +1,5 @@
-export const BASE_API = import.meta.env.VITE_BASE_API;
+export const ANIPUB_API_BASE_URL =
+  import.meta.env?.VITE_ANIPUB_API_BASE_URL || "https://anipub.xyz";
 
 export const ROLES = {
   MAIN: "teal",

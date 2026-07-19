@@ -31,11 +31,7 @@ const DescriptionAnime = ({ data }) => {
           className="description"
           overflowY="scroll"
         >
-          <Text
-            dangerouslySetInnerHTML={{
-              __html: `${data?.description}`,
-            }}
-          />
+          <Text whiteSpace="pre-line">{data?.description}</Text>
         </CardData>
       </GridItem>
 

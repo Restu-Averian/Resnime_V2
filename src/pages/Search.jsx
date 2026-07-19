@@ -8,7 +8,7 @@ const Search = () => {
 
   const searchVal = useMemo(() => {
     return searchParam?.get("q");
-  }, [searchParam?.get("q")]);
+  }, [searchParam]);
 
   useChangeDocTitle(`Resnime | ${searchVal}`);
   return (

@@ -1,13 +1,4 @@
-import {
-  AlertDialogBody,
-  AlertDialog as AlertDialogChakra,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
-  Button,
-  Stack,
-} from "@chakra-ui/react";
+import { Button, Dialog, Portal, Stack } from "@chakra-ui/react";
 
 /**
  * @typedef AddPropsAlertDialog
@@ -29,49 +20,50 @@ const AlertDialog = ({
   onCancel,
   children,
   footer,
+  isOpen,
   ...props
 }) => {
   return (
-    <AlertDialogChakra
+    <Dialog.Root
       {...props}
-      onOverlayClick={() => {
-        onCancel();
-      }}
-      onEsc={() => {
-        onCancel();
+      role="alertdialog"
+      open={isOpen}
+      onOpenChange={({ open }) => {
+        if (!open) onCancel?.();
       }}
     >
-      <AlertDialogOverlay>
-        <AlertDialogContent>
-          <AlertDialogHeader {...headerProps}>{header}</AlertDialogHeader>
-          <AlertDialogBody>
-            {children || "Are you sure to close ?"}
-          </AlertDialogBody>
-          <AlertDialogFooter>
-            {footer || (
-              <Stack justifyContent="end" direction="row">
-                <Button
-                  onClick={() => {
-                    onCancel();
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  colorScheme="teal"
-                  onClick={() => {
-                    onOk();
-                    onCancel();
-                  }}
-                >
-                  Ok
-                </Button>
-              </Stack>
-            )}
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialogOverlay>
-    </AlertDialogChakra>
+      <Portal>
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content>
+            <Dialog.Header {...headerProps}>{header}</Dialog.Header>
+            <Dialog.Body>{children || "Are you sure to close ?"}</Dialog.Body>
+            <Dialog.Footer>
+              {footer || (
+                <Stack justifyContent="end" direction="row">
+                  <Button
+                    onClick={() => {
+                      onCancel?.();
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    colorPalette="teal"
+                    onClick={() => {
+                      onOk?.();
+                      onCancel?.();
+                    }}
+                  >
+                    Ok
+                  </Button>
+                </Stack>
+              )}
+            </Dialog.Footer>
+          </Dialog.Content>
+        </Dialog.Positioner>
+      </Portal>
+    </Dialog.Root>
   );
 };
 export default AlertDialog;

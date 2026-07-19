@@ -1,49 +1,56 @@
-import { Button, Heading, Stack } from "@chakra-ui/react";
+import { Button, Heading, Stack, Text } from "@chakra-ui/react";
 import formatWord from "../../../helpers/formatWord";
 import { useEpisodeAnimeContext } from "./EpisodesAnimeContextProvider";
-import { useCallback, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import AlertDialog from "../../global/AlertDialog";
 import Modal from "../../global/Modal";
-import Select from "../../global/Select";
-import videoHLS from "../../../helpers/videoHLS";
-import EpisodesAnimeDownloadModal from "./EpisodesAnimeDownloadModal";
+import { getStreamOrigin } from "../../../services/stream.js";
 
 const EpisodesAnimeStreamingModal = () => {
   const [isOpenAlert, setisOpenAlert] = useState(false);
-  const [openModalDownload, setOpenModalDownload] = useState(false);
 
   const {
     isStreamOpen,
     episodeValParam,
-    videoRef,
     closeModalVideo,
-    dataStream,
+    selectedEpisode,
+    streamUrl,
+    streamError,
+    setStreamError,
+    data,
   } = useEpisodeAnimeContext();
 
-  const listQualityStreaming = useMemo(() => {
-    if (dataStream?.sources?.length > 0) {
-      return dataStream?.sources?.map((stream) => ({
-        label: stream?.quality,
-        value: stream?.url,
-      }));
-    }
-
-    return [];
-  }, [dataStream]);
-
-  const changeQualityHandler = useCallback(
-    (value) => {
-      videoHLS({
-        refCurrent: videoRef?.current,
-        srcVideo: value,
-      });
-    },
-    [dataStream]
-  );
-
   const episodeName = useMemo(() => {
-    return formatWord(episodeValParam?.replaceAll("-", " "));
-  }, [episodeValParam]);
+    return (
+      selectedEpisode?.title ||
+      formatWord(episodeValParam?.replaceAll("-", " "))
+    );
+  }, [episodeValParam, selectedEpisode]);
+
+  useEffect(() => {
+    const streamOrigin = getStreamOrigin();
+    const parseData = (data) => {
+      if (typeof data !== "string") return data;
+
+      try {
+        return JSON.parse(data);
+      } catch {
+        return {};
+      }
+    };
+
+    const handleMessage = (event) => {
+      if (event.origin !== streamOrigin) return;
+
+      const payload = parseData(event.data);
+      if (payload?.type === "error" || payload?.event === "error") {
+        setStreamError("This episode could not be played.");
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, [setStreamError]);
 
   return (
     <Modal
@@ -59,21 +66,28 @@ const EpisodesAnimeStreamingModal = () => {
       size="xl"
     >
       <Stack direction="column" spacing={5}>
-        <video ref={videoRef} controls />
-        <Stack direction="row" spacing={5}>
-          <Select
-            placeholder="Choose Quality"
-            listOptions={listQualityStreaming}
-            onChange={changeQualityHandler}
+        {streamError ? (
+          <Stack direction="column" spacing={3}>
+            <Text color="red.300">{streamError}</Text>
+            <Button size="sm" onClick={() => setStreamError("")}>
+              Retry
+            </Button>
+          </Stack>
+        ) : streamUrl ? (
+          <iframe
+            key={streamUrl}
+            src={streamUrl}
+            title={`${data?.title?.romaji || "Anime"} ${episodeName}`}
+            width="100%"
+            style={{ aspectRatio: "16 / 9", border: 0 }}
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowFullScreen
+            loading="lazy"
           />
-          <Button
-            onClick={() => {
-              setOpenModalDownload(true);
-            }}
-          >
-            Download
-          </Button>
-        </Stack>
+        ) : (
+          <Text>Preparing player...</Text>
+        )}
+        <Text fontSize="sm">Download is currently unavailable.</Text>
       </Stack>
 
       <AlertDialog
@@ -83,13 +97,6 @@ const EpisodesAnimeStreamingModal = () => {
         }}
         onOk={() => {
           closeModalVideo();
-        }}
-      />
-
-      <EpisodesAnimeDownloadModal
-        isOpen={openModalDownload}
-        onClose={() => {
-          setOpenModalDownload(false);
         }}
       />
     </Modal>

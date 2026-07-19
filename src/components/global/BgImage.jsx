@@ -16,24 +16,34 @@ const BgImage = ({
   useOverlay = false,
   height = 250,
   children,
+  style,
   ...props
 }) => {
+  const safeHeight = typeof height === "number" ? `${height}px` : height;
+
   return (
     <Box
-      bgImage={src}
-      height={height}
+      {...props}
+      {...(src && {
+        bgImage: `url("${src}")`,
+      })}
       bgSize="cover"
       bgPos="center"
-      position="relative"
       bgRepeat="no-repeat"
-      {...props}
+      height={safeHeight}
+      position="relative"
+      style={style}
     >
       {useOverlay && (
         <Box
-          pos="absolute"
-          bg=" linear-gradient(0deg, rgba(2,0,36,1) 0%, rgba(38,38,38,0) 80%);"
-          inset={0}
-          height={height}
+          style={{
+            position: "absolute",
+            inset: 0,
+            height: "100%",
+            background:
+              "linear-gradient(0deg, rgba(2,0,36,1) 0%, rgba(38,38,38,0) 80%)",
+            pointerEvents: "none",
+          }}
         />
       )}
       {children}

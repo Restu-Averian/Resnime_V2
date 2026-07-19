@@ -27,16 +27,16 @@ const CharacterAnimeList = ({ data, onOpenVA }) => {
 
           <Text textAlign="center">{char?.name?.full}</Text>
 
-          <Tag
+          <Tag.Root
             textAlign="center"
             display="block"
             pt={1}
             variant="outline"
-            colorScheme={ROLES[char?.role]}
+            colorPalette={ROLES[char?.role]}
             borderRadius="full"
           >
-            {char?.role}
-          </Tag>
+            <Tag.Label>{char?.role}</Tag.Label>
+          </Tag.Root>
 
           <Button
             onClick={() => {

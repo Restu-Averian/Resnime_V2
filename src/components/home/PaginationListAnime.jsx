@@ -1,4 +1,4 @@
-import { Button, Flex, NumberInput, NumberInputField } from "@chakra-ui/react";
+import { Button, Flex, NumberInput } from "@chakra-ui/react";
 
 const PaginationListAnime = ({
   loading,
@@ -30,17 +30,13 @@ const PaginationListAnime = ({
               </Button>
             )}
 
-            <NumberInput
+            <NumberInput.Root
               min={1}
               width={100}
-              defaultValue={currPage || 1}
-              onChange={(newPage) => {
-                if (/^[0-9]+$/.test(newPage)) {
-                  if (Number(newPage) > 0) {
-                    setNewPage(newPage);
-                  } else {
-                    setNewPage(1);
-                  }
+              defaultValue={String(currPage || 1)}
+              onValueChange={({ value }) => {
+                if (/^[0-9]+$/.test(value)) {
+                  setNewPage(Number(value) > 0 ? value : 1);
                 }
               }}
               onKeyUp={(e) => {
@@ -49,8 +45,8 @@ const PaginationListAnime = ({
                 }
               }}
             >
-              <NumberInputField textAlign="center" />
-            </NumberInput>
+              <NumberInput.Input textAlign="center" />
+            </NumberInput.Root>
 
             {data?.hasNextPage && (
               <Button

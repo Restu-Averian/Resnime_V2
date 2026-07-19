@@ -1,27 +1,19 @@
 # API Used
 
-## 1. List Anime
+Resnime uses AniPub as its only anime API provider.
 
-- Trending
-  `https://march-api1.vercel.app/meta/anilist/trending?provider=gogoanime`
-- Popular
-  `https://march-api1.vercel.app/meta/anilist/popular?provider=gogoanime&perPage=20`
+## Anime
 
-        a. Card
-        b. Text
+- Search: `/api/searchall/{query}?page={page}`
+- Detail: `/anime/api/details/{id}`
+- Episodes and player URLs: `/v1/api/details/{id}`
 
-## 2. Detail Anime && Recommendation
+Sections that AniPub does not expose are hidden in the app.
 
-`https://march-api1.vercel.app/meta/anilist/info/20954?fetchFiller=true&dub=false`
+Required environment variables are listed in `.env.example`.
 
-        a. Card
-        b. Text
-        c. Carousel (recommendation)
+## Streaming
 
-### 2.1 Streaming Anime
+Episode playback uses the player URLs returned by AniPub.
 
-`https://march-api1.vercel.app/meta/anilist/watch/koe-no-katachi-movie-episode-1?provider=gogoanime`
-
-        a. Card
-        b. Text
-        c. Library Video
+Direct download URLs are unavailable unless AniPub returns one.

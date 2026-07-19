@@ -1,7 +1,7 @@
-import { Input, Select as SelectChakra, Stack } from "@chakra-ui/react";
+import { Input, Stack } from "@chakra-ui/react";
 import useResponsive from "../../hooks/useResponsive";
 import Drawer from "./Drawer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Box from "./Box";
 
 /**
@@ -23,6 +23,10 @@ const Select = ({ listOptions, placeholder = "Select One", ...props }) => {
   const { sm } = useResponsive();
   const [openDrawer, setOpenDrawer] = useState(false);
   const [valueSelected, setValueSelected] = useState("");
+
+  useEffect(() => {
+    setValueSelected(props?.value || "");
+  }, [props?.value]);
 
   if (sm) {
     return (
@@ -68,8 +72,12 @@ const Select = ({ listOptions, placeholder = "Select One", ...props }) => {
     );
   }
   return (
-    <SelectChakra
-      placeholder={placeholder}
+    <Box
+      as="select"
+      borderWidth="1px"
+      borderRadius="md"
+      minH={10}
+      px={3}
       {...props}
       onChange={({ target: { value } }) => {
         if (props.onChange) {
@@ -77,12 +85,13 @@ const Select = ({ listOptions, placeholder = "Select One", ...props }) => {
         }
       }}
     >
+      <option value="">{placeholder}</option>
       {listOptions?.map((opt, idx) => (
         <option key={idx} value={opt?.value}>
           {opt?.label}
         </option>
       ))}
-    </SelectChakra>
+    </Box>
   );
 };
 export default Select;
