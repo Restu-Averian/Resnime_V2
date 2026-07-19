@@ -1,10 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import {
-  ALLOWED_AUDIO_TYPES,
-  STREAM_SERVERS,
-  buildStreamUrl,
-} from "../../../services/stream.js";
 
 /**
 /**
@@ -26,8 +21,6 @@ const EpisodesAnimeContextProvider = ({ data, children }) => {
   const [episodeParam, setEpisodeParam] = useSearchParams();
 
   const [isStreamOpen, setIsStreamOpen] = useState(false);
-  const [audioType, setAudioType] = useState("sub");
-  const [server, setServer] = useState("hd-1");
   const [streamError, setStreamError] = useState("");
 
   const episodeValParam = useMemo(() => {
@@ -37,23 +30,6 @@ const EpisodesAnimeContextProvider = ({ data, children }) => {
   const selectedEpisode = useMemo(() => {
     return data?.episodes?.find((episode) => episode?.id === episodeValParam);
   }, [data, episodeValParam]);
-
-  const streamState = useMemo(() => {
-    if (!selectedEpisode) return { error: "", url: "" };
-
-    try {
-      return {
-        error: "",
-        url: buildStreamUrl({
-          embedId: selectedEpisode?.embedId,
-          audioType,
-          server,
-        }),
-      };
-    } catch (error) {
-      return { error: error?.message, url: "" };
-    }
-  }, [audioType, data, selectedEpisode, server]);
 
   const openModalVideo = (e, episodeId) => {
     e?.preventDefault();
@@ -79,14 +55,8 @@ const EpisodesAnimeContextProvider = ({ data, children }) => {
   }, [episodeValParam]);
 
   useEffect(() => {
-    setAudioType("sub");
-    setServer("hd-1");
     setStreamError("");
   }, [episodeValParam]);
-
-  useEffect(() => {
-    setStreamError("");
-  }, [audioType, server]);
 
   return (
     <EpisodesAnimeContext.Provider
@@ -97,17 +67,9 @@ const EpisodesAnimeContextProvider = ({ data, children }) => {
         isStreamOpen,
         episodeValParam,
         selectedEpisode,
-        streamUrl: streamState.url,
-        audioType,
-        server,
-        streamError: streamError || streamState.error,
-        setAudioType,
-        setServer,
+        streamUrl: selectedEpisode?.playerUrl || "",
+        streamError,
         setStreamError,
-        audioOptions: ALLOWED_AUDIO_TYPES.filter(
-          (option) => option === "sub" || selectedEpisode?.dub,
-        ),
-        serverOptions: STREAM_SERVERS,
       }}
     >
       {children}

@@ -2,184 +2,142 @@ import assert from "node:assert/strict";
 import {
   adaptAnimeDetail,
   adaptAnimeListResponse,
+  adaptStreamingDetail,
 } from "../adapters/animeMapper.js";
-import { mapAnimoEpisode } from "./animoService.js";
-import { buildStreamUrl } from "./stream.js";
+import { normalizePlayerUrl } from "./stream.js";
 
-const rawAnime = {
-  mal_id: 21,
-  title: "One Piece",
-  title_english: "One Piece",
-  title_japanese: "ワンピース",
-  images: {
-    webp: {
-      large_image_url: "https://example.com/one-piece.webp",
-    },
-    jpg: {
-      large_image_url: "https://example.com/one-piece.jpg",
-      image_url: "https://example.com/one-piece-small.jpg",
-    },
-  },
-  trailer: {
-    youtube_id: "abc123",
-    images: {
-      maximum_image_url: "https://example.com/trailer-cover.jpg",
-      large_image_url: "https://example.com/trailer-large.jpg",
-    },
-  },
-  synopsis: "Pirates\nAdventure",
-  type: "TV",
-  status: "Currently Airing",
-  episodes: 2,
-  score: 8.73,
-  year: 1999,
-  season: "fall",
-  aired: {
-    prop: {
-      from: {
-        year: 1999,
-      },
-    },
-  },
-  genres: [
-    {
-      mal_id: 1,
-      name: "Action",
-    },
-  ],
-  studios: [
-    {
-      mal_id: 18,
-      name: "Toei Animation",
-    },
-  ],
-  relations: [
-    {
-      relation: "Side story",
-      entry: [
-        {
-          mal_id: 22,
-          name: "One Piece Movie",
-          type: "anime",
-        },
-      ],
-    },
-  ],
-};
-
-const list = adaptAnimeListResponse(
+const searchList = adaptAnimeListResponse(
   {
-    data: [rawAnime],
-    pagination: {
-      current_page: 3,
-      has_next_page: true,
-      last_visible_page: 9,
-    },
+    currentPage: 2,
+    AniData: [
+      {
+        _id: 81,
+        Name: "Naruto: Shippuden",
+        ImagePath: "https://example.com/naruto.jpg",
+        MALScore: "8.15",
+        DescripTion: "Ninja story",
+        finder: "naruto-shippuden",
+      },
+      {
+        _id: null,
+        Name: "Broken",
+      },
+    ],
   },
   1,
 );
 
-assert.equal(list.currentPage, 3);
-assert.equal(list.hasNextPage, true);
-assert.equal(list.lastPage, 9);
-assert.equal(list.results[0].id, 21);
-assert.equal(list.results[0].malId, 21);
-assert.equal(list.results[0].title.romaji, "One Piece");
-assert.equal(list.results[0].image, "https://example.com/one-piece.webp");
-assert.equal(list.results[0].cover, "https://example.com/trailer-cover.jpg");
-assert.equal(list.results[0].type, "TV");
-assert.equal(list.results[0].status, "Currently Airing");
-assert.deepEqual(list.results[0].genres, ["Action"]);
+assert.equal(searchList.currentPage, 2);
+assert.equal(searchList.hasNextPage, false);
+assert.equal(searchList.results.length, 1);
+assert.equal(searchList.results[0].id, 81);
+assert.equal(searchList.results[0].title.romaji, "Naruto: Shippuden");
+assert.equal(searchList.results[0].image, "https://example.com/naruto.jpg");
+assert.equal(searchList.results[0].score, 8.15);
 
-const detail = adaptAnimeDetail(rawAnime);
+const quickSearchList = adaptAnimeListResponse(
+  [
+    {
+      Id: 15,
+      Name: "One Piece Film Red",
+      Image: "https://example.com/film-red.jpg",
+      finder: "one-piece-film-red",
+    },
+  ],
+  1,
+);
 
-assert.equal(detail.cover, "https://example.com/trailer-cover.jpg");
-assert.deepEqual(detail.studios, ["Toei Animation"]);
-assert.equal(detail.season, "Fall");
-assert.equal(detail.episodes.length, 0);
-assert.equal(detail.relations[0].relationType, "Side story");
-assert.equal(detail.relations[0].image, "/placeholder.png");
-assert.equal(detail.recommendations.length, 0);
+assert.equal(quickSearchList.results[0].id, 15);
+assert.equal(
+  quickSearchList.results[0].image,
+  "https://example.com/film-red.jpg",
+);
+
+const detail = adaptAnimeDetail({
+  local: {
+    _id: 1443,
+    Name: "Frieren: Beyond Journey's End Season 2",
+    ImagePath: "https://example.com/frieren.jpg",
+    Cover: "https://example.com/frieren-cover.jpg",
+    Synonyms: "Sousou no Frieren 2",
+    Aired: "Jan 16, 2026 to ?",
+    Premiered: "Winter 2026",
+    Duration: "24m",
+    Status: "Ongoing",
+    MALScore: "?",
+    Genres: ["Adventure", "Drama"],
+    Studios: "Madhouse",
+    DescripTion: "Second season.",
+    epCount: 4,
+  },
+});
+
+assert.equal(detail.id, 1443);
+assert.equal(detail.title.romaji, "Frieren: Beyond Journey's End Season 2");
+assert.equal(detail.cover, "https://example.com/frieren-cover.jpg");
+assert.deepEqual(detail.genres, ["Adventure", "Drama"]);
+assert.equal(detail.status, "Ongoing");
+assert.equal(detail.totalEpisodes, 4);
+assert.equal(detail.releaseDate, "Jan 16, 2026 to ?");
+assert.equal(detail.season, "Winter 2026");
+assert.deepEqual(detail.studios, ["Madhouse"]);
+assert.equal(detail.description, "Second season.");
+assert.equal(detail.relations.length, 0);
 assert.equal(detail.characters.length, 0);
+assert.equal(detail.recommendations.length, 0);
 
-const detailWithHydratedRelation = adaptAnimeDetail(rawAnime, {}, [
-  {
-    mal_id: 22,
-    title: "One Piece Movie",
-    images: {
-      webp: {
-        large_image_url: "https://example.com/one-piece-movie.webp",
-      },
-    },
+assert.equal(
+  normalizePlayerUrl("src=https://anipub.xyz/video/163517/sub"),
+  "https://anipub.xyz/video/163517/sub",
+);
+assert.equal(
+  normalizePlayerUrl("/video/163518/sub"),
+  "https://anipub.xyz/video/163518/sub",
+);
+assert.equal(normalizePlayerUrl(null), null);
+assert.equal(normalizePlayerUrl("not a url"), null);
+
+const streaming = adaptStreamingDetail({
+  local: {
+    _id: 1443,
+    name: "Episode 1",
+    link: "src=https://anipub.xyz/video/163517/sub",
+    poster: "https://example.com/frieren.jpg",
+    ep: [
+      { link: "src=https://anipub.xyz/video/163518/sub" },
+      { link: "src=https://anipub.xyz/video/163518/sub" },
+      { link: "" },
+      { link: "/video/163519/sub" },
+    ],
   },
-]);
-
-assert.equal(
-  detailWithHydratedRelation.relations[0].image,
-  "https://example.com/one-piece-movie.webp",
-);
-
-const unavailableDetail = adaptAnimeDetail(rawAnime, {
-  status: "unavailable",
-  episodes: [],
 });
 
-assert.equal(unavailableDetail.streamingStatus, "unavailable");
-assert.equal(unavailableDetail.episodes.length, 0);
-
-const errorDetail = adaptAnimeDetail(rawAnime, {
-  status: "error",
-  error: "Unable to check streaming availability.",
-  episodes: [],
-});
-
-assert.equal(errorDetail.streamingStatus, "error");
-assert.equal(
-  errorDetail.streamingError,
-  "Unable to check streaming availability.",
-);
-
-assert.equal(
-  buildStreamUrl({
-    embedId: 2142,
-  }),
-  "https://cdn.4animo.xyz/embed/hd-1/in/2142/sub",
-);
-
-assert.throws(() => buildStreamUrl({ embedId: "x" }));
-assert.throws(() => buildStreamUrl({ embedId: 0 }));
-assert.throws(() => buildStreamUrl({ embedId: 2142, audioType: "raw" }));
-assert.equal(
-  buildStreamUrl({ embedId: 2142, server: "hd-2" }),
-  "https://cdn.4animo.xyz/embed/hd-2/in/2142/sub",
-);
-
+assert.equal(streaming.status, "available");
+assert.equal(streaming.episodes.length, 3);
 assert.deepEqual(
-  mapAnimoEpisode({
-    number: 1,
-    titles: {
-      en: "I'm Luffy! The Man Who's Gonna Be King of the Pirates!",
-    },
-    filler: false,
-    thumbnail: "https://cdnanimo.xyz/episode/1.jpg",
-    sub: true,
-    dub: true,
-    embed_id: "2142",
-    ani: "21/1",
-    mal: "21/1",
-  }),
-  {
-    id: "2142",
-    embedId: 2142,
-    number: 1,
-    title: "I'm Luffy! The Man Who's Gonna Be King of the Pirates!",
-    filler: false,
-    malId: "21/1",
-    anilistId: "21/1",
-    sub: true,
-    dub: true,
-    image: "https://cdnanimo.xyz/episode/1.jpg",
-  },
+  streaming.episodes.map((episode) => episode.number),
+  [1, 2, 3],
 );
+assert.equal(
+  streaming.episodes[0].playerUrl,
+  "https://anipub.xyz/video/163517/sub",
+);
+assert.equal(
+  streaming.episodes[1].playerUrl,
+  "https://anipub.xyz/video/163518/sub",
+);
+assert.equal(
+  streaming.episodes[2].playerUrl,
+  "https://anipub.xyz/video/163519/sub",
+);
+
+const unavailableStreaming = adaptStreamingDetail({
+  local: {
+    ep: [{ link: "" }],
+  },
+});
+
+assert.equal(unavailableStreaming.status, "unavailable");
+assert.equal(unavailableStreaming.episodes.length, 0);
 
 console.log("anime service checks passed");

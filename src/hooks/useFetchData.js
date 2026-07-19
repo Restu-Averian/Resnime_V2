@@ -3,10 +3,7 @@ import { getAnimeByPath } from "../services/animeService";
 
 const searchDebounceMs = 500;
 
-const isSearchPath = (path) =>
-  !["/trending", "/popular", "/upcoming"].some((item) =>
-    path?.startsWith(item),
-  ) && !path?.startsWith("/anime/");
+const isSearchPath = (path) => !path?.startsWith("/anime/");
 
 const useFetchData = (path) => {
   const [state, setState] = useState({

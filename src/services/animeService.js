@@ -1,74 +1,70 @@
+import axios from "axios";
 import {
   adaptAnimeDetail,
   adaptAnimeListResponse,
+  adaptStreamingDetail,
 } from "../adapters/animeMapper.js";
-import {
-  getAnimeDetail as getJikanAnimeDetail,
-  getAnimeSummary,
-  getCurrentSeasonAnime,
-  getPopularAnime as getJikanPopularAnime,
-  getUpcomingAnime as getJikanUpcomingAnime,
-  searchAnime as searchJikanAnime,
-} from "./jikanApi.js";
-import { getAnimoEpisodes } from "./animoService.js";
+import { ANIPUB_API_BASE_URL } from "../constants/index.js";
+
+const client = axios.create({
+  baseURL: ANIPUB_API_BASE_URL,
+  timeout: 15000,
+  headers: {
+    Accept: "application/json",
+  },
+});
 
 const getPage = (searchParams) => {
   const page = Number(searchParams.get("page"));
   return Number.isInteger(page) && page > 0 ? page : 1;
 };
 
-const toValidMalId = (id) => {
-  const malId = Number(id);
-  if (!Number.isInteger(malId) || malId < 1) {
+const toValidAnimeId = (id) => {
+  const animeId = Number(id);
+  if (!Number.isInteger(animeId) || animeId < 1) {
     throw new Error("Anime not found.");
   }
-  return malId;
+  return animeId;
 };
 
-const getRelationIds = (anime) => [
-  ...new Set(
-    anime?.relations
-      ?.flatMap((relation) => relation?.entry?.map((entry) => entry?.mal_id))
-      .filter((id) => Number.isInteger(Number(id)) && Number(id) > 0) || [],
-  ),
-];
+const normalizeError = (error, fallbackMessage) => {
+  if (
+    error?.cancelled ||
+    axios.isCancel(error) ||
+    error?.code === "ERR_CANCELED"
+  ) {
+    return {
+      cancelled: true,
+      message: "Request cancelled.",
+    };
+  }
 
-const getRelationAnime = async (anime, signal) => {
-  const relationIds = getRelationIds(anime);
-  if (!relationIds.length) return [];
+  if (error?.response?.status === 404) {
+    return {
+      status: 404,
+      message: "Anime not found.",
+    };
+  }
 
-  const results = await Promise.allSettled(
-    relationIds.map((relationId) => getAnimeSummary(relationId, signal)),
-  );
-
-  return results
-    .map((result) => {
-      if (result.status !== "fulfilled") {
-        if (result.reason?.cancelled) throw result.reason;
-        return null;
-      }
-
-      return result.value?.data || null;
-    })
-    .filter(Boolean);
+  return {
+    status: error?.response?.status,
+    message: fallbackMessage,
+  };
 };
 
-export const getTrendingAnime = async (page, signal) => {
-  const data = await getCurrentSeasonAnime(page, signal);
-  return adaptAnimeListResponse(data, page);
+const request = async (url, { signal, params, fallbackMessage }) => {
+  try {
+    const response = await client.get(url, { signal, params });
+    if (!response?.data || typeof response.data !== "object") {
+      throw { message: fallbackMessage };
+    }
+    return response.data;
+  } catch (error) {
+    throw normalizeError(error, fallbackMessage);
+  }
 };
 
-export const getPopularAnime = async (page, signal) => {
-  const data = await getJikanPopularAnime(page, signal);
-  return adaptAnimeListResponse(data, page);
-};
-
-export const getUpcomingAnime = async (page, signal) => {
-  const data = await getJikanUpcomingAnime(page, signal);
-  return adaptAnimeListResponse(data, page);
-};
-
-export const searchAnime = async (query, page, signal) => {
+export const searchAnime = async (query, page = 1, signal) => {
   const q = query?.trim();
   if (!q) {
     return {
@@ -79,16 +75,33 @@ export const searchAnime = async (query, page, signal) => {
     };
   }
 
-  const data = await searchJikanAnime(q, page, signal);
-  return adaptAnimeListResponse(data, page);
+  const data = await request(`/api/searchall/${encodeURIComponent(q)}`, {
+    signal,
+    params: { page },
+    fallbackMessage: "Unable to search anime.",
+  });
+
+  return adaptAnimeListResponse(data?.found === false ? [] : data, page);
+};
+
+export const getAnimeStreaming = async (id, signal) => {
+  const animeId = toValidAnimeId(id);
+  const data = await request(`/v1/api/details/${animeId}`, {
+    signal,
+    fallbackMessage: "Unable to check streaming availability.",
+  });
+
+  return adaptStreamingDetail(data);
 };
 
 export const getAnimeDetail = async (id, signal) => {
-  const malId = toValidMalId(id);
-  const detail = await getJikanAnimeDetail(malId, signal);
-  const anime = detail?.data;
+  const animeId = toValidAnimeId(id);
+  const detail = await request(`/anime/api/details/${animeId}`, {
+    signal,
+    fallbackMessage: "Unable to load anime detail.",
+  });
 
-  if (!anime?.mal_id) {
+  if (!detail?.local?._id) {
     throw new Error("Anime not found.");
   }
 
@@ -97,16 +110,15 @@ export const getAnimeDetail = async (id, signal) => {
     episodes: [],
     error: "",
   };
-  let relations = [];
 
   try {
-    streaming = await getAnimoEpisodes(
-      malId,
-      anime?.title_english || anime?.title,
-      signal,
-    );
+    streaming = await getAnimeStreaming(animeId, signal);
   } catch (error) {
     if (error?.cancelled) throw error;
+    if (error?.status === 404) {
+      return adaptAnimeDetail(detail, streaming);
+    }
+
     streaming = {
       status: "error",
       episodes: [],
@@ -114,13 +126,7 @@ export const getAnimeDetail = async (id, signal) => {
     };
   }
 
-  try {
-    relations = await getRelationAnime(anime, signal);
-  } catch (error) {
-    if (error?.cancelled) throw error;
-  }
-
-  return adaptAnimeDetail(anime, streaming, relations);
+  return adaptAnimeDetail(detail, streaming);
 };
 
 export const getAnimeByPath = (path, signal) => {
@@ -128,9 +134,6 @@ export const getAnimeByPath = (path, signal) => {
   const searchParams = new URLSearchParams(query);
   const page = getPage(searchParams);
 
-  if (pathname === "/trending") return getTrendingAnime(page, signal);
-  if (pathname === "/popular") return getPopularAnime(page, signal);
-  if (pathname === "/upcoming") return getUpcomingAnime(page, signal);
   if (pathname.startsWith("/anime/")) {
     return getAnimeDetail(pathname.replace("/anime/", ""), signal);
   }

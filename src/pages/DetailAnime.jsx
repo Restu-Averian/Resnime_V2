@@ -104,18 +104,6 @@ const DetailAnime = () => {
             </Stack>
           </Box>
 
-          <Box
-            showIf={
-              detailData?.id &&
-              !detailData?.episodes?.length &&
-              detailData?.streamingStatus !== "error"
-            }
-          >
-            <Text textAlign="center">
-              Streaming is currently unavailable for this anime.
-            </Text>
-          </Box>
-
           <Box showIf={detailData?.relations?.length > 0} useSuspense>
             <RelationsAnime data={detailData} />
           </Box>

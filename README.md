@@ -1,22 +1,19 @@
 # API Used
 
-## 1. Anime Metadata
+Resnime uses AniPub as its only anime API provider.
 
-Resnime uses Jikan REST API v4 for anime metadata.
+## Anime
 
-- Search: `/anime?q={query}&page={page}&limit={limit}&sfw=true`
-- Trending: `/seasons/now?page={page}&limit={limit}&sfw=true`
-- Popular: `/top/anime?filter=bypopularity&page={page}&limit={limit}`
-- Upcoming: `/seasons/upcoming?page={page}&limit={limit}&sfw=true`
-- Detail: `/anime/{malId}/full`
-- Episodes: `/anime/{malId}/episodes?page=1`
+- Search: `/api/searchall/{query}?page={page}`
+- Detail: `/anime/api/details/{id}`
+- Episodes and player URLs: `/v1/api/details/{id}`
+
+Sections that AniPub does not expose are hidden in the app.
 
 Required environment variables are listed in `.env.example`.
 
-## 2. Streaming
+## Streaming
 
-Episode playback uses the 4Animo iframe provider:
+Episode playback uses the player URLs returned by AniPub.
 
-`/embed/{server}/mal/{malId}/{episodeNumber}/{audioType}?k=1`
-
-Direct download URLs are unavailable with the iframe provider.
+Direct download URLs are unavailable unless AniPub returns one.
