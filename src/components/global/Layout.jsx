@@ -9,7 +9,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import Sidebar from "./Sidebar";
 
@@ -17,11 +17,18 @@ const Layout = ({ children }) => {
   const [search, setSearch] = useState("");
   const [searchParam, setSearchParam] = useSearchParams();
   const navigate = useNavigate();
+  const query = useMemo(() => searchParam?.get("q") || "", [searchParam]);
+
+  useEffect(() => {
+    setSearch(query);
+  }, [query]);
 
   const searchHandler = () => {
-    searchParam?.set("q", search);
-    setSearchParam(searchParam);
-    navigate(`/search/?q=${search}`);
+    const params = new URLSearchParams(searchParam);
+    params.set("q", search.trim());
+    params.delete("page");
+    setSearchParam(params);
+    navigate(`/search/?${params.toString()}`);
   };
 
   return (
@@ -75,7 +82,7 @@ const Layout = ({ children }) => {
             </HStack>
             <Box
               w={{ base: "calc(100vw - 32px)", md: "full" }}
-              maxW={{ base: "calc(100vw - 32px)", lg: "1180px" }}
+              maxW={{ base: "calc(100vw - 32px)", lg: "100%" }}
               mx="auto"
             >
               <InputGroup startElement={<Search size={18} />}>
@@ -88,6 +95,7 @@ const Layout = ({ children }) => {
                   bg="rgba(255,255,255,0.035)"
                   _placeholder={{ color: "gray.400" }}
                   placeholder="Search anime, episodes, genres..."
+                  value={search}
                   onChange={({ target: { value } }) => {
                     setSearch(value);
                   }}

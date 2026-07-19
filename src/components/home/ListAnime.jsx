@@ -11,7 +11,7 @@ import useResponsive from "../../hooks/useResponsive";
 import ErrorPage from "../global/ErrorPage";
 import imageError from "../../assets/image_error.png";
 
-const ListAnime = ({ titlePage, path, useExploreMore = false }) => {
+const ListAnime = ({ titlePage, path, useExploreMore = false, CardComponent = CardAnime }) => {
   const { sm } = useResponsive();
 
   const navigate = useNavigate();
@@ -80,7 +80,7 @@ const ListAnime = ({ titlePage, path, useExploreMore = false }) => {
                 <>
                   <SimpleGrid columns={sm ? 1 : 2} gap={10} alignItems="center">
                     {arrDatas?.map((item, key) => (
-                      <CardAnime data={item} key={key} />
+                      <CardComponent data={item} anime={item} key={key} />
                     ))}
 
                     {useExploreMore && (

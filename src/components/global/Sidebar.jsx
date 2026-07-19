@@ -61,7 +61,10 @@ const Sidebar = () => {
 
       <VStack as="nav" align="stretch" gap={2}>
         {navItems.map((item) => {
-          const active = item.to === "/" ? pathname === "/" : false;
+          const active =
+            item.to === "/"
+              ? pathname === "/"
+              : item.label === "Browse" && pathname.startsWith(item.to);
 
           return (
             <ChakraLink
