@@ -1,4 +1,11 @@
-import { Box, Flex, HStack, Icon, Link as ChakraLink, Text, VStack } from "@chakra-ui/react";
+import {
+  Flex,
+  HStack,
+  Icon,
+  Link as ChakraLink,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Bookmark,
@@ -70,24 +77,19 @@ const Sidebar = () => {
               borderRadius="8px"
               color={active ? "#ff6d8f" : "gray.300"}
               bg={active ? "rgba(255, 109, 143, 0.13)" : "transparent"}
-              borderLeft={active ? "3px solid #ff6d8f" : "3px solid transparent"}
+              borderLeft={
+                active ? "3px solid #ff6d8f" : "3px solid transparent"
+              }
               _hover={{ textDecoration: "none", bg: "rgba(255,255,255,0.06)" }}
             >
               <Icon as={item.icon} boxSize={5} />
-              <Text fontWeight={active ? "semibold" : "medium"}>{item.label}</Text>
+              <Text fontWeight={active ? "semibold" : "medium"}>
+                {item.label}
+              </Text>
             </ChakraLink>
           );
         })}
       </VStack>
-
-      <Box
-        mt="auto"
-        mx={-4}
-        mb={-7}
-        h="330px"
-        bg="radial-gradient(circle at 50% 25%, rgba(255, 118, 153, 0.24), transparent 28%), linear-gradient(180deg, transparent, rgba(12, 23, 45, 0.92)), linear-gradient(135deg, #192648, #071020 70%)"
-        opacity={0.9}
-      />
     </Flex>
   );
 };
