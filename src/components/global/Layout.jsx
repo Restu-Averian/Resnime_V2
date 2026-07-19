@@ -1,8 +1,17 @@
-import { Box, Input, InputGroup, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  HStack,
+  Input,
+  InputGroup,
+  Kbd,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { Search } from "lucide-react";
-import Image from "./Image";
+import Sidebar from "./Sidebar";
 
 const Layout = ({ children }) => {
   const [search, setSearch] = useState("");
@@ -16,42 +25,88 @@ const Layout = ({ children }) => {
   };
 
   return (
-    <Stack direction="column" spacing={1}>
-      <Box
-        position="sticky"
-        top={0}
-        zIndex={99}
-        bgColor="var(--chakra-colors-chakra-body-bg)"
+    <Flex minH="100vh" bg="#050b16" color="white" overflowX="hidden">
+      <Sidebar />
+      <Stack
+        direction="column"
+        gap={0}
+        flex={1}
+        minW={0}
+        w={{ base: "100vw", lg: "calc(100vw - 270px)" }}
+        maxW={{ base: "100vw", lg: "calc(100vw - 270px)" }}
+        ml={{ base: 0, lg: "270px" }}
       >
-        <Stack direction="row" alignItems="center">
-          <Box
-            cursor="pointer"
-            onClick={() => {
-              navigate("/");
-            }}
+        <Box
+          position="sticky"
+          top={0}
+          zIndex={19}
+          px={{ base: 4, md: 8 }}
+          pt={{ base: 4, md: 5 }}
+          pb={3}
+          bg="rgba(5, 11, 22, 0.86)"
+          backdropFilter="blur(18px)"
+          borderBottom="1px solid rgba(255,255,255,0.04)"
+          overflowX="hidden"
+        >
+          <Stack
+            direction={{ base: "column", md: "row" }}
+            align={{ base: "stretch", md: "center" }}
+            gap={4}
           >
-            <Image src="/icon.png" boxSize={20} />
-          </Box>
-          <Box style={{ width: "100%" }}>
-            <InputGroup startElement={<Search size={18} />}>
-              <Input
-                type="search"
-                ps={10}
-                onChange={({ target: { value } }) => {
-                  setSearch(value);
-                }}
-                onKeyUp={(e) => {
-                  if (e?.code === "Enter" || e?.key === "Enter") {
-                    searchHandler();
-                  }
-                }}
-              />
-            </InputGroup>
-          </Box>
-        </Stack>
-      </Box>
-      <Box className="content">{children}</Box>
-    </Stack>
+            <HStack
+              display={{ base: "flex", lg: "none" }}
+              cursor="pointer"
+              onClick={() => navigate("/")}
+              gap={3}
+              minW="fit-content"
+            >
+              <Text
+                color="#ff6d8f"
+                fontSize="4xl"
+                fontWeight="black"
+                lineHeight={1}
+                fontStyle="italic"
+              >
+                R
+              </Text>
+              <Text fontSize="xl" fontWeight="bold">
+                Resnime
+              </Text>
+            </HStack>
+            <Box
+              w={{ base: "calc(100vw - 32px)", md: "full" }}
+              maxW={{ base: "calc(100vw - 32px)", lg: "1180px" }}
+              mx="auto"
+            >
+              <InputGroup startElement={<Search size={18} />}>
+                <Input
+                  type="search"
+                  ps={10}
+                  h="52px"
+                  borderRadius="18px"
+                  borderColor="rgba(255,255,255,0.1)"
+                  bg="rgba(255,255,255,0.035)"
+                  _placeholder={{ color: "gray.400" }}
+                  placeholder="Search anime, episodes, genres..."
+                  onChange={({ target: { value } }) => {
+                    setSearch(value);
+                  }}
+                  onKeyUp={(e) => {
+                    if (e?.code === "Enter" || e?.key === "Enter") {
+                      searchHandler();
+                    }
+                  }}
+                />
+              </InputGroup>
+            </Box>
+            <Kbd display={{ base: "none", md: "inline-flex" }}>/</Kbd>
+          </Stack>
+        </Box>
+        <Box className="content" overflowX="hidden">
+          {children}
+        </Box>
+      </Stack>
+    </Flex>
   );
 };
 export default Layout;

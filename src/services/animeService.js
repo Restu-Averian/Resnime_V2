@@ -64,6 +64,79 @@ const request = async (url, { signal, params, fallbackMessage }) => {
   }
 };
 
+const requestAny = async (url, { signal, params, fallbackMessage }) => {
+  try {
+    const response = await client.get(url, { signal, params });
+    return response.data;
+  } catch (error) {
+    throw normalizeError(error, fallbackMessage);
+  }
+};
+
+const toPositiveId = (value) => {
+  const id = Number(value);
+  return Number.isInteger(id) && id > 0 ? id : null;
+};
+
+const getAnimeInfo = async (id, signal) => {
+  const animeId = toValidAnimeId(id);
+  const data = await request(`/api/info/${animeId}`, {
+    signal,
+    fallbackMessage: "Unable to load anime info.",
+  });
+
+  return adaptAnimeDetail(data);
+};
+
+export const getHomeBannerAnime = async (signal) => {
+  const latestId = toPositiveId(
+    await requestAny("/api/getlast", {
+      signal,
+      fallbackMessage: "Unable to load featured anime.",
+    }),
+  );
+
+  if (!latestId) throw new Error("Featured anime not found.");
+  return getAnimeInfo(latestId, signal);
+};
+
+export const getRecentlyUpdatedAnime = async (page = 1, signal, limit = 8) => {
+  const total = toPositiveId(
+    await requestAny("/api/getAll", {
+      signal,
+      fallbackMessage: "Unable to load recently updated anime.",
+    }),
+  );
+
+  if (!total) {
+    return {
+      results: [],
+      currentPage: page,
+      hasNextPage: false,
+      lastPage: null,
+    };
+  }
+
+  const currentPage = Math.max(Number(page) || 1, 1);
+  const startId = total - (currentPage - 1) * limit;
+  const ids = Array.from({ length: limit + 6 }, (_, index) => startId - index)
+    .filter((id) => id > 0);
+
+  const results = (
+    await Promise.allSettled(ids.map((id) => getAnimeInfo(id, signal)))
+  )
+    .filter((result) => result.status === "fulfilled")
+    .map((result) => result.value)
+    .slice(0, limit);
+
+  return {
+    results,
+    currentPage,
+    hasNextPage: startId - limit > 0,
+    lastPage: Math.ceil(total / limit),
+  };
+};
+
 export const searchAnime = async (query, page = 1, signal) => {
   const q = query?.trim();
   if (!q) {

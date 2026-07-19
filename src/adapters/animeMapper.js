@@ -1,13 +1,20 @@
 import { normalizePlayerUrl } from "../services/stream.js";
+import { ANIPUB_API_BASE_URL } from "../constants/index.js";
 
 const titleFallback = "Untitled Anime";
 
 const placeholderImage = "/placeholder.png";
 
 const getImage = (anime) =>
-  anime?.ImagePath || anime?.Image || anime?.poster || placeholderImage;
+  toAssetUrl(anime?.ImagePath || anime?.Image || anime?.poster);
 
-const getCover = (anime) => anime?.Cover || getImage(anime);
+const getCover = (anime) => (anime?.Cover ? toAssetUrl(anime.Cover) : getImage(anime));
+
+const toAssetUrl = (path) => {
+  if (!path) return placeholderImage;
+  if (/^https?:\/\//i.test(path)) return path;
+  return new URL(path.replace(/^\/+/, ""), `${ANIPUB_API_BASE_URL}/`).href;
+};
 
 const toScore = (value) => {
   const score = Number(value);
