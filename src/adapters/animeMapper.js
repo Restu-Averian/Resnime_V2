@@ -1,13 +1,20 @@
 import { normalizePlayerUrl } from "../services/stream.js";
+import { ANIPUB_API_BASE_URL } from "../constants/index.js";
 
 const titleFallback = "Untitled Anime";
 
 const placeholderImage = "/placeholder.png";
 
 const getImage = (anime) =>
-  anime?.ImagePath || anime?.Image || anime?.poster || placeholderImage;
+  toAssetUrl(anime?.ImagePath || anime?.Image || anime?.poster);
 
-const getCover = (anime) => anime?.Cover || getImage(anime);
+const getCover = (anime) => (anime?.Cover ? toAssetUrl(anime.Cover) : getImage(anime));
+
+const toAssetUrl = (path) => {
+  if (!path) return placeholderImage;
+  if (/^https?:\/\//i.test(path)) return path;
+  return new URL(path.replace(/^\/+/, ""), `${ANIPUB_API_BASE_URL}/`).href;
+};
 
 const toScore = (value) => {
   const score = Number(value);
@@ -69,6 +76,15 @@ export const adaptAnimeListResponse = (rawResponse, fallbackPage = 1) => ({
   currentPage: rawResponse?.currentPage || Number(fallbackPage) || 1,
   hasNextPage: Boolean(rawResponse?.AniData?.length >= 20),
   lastPage: null,
+});
+
+export const adaptAnimeSortResponse = (rawResponse, fallbackPage = 1) => ({
+  results: (Array.isArray(rawResponse?.[1]) ? rawResponse[1] : [])
+    .map((anime) => normalizeAnime(anime))
+    .filter((anime) => anime?.id),
+  currentPage: Number(fallbackPage) || 1,
+  hasNextPage: Number(rawResponse?.[0]) > Number(fallbackPage),
+  lastPage: Number(rawResponse?.[0]) || null,
 });
 
 const createEpisode = (entry, fallbackNumber, fallbackImage) => {

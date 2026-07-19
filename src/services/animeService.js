@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   adaptAnimeDetail,
   adaptAnimeListResponse,
+  adaptAnimeSortResponse,
   adaptStreamingDetail,
 } from "../adapters/animeMapper.js";
 import { ANIPUB_API_BASE_URL } from "../constants/index.js";
@@ -52,7 +53,7 @@ const normalizeError = (error, fallbackMessage) => {
   };
 };
 
-const request = async (url, { signal, params, fallbackMessage }) => {
+const fetch = async (url, { signal, params, fallbackMessage }) => {
   try {
     const response = await client.get(url, { signal, params });
     if (!response?.data || typeof response.data !== "object") {
@@ -64,7 +65,82 @@ const request = async (url, { signal, params, fallbackMessage }) => {
   }
 };
 
-export const searchAnime = async (query, page = 1, signal) => {
+const fetchAny = async (url, { signal, params, fallbackMessage }) => {
+  try {
+    const response = await client.get(url, { signal, params });
+    return response.data;
+  } catch (error) {
+    throw normalizeError(error, fallbackMessage);
+  }
+};
+
+const toPositiveId = (value) => {
+  const id = Number(value);
+  return Number.isInteger(id) && id > 0 ? id : null;
+};
+
+const getAnimeInfo = async (id, signal) => {
+  const animeId = toValidAnimeId(id);
+  const data = await fetch(`/api/info/${animeId}`, {
+    signal,
+    fallbackMessage: "Unable to load anime info.",
+  });
+
+  return adaptAnimeDetail(data);
+};
+
+export const getHomeBannerAnime = async (signal) => {
+  const latestId = toPositiveId(
+    await fetchAny("/api/getlast", {
+      signal,
+      fallbackMessage: "Unable to load featured anime.",
+    }),
+  );
+
+  if (!latestId) throw new Error("Featured anime not found.");
+  return getAnimeInfo(latestId, signal);
+};
+
+export const getRecentlyUpdatedAnime = async (page = 1, signal, limit = 8) => {
+  const total = toPositiveId(
+    await fetchAny("/api/getAll", {
+      signal,
+      fallbackMessage: "Unable to load recently updated anime.",
+    }),
+  );
+
+  if (!total) {
+    return {
+      results: [],
+      currentPage: page,
+      hasNextPage: false,
+      lastPage: null,
+    };
+  }
+
+  const currentPage = Math.max(Number(page) || 1, 1);
+  const startId = total - (currentPage - 1) * limit;
+  const ids = Array.from(
+    { length: limit + 6 },
+    (_, index) => startId - index,
+  ).filter((id) => id > 0);
+
+  const results = (
+    await Promise.allSettled(ids.map((id) => getAnimeInfo(id, signal)))
+  )
+    .filter((result) => result.status === "fulfilled")
+    .map((result) => result.value)
+    .slice(0, limit);
+
+  return {
+    results,
+    currentPage,
+    hasNextPage: startId - limit > 0,
+    lastPage: Math.ceil(total / limit),
+  };
+};
+
+const searchAnime = async (query, page = 1, signal) => {
   const q = query?.trim();
   if (!q) {
     return {
@@ -75,7 +151,7 @@ export const searchAnime = async (query, page = 1, signal) => {
     };
   }
 
-  const data = await request(`/api/searchall/${encodeURIComponent(q)}`, {
+  const data = await fetch(`/api/searchall/${encodeURIComponent(q)}`, {
     signal,
     params: { page },
     fallbackMessage: "Unable to search anime.",
@@ -84,9 +160,26 @@ export const searchAnime = async (query, page = 1, signal) => {
   return adaptAnimeListResponse(data?.found === false ? [] : data, page);
 };
 
-export const getAnimeStreaming = async (id, signal) => {
+export const sortAnime = async (options = {}, signal) => {
+  const page = Number(options.page) || 1;
+  const data = await fetchAny("/api/sort", {
+    signal,
+    params: {
+      name: options.name || undefined,
+      genre: options.genre || undefined,
+      ratefrom: options.ratefrom ?? 0,
+      rateto: options.rateto ?? 10,
+      page,
+    },
+    fallbackMessage: "Unable to sort anime.",
+  });
+
+  return adaptAnimeSortResponse(data, page);
+};
+
+const getAnimeStreaming = async (id, signal) => {
   const animeId = toValidAnimeId(id);
-  const data = await request(`/v1/api/details/${animeId}`, {
+  const data = await fetch(`/v1/api/details/${animeId}`, {
     signal,
     fallbackMessage: "Unable to check streaming availability.",
   });
@@ -94,9 +187,9 @@ export const getAnimeStreaming = async (id, signal) => {
   return adaptStreamingDetail(data);
 };
 
-export const getAnimeDetail = async (id, signal) => {
+const getAnimeDetail = async (id, signal) => {
   const animeId = toValidAnimeId(id);
-  const detail = await request(`/anime/api/details/${animeId}`, {
+  const detail = await fetch(`/anime/api/details/${animeId}`, {
     signal,
     fallbackMessage: "Unable to load anime detail.",
   });
