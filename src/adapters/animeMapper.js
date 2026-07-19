@@ -110,10 +110,21 @@ export const adaptStreamingDetail = (rawStreaming) => {
 export const adaptAnimeDetail = (rawAnime, streaming = {}) => {
   const local = getAnimePayload(rawAnime);
   const anime = normalizeAnime(local);
+  const episodeFallbackImage =
+    anime.image !== placeholderImage ? anime.image : anime.cover;
+  const episodes = Array.isArray(streaming?.episodes)
+    ? streaming.episodes.map((episode) => ({
+        ...episode,
+        image:
+          episode?.image && episode.image !== placeholderImage
+            ? episode.image
+            : episodeFallbackImage,
+      }))
+    : [];
 
   return {
     ...anime,
-    episodes: Array.isArray(streaming?.episodes) ? streaming.episodes : [],
+    episodes,
     streamingStatus: streaming?.status || "unavailable",
     streamingError: streaming?.error || "",
     relations: [],
