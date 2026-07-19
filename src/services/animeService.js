@@ -138,7 +138,7 @@ export const getRecentlyUpdatedAnime = async (page = 1, signal, limit = 8) => {
   };
 };
 
-export const searchAnime = async (query, page = 1, signal) => {
+const searchAnime = async (query, page = 1, signal) => {
   const q = query?.trim();
   if (!q) {
     return {
@@ -175,7 +175,7 @@ export const sortAnime = async (options = {}, signal) => {
   return adaptAnimeSortResponse(data, page);
 };
 
-export const getAnimeStreaming = async (id, signal) => {
+const getAnimeStreaming = async (id, signal) => {
   const animeId = toValidAnimeId(id);
   const data = await request(`/v1/api/details/${animeId}`, {
     signal,
@@ -185,7 +185,7 @@ export const getAnimeStreaming = async (id, signal) => {
   return adaptStreamingDetail(data);
 };
 
-export const getAnimeDetail = async (id, signal) => {
+const getAnimeDetail = async (id, signal) => {
   const animeId = toValidAnimeId(id);
   const detail = await request(`/anime/api/details/${animeId}`, {
     signal,
