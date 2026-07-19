@@ -2,20 +2,16 @@ import {
   Box,
   Flex,
   Grid,
-  HStack,
-  IconButton,
   Skeleton,
   Stack,
-  Text,
 } from "@chakra-ui/react";
-import { useEffect, useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight, Flame } from "lucide-react";
+import { useEffect, useState } from "react";
 import useChangeDocTitle from "../hooks/useChangeDocTitle";
 import {
   getHomeBannerAnime,
   getRecentlyUpdatedAnime,
 } from "../services/animeService";
-import SectionHeader from "../components/home/SectionHeader";
+import HomeSectionHeader from "../components/home/HomeSectionHeader";
 import HeroBanner from "../components/home/HeroBanner";
 import RecentCard from "../components/home/RecentCard";
 
@@ -53,16 +49,6 @@ const Home = () => {
     return () => controller.abort();
   }, [page]);
 
-  const recentCards = useMemo(
-    () =>
-      loading
-        ? Array.from({ length: 8 }, (_, index) => (
-            <Skeleton key={index} h="132px" borderRadius="10px" />
-          ))
-        : recent.map((anime) => <RecentCard key={anime.id} anime={anime} />),
-    [loading, recent],
-  );
-
   return (
     <Stack gap={6} maxW="1680px" mx="auto">
       <HeroBanner anime={banner} loading={loading} />
@@ -80,39 +66,8 @@ const Home = () => {
       )}
 
       <Stack gap={3}>
-        <SectionHeader
-          icon={Flame}
-          title="Recently Updated"
-          action={
-            <HStack gap={2}>
-              <IconButton
-                aria-label="Previous recent page"
-                size="sm"
-                borderRadius="10px"
-                variant="outline"
-                borderColor="rgba(255,255,255,0.14)"
-                disabled={page === 1 || loading}
-                onClick={() => setPage((value) => Math.max(value - 1, 1))}
-              >
-                <ChevronLeft />
-              </IconButton>
-              <Text color="gray.300" minW="70px" textAlign="center">
-                Page {page}
-              </Text>
-              <IconButton
-                aria-label="Next recent page"
-                size="sm"
-                borderRadius="10px"
-                variant="outline"
-                borderColor="rgba(255,255,255,0.14)"
-                disabled={loading}
-                onClick={() => setPage((value) => value + 1)}
-              >
-                <ChevronRight />
-              </IconButton>
-            </HStack>
-          }
-        />
+        <HomeSectionHeader page={page} setPage={setPage} loading={loading} />
+
         <Grid
           templateColumns={{
             base: "1fr",
@@ -121,8 +76,15 @@ const Home = () => {
           }}
           gap={4}
         >
-          {recentCards}
+          {loading
+            ? Array.from({ length: 8 }, (_, index) => (
+                <Skeleton key={index} h="132px" borderRadius="10px" />
+              ))
+            : recent.map((anime) => (
+                <RecentCard key={anime.id} anime={anime} />
+              ))}
         </Grid>
+
         {!loading && !recent.length && (
           <Flex
             minH="140px"

@@ -6,16 +6,9 @@
     <a href="https://www.resnime.my.id">Live Website</a>
   </p>
   <p>
-    <img src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React 19" />
-    <img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 8" />
-   <img
-    src="https://img.shields.io/badge/JavaScript-JSX-F7DF1E.svg?style=flat-square&logo=javascript&logoColor=black"
-    alt="JavaScript and JSX"
-  />
-  <img
-    src="https://img.shields.io/badge/Chakra%20UI-3-319795.svg?style=flat-square&logo=chakraui&logoColor=white"
-    alt="Chakra UI 3"
-  />
+    <img src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=61DAFB" alt="React 19" />
+    <img src="https://img.shields.io/badge/Vite-8-20232A?style=flat-square&logo=vite&logoColor=646CFF" alt="Vite 8" />
+    <img src="https://img.shields.io/badge/Chakra%20UI-3-20232A?style=flat-square&logo=chakraui&logoColor=41C89F" alt="Chakra UI 3" />
   </p>
 </div>
 

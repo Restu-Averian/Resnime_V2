@@ -5,6 +5,8 @@ import {
   Box as ChakraBox,
   Button,
   Flex,
+  Grid,
+  GridItem,
   Heading,
   HStack,
   Icon,
@@ -15,12 +17,24 @@ import {
 } from "@chakra-ui/react";
 import {
   Bookmark,
+  BookOpen,
+  Building2,
+  CalendarDays,
+  CircleCheck,
   FileText,
+  Flame,
+  Heart,
+  Info,
   ListFilter,
+  ListVideo,
   Play,
+  Sparkles,
   Star,
+  SunMedium,
+  Tag,
   Users,
   Video,
+  Zap,
 } from "lucide-react";
 import useFetchData from "../hooks/useFetchData";
 import Loading from "../components/global/Loading";
@@ -33,21 +47,8 @@ import { sortAnime } from "../services/animeService";
 const CharacterAnime = lazy(
   () => import("../components/detail-anime/character-anime/CharacterAnime"),
 );
-const DescriptionAnime = lazy(
-  () => import("../components/detail-anime/description-anime/DescriptionAnime"),
-);
 const EpisodesAnime = lazy(
   () => import("../components/detail-anime/episodes-anime/EpisodesAnime"),
-);
-const RecommendationAnime = lazy(
-  () =>
-    import("../components/detail-anime/recommendation-anime/RecommendationAnime"),
-);
-const RelationsAnime = lazy(
-  () => import("../components/detail-anime/relations-anime/RelationsAnime"),
-);
-const TitleAnime = lazy(
-  () => import("../components/detail-anime/title-anime/TitleAnime"),
 );
 
 const tabs = [
@@ -58,6 +59,16 @@ const tabs = [
 ];
 
 const getTitle = (data, fallback) => data?.title?.romaji || decodeURI(fallback);
+
+const emptyValue = "Unknown";
+
+const cleanDescription = (description) =>
+  description?.replace(/<[^>]*>/g, "").trim() || "No story summary available.";
+
+const toDisplayValue = (value) => {
+  if (Array.isArray(value)) return value.length ? value.join(", ") : emptyValue;
+  return value || emptyValue;
+};
 
 const sortEpisodes = (episodes, direction) => {
   return [...(episodes || [])].sort((a, b) => {
@@ -133,7 +144,9 @@ const DetailHero = ({ data, animeName, onWatch }) => {
                 </HStack>
               )}
               {data?.releaseDate && <Text>{data.releaseDate}</Text>}
-              {data?.totalEpisodes && <Text>{data.totalEpisodes} Episodes</Text>}
+              {data?.totalEpisodes && (
+                <Text>{data.totalEpisodes} Episodes</Text>
+              )}
               {data?.type && <Text>{data.type}</Text>}
             </Stack>
           </Stack>
@@ -217,6 +230,153 @@ const DetailHero = ({ data, animeName, onWatch }) => {
         </Stack>
       </Flex>
     </ChakraBox>
+  );
+};
+
+const DetailOverview = ({ data }) => {
+  const description = cleanDescription(data?.description);
+  const infoItems = [
+    { label: "Genres", value: data?.genres, icon: Tag },
+    { label: "Status", value: data?.status, icon: CircleCheck },
+    { label: "Release Date", value: data?.releaseDate, icon: CalendarDays },
+    { label: "Season", value: data?.season, icon: SunMedium },
+    { label: "Studio", value: data?.studios, icon: Building2 },
+    { label: "Type", value: data?.type, icon: Video },
+    { label: "Episodes", value: data?.totalEpisodes, icon: ListVideo },
+  ];
+  const episodeLabel =
+    data?.totalEpisodes &&
+    `${data.totalEpisodes} Episode${Number(data.totalEpisodes) === 1 ? "" : "s"}`;
+  const storyBadges = [
+    { label: data?.type, icon: BookOpen },
+    { label: data?.status, icon: Zap },
+    { label: data?.genres?.[0], icon: Flame },
+    { label: episodeLabel, icon: Heart },
+  ].filter(({ label }) => label);
+
+  return (
+    <Stack gap={4}>
+      <Stack gap={1}>
+        <HStack gap={2}>
+          <Sparkles size={20} color="#ff6d8f" fill="rgba(255,109,143,0.28)" />
+          <Heading
+            as="h2"
+            fontSize={{ base: "2xl", md: "3xl" }}
+            lineHeight={1.1}
+          >
+            Overview
+          </Heading>
+        </HStack>
+        <Text color="gray.400" fontSize={{ base: "sm", md: "md" }}>
+          Learn more about the story, world, and production.
+        </Text>
+      </Stack>
+
+      <Grid templateColumns={{ base: "1fr", xl: "1.42fr 1fr" }} gap={7}>
+        <GridItem minW={0}>
+          <ChakraBox
+            minH="310px"
+            border="1px solid rgba(255,109,143,0.22)"
+            borderRadius="14px"
+            bgImage={`linear-gradient(90deg, rgba(10, 14, 33, 0.96) 0%, rgba(4, 6, 17, 0.85) 75%, rgba(2, 3, 10, 0.74) 100%), url(${data?.cover || data?.image})`}
+            bgSize="cover"
+            bgPos="center"
+            boxShadow="inset 0 1px 0 rgba(255,255,255,0.05), 0 18px 55px rgba(0,0,0,0.24)"
+            overflow="hidden"
+            px={{ base: 5, md: 6 }}
+            py={{ base: 5, md: 6 }}
+          >
+            <Stack gap={5} h="full" justify="space-between">
+              <Stack gap={4}>
+                <HStack gap={3} color="#ff8daf">
+                  <BookOpen size={23} />
+                  <Heading as="h3" fontSize={{ base: "lg", md: "xl" }}>
+                    Story Summary
+                  </Heading>
+                </HStack>
+                <Text
+                  color="gray.100"
+                  fontSize={{ base: "sm", md: "md" }}
+                  lineHeight="1.75"
+                  maxW="760px"
+                  whiteSpace="pre-line"
+                  lineClamp={8}
+                >
+                  {description}
+                </Text>
+              </Stack>
+
+              <HStack gap={2} wrap="wrap">
+                {storyBadges.map(({ label, icon }) => (
+                  <HStack
+                    key={label}
+                    gap={2}
+                    px={3}
+                    py={2}
+                    borderRadius="9px"
+                    border="1px solid rgba(255,109,143,0.18)"
+                    bg="rgba(255,255,255,0.045)"
+                    color="gray.100"
+                    fontSize="sm"
+                  >
+                    <Icon as={icon} boxSize={4} color="#ff6d8f" />
+                    <Text>{label}</Text>
+                  </HStack>
+                ))}
+              </HStack>
+            </Stack>
+          </ChakraBox>
+        </GridItem>
+
+        <GridItem minW={0}>
+          <ChakraBox
+            minH="310px"
+            border="1px solid rgba(255,109,143,0.2)"
+            borderRadius="14px"
+            bg="rgba(15, 18, 43, 0.82)"
+            boxShadow="inset 0 1px 0 rgba(255,255,255,0.05), 0 18px 55px rgba(0,0,0,0.22)"
+            px={{ base: 5, md: 6 }}
+            py={{ base: 5, md: 6 }}
+          >
+            <Stack gap={4}>
+              <HStack gap={3} color="#ffc1d2">
+                <Info size={22} color="#ff6d8f" />
+                <Heading as="h3" fontSize={{ base: "lg", md: "xl" }}>
+                  Information
+                </Heading>
+              </HStack>
+
+              <Stack gap={0}>
+                {infoItems.map(({ label, value, icon }) => (
+                  <Flex
+                    key={label}
+                    align="center"
+                    justify="space-between"
+                    gap={4}
+                    py={2.5}
+                    borderBottom="1px solid rgba(255,255,255,0.07)"
+                    _last={{ borderBottom: 0 }}
+                  >
+                    <HStack gap={3} minW={0} color="gray.400">
+                      <Icon as={icon} boxSize={4} color="gray.300" />
+                      <Text fontSize="sm">{label}</Text>
+                    </HStack>
+                    <Text
+                      color="gray.100"
+                      fontSize="sm"
+                      textAlign="right"
+                      overflowWrap="anywhere"
+                    >
+                      {toDisplayValue(value)}
+                    </Text>
+                  </Flex>
+                ))}
+              </Stack>
+            </Stack>
+          </ChakraBox>
+        </GridItem>
+      </Grid>
+    </Stack>
   );
 };
 
@@ -319,7 +479,12 @@ const DetailAnime = () => {
               borderBottom="1px solid rgba(255,255,255,0.1)"
               mb={5}
             >
-              <HStack as="div" role="tablist" gap={{ base: 1, md: 5 }} overflowX="auto">
+              <HStack
+                as="div"
+                role="tablist"
+                gap={{ base: 1, md: 5 }}
+                overflowX="auto"
+              >
                 {tabs.map((tab) => {
                   const active = activeTab === tab.id;
 
@@ -333,9 +498,7 @@ const DetailAnime = () => {
                       px={{ base: 3, md: 4 }}
                       color={active ? "#ff6d8f" : "gray.300"}
                       borderBottom={
-                        active
-                          ? "2px solid #ff6d8f"
-                          : "2px solid transparent"
+                        active ? "2px solid #ff6d8f" : "2px solid transparent"
                       }
                       onClick={() => setActiveTab(tab.id)}
                       _hover={{
@@ -381,7 +544,10 @@ const DetailAnime = () => {
                       </Select.IndicatorGroup>
                     </Select.Control>
                     <Select.Positioner>
-                      <Select.Content bg="#08101f" borderColor="rgba(255,255,255,0.14)">
+                      <Select.Content
+                        bg="#08101f"
+                        borderColor="rgba(255,255,255,0.14)"
+                      >
                         <Select.Item item="episode-asc">
                           Episode
                           <Select.ItemIndicator />
@@ -404,7 +570,10 @@ const DetailAnime = () => {
                     {sortError}
                   </Text>
                 )}
-                <Box showIf={sortedDetailData?.episodes?.length > 0} useSuspense>
+                <Box
+                  showIf={sortedDetailData?.episodes?.length > 0}
+                  useSuspense
+                >
                   <EpisodesAnime data={sortedDetailData} />
                 </Box>
                 {!sortedDetailData?.episodes?.length && (
@@ -422,22 +591,7 @@ const DetailAnime = () => {
               </Stack>
             )}
 
-            {activeTab === "overview" && (
-              <Stack gap={7}>
-                <Box useSuspense>
-                  <TitleAnime data={detailData} />
-                </Box>
-                <Box useSuspense>
-                  <DescriptionAnime data={detailData} />
-                </Box>
-                <Box showIf={detailData?.relations?.length > 0} useSuspense>
-                  <RelationsAnime data={detailData} />
-                </Box>
-                <Box showIf={detailData?.recommendations?.length > 0} useSuspense>
-                  <RecommendationAnime data={detailData} />
-                </Box>
-              </Stack>
-            )}
+            {activeTab === "overview" && <DetailOverview data={detailData} />}
 
             {activeTab === "characters" && (
               <>

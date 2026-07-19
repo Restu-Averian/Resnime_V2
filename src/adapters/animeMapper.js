@@ -8,7 +8,8 @@ const placeholderImage = "/placeholder.png";
 const getImage = (anime) =>
   toAssetUrl(anime?.ImagePath || anime?.Image || anime?.poster);
 
-const getCover = (anime) => (anime?.Cover ? toAssetUrl(anime.Cover) : getImage(anime));
+const getCover = (anime) =>
+  anime?.Cover ? toAssetUrl(anime.Cover) : getImage(anime);
 
 const toAssetUrl = (path) => {
   if (!path) return placeholderImage;
@@ -58,6 +59,7 @@ const normalizeAnime = (anime) => {
     totalEpisodes: anime?.epCount || "",
     averageScore: score,
     score,
+    ratingsCount: Number(anime?.RatingsNum) || 0,
     releaseDate: anime?.Aired || "",
     season: anime?.Premiered || "",
     studios: getStudios(anime),
@@ -67,25 +69,6 @@ const normalizeAnime = (anime) => {
     characters: [],
   };
 };
-
-export const adaptAnimeListResponse = (rawResponse, fallbackPage = 1) => ({
-  results:
-    (Array.isArray(rawResponse) ? rawResponse : rawResponse?.AniData)
-      ?.map((anime) => normalizeAnime(anime))
-      .filter((anime) => anime?.id) || [],
-  currentPage: rawResponse?.currentPage || Number(fallbackPage) || 1,
-  hasNextPage: Boolean(rawResponse?.AniData?.length >= 20),
-  lastPage: null,
-});
-
-export const adaptAnimeSortResponse = (rawResponse, fallbackPage = 1) => ({
-  results: (Array.isArray(rawResponse?.[1]) ? rawResponse[1] : [])
-    .map((anime) => normalizeAnime(anime))
-    .filter((anime) => anime?.id),
-  currentPage: Number(fallbackPage) || 1,
-  hasNextPage: Number(rawResponse?.[0]) > Number(fallbackPage),
-  lastPage: Number(rawResponse?.[0]) || null,
-});
 
 const createEpisode = (entry, fallbackNumber, fallbackImage) => {
   const playerUrl = normalizePlayerUrl(entry?.link);
@@ -100,7 +83,41 @@ const createEpisode = (entry, fallbackNumber, fallbackImage) => {
   };
 };
 
-export const adaptStreamingDetail = (rawStreaming) => {
+export const fmtAnimeListResponse = (rawResponse, fallbackPage = 1) => ({
+  results:
+    (Array.isArray(rawResponse) ? rawResponse : rawResponse?.AniData)
+      ?.map((anime) => normalizeAnime(anime))
+      .filter((anime) => anime?.id) || [],
+  currentPage: rawResponse?.currentPage || Number(fallbackPage) || 1,
+  hasNextPage: Boolean(rawResponse?.AniData?.length >= 20),
+  lastPage: null,
+});
+
+export const fmtAnimeGenreResponse = (rawResponse, fallbackPage = 1) => {
+  const rawResults = Array.isArray(rawResponse?.wholePage)
+    ? rawResponse.wholePage
+    : [];
+
+  return {
+    results: rawResults
+      .filter((anime) => anime?._id && anime?.Name && anime?.ImagePath)
+      .map((anime) => normalizeAnime(anime)),
+    currentPage: rawResponse?.currentPage || Number(fallbackPage) || 1,
+    hasNextPage: rawResults.length >= 20,
+    lastPage: null,
+  };
+};
+
+export const fmtAnimeSortResponse = (rawResponse, fallbackPage = 1) => ({
+  results: (Array.isArray(rawResponse?.[1]) ? rawResponse[1] : [])
+    .map((anime) => normalizeAnime(anime))
+    .filter((anime) => anime?.id),
+  currentPage: Number(fallbackPage) || 1,
+  hasNextPage: Number(rawResponse?.[0]) > Number(fallbackPage),
+  lastPage: Number(rawResponse?.[0]) || null,
+});
+
+export const fmtAnimeStreamingDetail = (rawStreaming) => {
   const local = rawStreaming?.local || {};
   const entries = [
     local?.link ? { ...local, name: local?.name || "Episode 1" } : null,
@@ -123,7 +140,7 @@ export const adaptStreamingDetail = (rawStreaming) => {
   };
 };
 
-export const adaptAnimeDetail = (rawAnime, streaming = {}) => {
+export const fmtAnimeDetailResponse = (rawAnime, streaming = {}) => {
   const local = getAnimePayload(rawAnime);
   const anime = normalizeAnime(local);
   const episodeFallbackImage =
