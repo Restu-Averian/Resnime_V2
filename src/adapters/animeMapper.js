@@ -78,6 +78,15 @@ export const adaptAnimeListResponse = (rawResponse, fallbackPage = 1) => ({
   lastPage: null,
 });
 
+export const adaptAnimeSortResponse = (rawResponse, fallbackPage = 1) => ({
+  results: (Array.isArray(rawResponse?.[1]) ? rawResponse[1] : [])
+    .map((anime) => normalizeAnime(anime))
+    .filter((anime) => anime?.id),
+  currentPage: Number(fallbackPage) || 1,
+  hasNextPage: Number(rawResponse?.[0]) > Number(fallbackPage),
+  lastPage: Number(rawResponse?.[0]) || null,
+});
+
 const createEpisode = (entry, fallbackNumber, fallbackImage) => {
   const playerUrl = normalizePlayerUrl(entry?.link);
   if (!playerUrl) return null;

@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   adaptAnimeDetail,
   adaptAnimeListResponse,
+  adaptAnimeSortResponse,
   adaptStreamingDetail,
 } from "../adapters/animeMapper.js";
 import { ANIPUB_API_BASE_URL } from "../constants/index.js";
@@ -155,6 +156,23 @@ export const searchAnime = async (query, page = 1, signal) => {
   });
 
   return adaptAnimeListResponse(data?.found === false ? [] : data, page);
+};
+
+export const sortAnime = async (options = {}, signal) => {
+  const page = Number(options.page) || 1;
+  const data = await requestAny("/api/sort", {
+    signal,
+    params: {
+      name: options.name || undefined,
+      genre: options.genre || undefined,
+      ratefrom: options.ratefrom ?? 0,
+      rateto: options.rateto ?? 10,
+      page,
+    },
+    fallbackMessage: "Unable to sort anime.",
+  });
+
+  return adaptAnimeSortResponse(data, page);
 };
 
 export const getAnimeStreaming = async (id, signal) => {
