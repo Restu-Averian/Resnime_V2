@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   fmtAnimeDetailResponse,
+  fmtAnimeGenreResponse,
   fmtAnimeListResponse,
   fmtAnimeSortResponse,
   fmtAnimeStreamingDetail,
@@ -175,6 +176,31 @@ export const sortAnime = async (options = {}, signal) => {
   });
 
   return fmtAnimeSortResponse(data, page);
+};
+
+export const getAnimeByGenre = async (genre, page = 1, signal) => {
+  const selectedGenre = genre?.trim();
+  const currentPage = Number(page) || 1;
+
+  if (!selectedGenre) {
+    return {
+      results: [],
+      currentPage,
+      hasNextPage: false,
+      lastPage: null,
+    };
+  }
+
+  const data = await fetch(
+    `/api/findbyGenre/${encodeURIComponent(selectedGenre)}`,
+    {
+      signal,
+      params: { Page: currentPage },
+      fallbackMessage: "Unable to load genre anime.",
+    },
+  );
+
+  return fmtAnimeGenreResponse(data, currentPage);
 };
 
 const getAnimeDetail = async (id, signal) => {

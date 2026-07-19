@@ -59,6 +59,7 @@ const normalizeAnime = (anime) => {
     totalEpisodes: anime?.epCount || "",
     averageScore: score,
     score,
+    ratingsCount: Number(anime?.RatingsNum) || 0,
     releaseDate: anime?.Aired || "",
     season: anime?.Premiered || "",
     studios: getStudios(anime),
@@ -91,6 +92,21 @@ export const fmtAnimeListResponse = (rawResponse, fallbackPage = 1) => ({
   hasNextPage: Boolean(rawResponse?.AniData?.length >= 20),
   lastPage: null,
 });
+
+export const fmtAnimeGenreResponse = (rawResponse, fallbackPage = 1) => {
+  const rawResults = Array.isArray(rawResponse?.wholePage)
+    ? rawResponse.wholePage
+    : [];
+
+  return {
+    results: rawResults
+      .filter((anime) => anime?._id && anime?.Name && anime?.ImagePath)
+      .map((anime) => normalizeAnime(anime)),
+    currentPage: rawResponse?.currentPage || Number(fallbackPage) || 1,
+    hasNextPage: rawResults.length >= 20,
+    lastPage: null,
+  };
+};
 
 export const fmtAnimeSortResponse = (rawResponse, fallbackPage = 1) => ({
   results: (Array.isArray(rawResponse?.[1]) ? rawResponse[1] : [])

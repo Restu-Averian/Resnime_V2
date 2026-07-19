@@ -10,10 +10,10 @@ import {
 } from "lucide-react";
 
 const navItems = [
-  { label: "Home", icon: Home, to: "/" },
-  { label: "Browse", icon: Compass, to: "/search" },
+  { label: "Home", icon: Home, to: "/", activePath: "/" },
+  { label: "Browse", icon: Compass, to: "/search", activePath: "/search" },
   { label: "New Episodes", icon: Clapperboard, to: "/search" },
-  { label: "Genres", icon: Grid2X2, to: "/search" },
+  { label: "Genres", icon: Grid2X2, to: "/genres", activePath: "/genres" },
   { label: "Bookmarks", icon: Bookmark, to: "/search" },
   { label: "History", icon: History, to: "/search" },
 ];
@@ -24,10 +24,11 @@ const SidebarListMenu = () => {
   return (
     <VStack as="nav" align="stretch" gap={2}>
       {navItems.map((item) => {
-        const active =
-          item.to === "/"
+        const active = item.activePath
+          ? item.activePath === "/"
             ? pathname === "/"
-            : item.label === "Browse" && pathname.startsWith(item.to);
+            : pathname.startsWith(item.activePath)
+          : false;
 
         return (
           <ChakraLink
