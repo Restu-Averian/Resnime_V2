@@ -2,20 +2,16 @@ import {
   Box,
   Flex,
   Grid,
-  HStack,
-  IconButton,
   Skeleton,
   Stack,
-  Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, Flame } from "lucide-react";
 import useChangeDocTitle from "../hooks/useChangeDocTitle";
 import {
   getHomeBannerAnime,
   getRecentlyUpdatedAnime,
 } from "../services/animeService";
-import SectionHeader from "../components/home/SectionHeader";
+import HomeSectionHeader from "../components/home/HomeSectionHeader";
 import HeroBanner from "../components/home/HeroBanner";
 import RecentCard from "../components/home/RecentCard";
 
@@ -70,39 +66,8 @@ const Home = () => {
       )}
 
       <Stack gap={3}>
-        <SectionHeader
-          icon={Flame}
-          title="Recently Updated"
-          action={
-            <HStack gap={2}>
-              <IconButton
-                aria-label="Previous recent page"
-                size="sm"
-                borderRadius="10px"
-                variant="outline"
-                borderColor="rgba(255,255,255,0.14)"
-                disabled={page === 1 || loading}
-                onClick={() => setPage((value) => Math.max(value - 1, 1))}
-              >
-                <ChevronLeft />
-              </IconButton>
-              <Text color="gray.300" minW="70px" textAlign="center">
-                Page {page}
-              </Text>
-              <IconButton
-                aria-label="Next recent page"
-                size="sm"
-                borderRadius="10px"
-                variant="outline"
-                borderColor="rgba(255,255,255,0.14)"
-                disabled={loading}
-                onClick={() => setPage((value) => value + 1)}
-              >
-                <ChevronRight />
-              </IconButton>
-            </HStack>
-          }
-        />
+        <HomeSectionHeader page={page} setPage={setPage} loading={loading} />
+
         <Grid
           templateColumns={{
             base: "1fr",
@@ -119,6 +84,7 @@ const Home = () => {
                 <RecentCard key={anime.id} anime={anime} />
               ))}
         </Grid>
+
         {!loading && !recent.length && (
           <Flex
             minH="140px"
