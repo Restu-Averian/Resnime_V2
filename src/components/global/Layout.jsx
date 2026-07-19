@@ -2,6 +2,7 @@ import {
   Box,
   Flex,
   HStack,
+  Image,
   Input,
   InputGroup,
   Kbd,
@@ -11,7 +12,7 @@ import {
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import Sidebar from "./Sidebar";
+import Sidebar from "./sidebar";
 
 const Layout = ({ children }) => {
   const [search, setSearch] = useState("");
@@ -67,15 +68,7 @@ const Layout = ({ children }) => {
               gap={3}
               minW="fit-content"
             >
-              <Text
-                color="#ff6d8f"
-                fontSize="4xl"
-                fontWeight="black"
-                lineHeight={1}
-                fontStyle="italic"
-              >
-                R
-              </Text>
+              <Image src="/icon.png" alt="Resnime logo" w="32px" h="32px" />
               <Text fontSize="xl" fontWeight="bold">
                 Resnime
               </Text>

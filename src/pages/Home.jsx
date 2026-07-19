@@ -8,7 +8,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Flame } from "lucide-react";
 import useChangeDocTitle from "../hooks/useChangeDocTitle";
 import {
@@ -52,16 +52,6 @@ const Home = () => {
 
     return () => controller.abort();
   }, [page]);
-
-  const recentCards = useMemo(
-    () =>
-      loading
-        ? Array.from({ length: 8 }, (_, index) => (
-            <Skeleton key={index} h="132px" borderRadius="10px" />
-          ))
-        : recent.map((anime) => <RecentCard key={anime.id} anime={anime} />),
-    [loading, recent],
-  );
 
   return (
     <Stack gap={6} maxW="1680px" mx="auto">
@@ -121,7 +111,13 @@ const Home = () => {
           }}
           gap={4}
         >
-          {recentCards}
+          {loading
+            ? Array.from({ length: 8 }, (_, index) => (
+                <Skeleton key={index} h="132px" borderRadius="10px" />
+              ))
+            : recent.map((anime) => (
+                <RecentCard key={anime.id} anime={anime} />
+              ))}
         </Grid>
         {!loading && !recent.length && (
           <Flex
