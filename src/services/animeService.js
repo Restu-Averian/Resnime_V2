@@ -1,9 +1,9 @@
 import axios from "axios";
 import {
-  adaptAnimeDetail,
-  adaptAnimeListResponse,
-  adaptAnimeSortResponse,
-  adaptStreamingDetail,
+  fmtAnimeDetailResponse,
+  fmtAnimeListResponse,
+  fmtAnimeSortResponse,
+  fmtAnimeStreamingDetail,
 } from "../adapters/animeMapper.js";
 import { ANIPUB_API_BASE_URL } from "../constants/index.js";
 
@@ -86,7 +86,7 @@ const getAnimeInfo = async (id, signal) => {
     fallbackMessage: "Unable to load anime info.",
   });
 
-  return adaptAnimeDetail(data);
+  return fmtAnimeDetailResponse(data);
 };
 
 export const getHomeBannerAnime = async (signal) => {
@@ -157,7 +157,7 @@ const searchAnime = async (query, page = 1, signal) => {
     fallbackMessage: "Unable to search anime.",
   });
 
-  return adaptAnimeListResponse(data?.found === false ? [] : data, page);
+  return fmtAnimeListResponse(data?.found === false ? [] : data, page);
 };
 
 export const sortAnime = async (options = {}, signal) => {
@@ -174,17 +174,7 @@ export const sortAnime = async (options = {}, signal) => {
     fallbackMessage: "Unable to sort anime.",
   });
 
-  return adaptAnimeSortResponse(data, page);
-};
-
-const getAnimeStreaming = async (id, signal) => {
-  const animeId = toValidAnimeId(id);
-  const data = await fetch(`/v1/api/details/${animeId}`, {
-    signal,
-    fallbackMessage: "Unable to check streaming availability.",
-  });
-
-  return adaptStreamingDetail(data);
+  return fmtAnimeSortResponse(data, page);
 };
 
 const getAnimeDetail = async (id, signal) => {
@@ -205,11 +195,15 @@ const getAnimeDetail = async (id, signal) => {
   };
 
   try {
-    streaming = await getAnimeStreaming(animeId, signal);
+    const streamingData = await fetch(`/v1/api/details/${animeId}`, {
+      signal,
+      fallbackMessage: "Unable to check streaming availability.",
+    });
+    streaming = fmtAnimeStreamingDetail(streamingData);
   } catch (error) {
     if (error?.cancelled) throw error;
     if (error?.status === 404) {
-      return adaptAnimeDetail(detail, streaming);
+      return fmtAnimeDetailResponse(detail, streaming);
     }
 
     streaming = {
@@ -219,7 +213,7 @@ const getAnimeDetail = async (id, signal) => {
     };
   }
 
-  return adaptAnimeDetail(detail, streaming);
+  return fmtAnimeDetailResponse(detail, streaming);
 };
 
 export const getAnimeByPath = (path, signal) => {
