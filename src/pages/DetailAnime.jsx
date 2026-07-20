@@ -11,7 +11,6 @@ import {
   HStack,
   Icon,
   Image,
-  Select,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -25,7 +24,6 @@ import {
   Flame,
   Heart,
   Info,
-  ListFilter,
   ListVideo,
   Play,
   Sparkles,
@@ -513,54 +511,6 @@ const DetailAnime = () => {
                 })}
               </HStack>
 
-              {activeTab === "episodes" && (
-                <HStack
-                  align="center"
-                  gap={2}
-                  border="1px solid rgba(255,255,255,0.14)"
-                  borderRadius="10px"
-                  px={3}
-                  py={2}
-                  bg="rgba(255,255,255,0.03)"
-                >
-                  <ListFilter size={16} color="#cbd5e1" />
-                  <Text color="gray.300" fontSize="sm">
-                    Sort
-                  </Text>
-                  <Select.Root
-                    size="sm"
-                    value={[sortMode]}
-                    onValueChange={({ value }) => {
-                      setSortMode(value?.[0] || "episode-asc");
-                    }}
-                  >
-                    <Select.HiddenSelect aria-label="Sort episodes" />
-                    <Select.Control minW="140px" border="0">
-                      <Select.Trigger bg="transparent" border="0" px={1}>
-                        <Select.ValueText placeholder="Episode" />
-                      </Select.Trigger>
-                      <Select.IndicatorGroup>
-                        <Select.Indicator />
-                      </Select.IndicatorGroup>
-                    </Select.Control>
-                    <Select.Positioner>
-                      <Select.Content
-                        bg="#08101f"
-                        borderColor="rgba(255,255,255,0.14)"
-                      >
-                        <Select.Item item="episode-asc">
-                          Episode
-                          <Select.ItemIndicator />
-                        </Select.Item>
-                        <Select.Item item="episode-desc">
-                          Latest
-                          <Select.ItemIndicator />
-                        </Select.Item>
-                      </Select.Content>
-                    </Select.Positioner>
-                  </Select.Root>
-                </HStack>
-              )}
             </Flex>
 
             {activeTab === "episodes" && (
@@ -574,7 +524,11 @@ const DetailAnime = () => {
                   showIf={sortedDetailData?.episodes?.length > 0}
                   useSuspense
                 >
-                  <EpisodesAnime data={sortedDetailData} />
+                  <EpisodesAnime
+                    data={sortedDetailData}
+                    sortMode={sortMode}
+                    setSortMode={setSortMode}
+                  />
                 </Box>
                 {!sortedDetailData?.episodes?.length && (
                   <ChakraBox
