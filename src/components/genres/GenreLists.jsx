@@ -1,8 +1,19 @@
-import { Heading, HStack, Icon, SimpleGrid, Stack, Text } from "@chakra-ui/react";
+import {
+  Heading,
+  HStack,
+  Icon,
+  SimpleGrid,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { Grid2X2 } from "lucide-react";
+import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 import GenreListItem from "./GenreListItem";
 
-const GenreLists = ({ filteredGenres, selectedGenre, selectGenre }) => {
+const GenreLists = ({ filteredGenres, selectedGenre }) => {
+  const navigate = useNavigate();
+
   return (
     <Stack
       gap={4}
@@ -24,7 +35,7 @@ const GenreLists = ({ filteredGenres, selectedGenre, selectGenre }) => {
               key={item.value}
               genre={item}
               active={item.value === selectedGenre}
-              onClick={() => selectGenre(item.value)}
+              onClick={() => navigate(`/genres/${item.value}`)}
             />
           ))}
         </SimpleGrid>
@@ -33,6 +44,11 @@ const GenreLists = ({ filteredGenres, selectedGenre, selectGenre }) => {
       )}
     </Stack>
   );
+};
+
+GenreLists.propTypes = {
+  filteredGenres: PropTypes.array,
+  selectedGenre: PropTypes.string,
 };
 
 export default GenreLists;

@@ -26,8 +26,8 @@ import {
   Trophy,
   WandSparkles,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
 import ErrorPage from "../components/global/ErrorPage";
 import Pagination from "../components/global/Pagination";
 import GenresHeader from "../components/genres/GenresHeader";
@@ -79,7 +79,6 @@ const sortAnime = (results, sortMode) =>
   });
 
 const Genres = () => {
-  const navigate = useNavigate();
   const { genre } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const [genreQuery, setGenreQuery] = useState("");
@@ -89,6 +88,7 @@ const Genres = () => {
     loading: true,
     error: "",
   });
+  const controllerRef = useRef(null);
 
   const selectedGenre = genre || searchParams.get("genre") || fallbackGenre;
   const currentPage = getSafePage(searchParams.get("page"));
@@ -107,31 +107,35 @@ const Genres = () => {
 
   useChangeDocTitle(`Resnime | ${genreLabel} Anime`);
 
-  useEffect(() => {
-    const controller = new AbortController();
+  const fetchData = useCallback(async () => {
+    const signal = controllerRef.current?.signal;
+    if (!signal) return;
+
     setState({ data: null, loading: true, error: "" });
 
-    getAnimeByGenre(selectedGenre, currentPage, controller.signal)
-      .then((data) => {
-        if (!controller.signal.aborted) {
-          setState({ data, loading: false, error: "" });
-        }
-      })
-      .catch((error) => {
-        if (error?.cancelled || controller.signal.aborted) return;
-        setState({
-          data: null,
-          loading: false,
-          error: error?.message || "Unable to load genre anime.",
-        });
+    try {
+      const data = await getAnimeByGenre(selectedGenre, currentPage, signal);
+      if (!signal.aborted) {
+        setState({ data, loading: false, error: "" });
+      }
+    } catch (error) {
+      if (error?.cancelled || signal.aborted) return;
+      setState({
+        data: null,
+        loading: false,
+        error: error?.message || "Unable to load genre anime.",
       });
+    }
+  }, [selectedGenre, currentPage]);
 
-    return () => controller.abort();
-  }, [currentPage, selectedGenre]);
+  useEffect(() => {
+    controllerRef.current = new AbortController();
+    fetchData();
 
-  const selectGenre = (nextGenre) => {
-    navigate(`/genres/${nextGenre}`);
-  };
+    return () => {
+      controllerRef.current?.abort();
+    };
+  }, [fetchData]);
 
   const setPage = (nextPage) => {
     setSearchParams((prev) => {
@@ -156,7 +160,6 @@ const Genres = () => {
       <GenreLists
         filteredGenres={filteredGenres}
         selectedGenre={selectedGenre}
-        selectGenre={selectGenre}
       />
 
       <Stack
