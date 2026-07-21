@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, Skeleton, Stack } from "@chakra-ui/react";
+import { Box, Flex, Grid, Stack } from "@chakra-ui/react";
 import { useEffect, useState, useRef } from "react";
 import useChangeDocTitle from "../hooks/useChangeDocTitle";
 import {
@@ -8,6 +8,7 @@ import {
 import HomeSectionHeader from "../components/home/HomeSectionHeader";
 import HeroBanner from "../components/home/HeroBanner";
 import RecentCard from "../components/home/RecentCard";
+import RecentCardSkeleton from "../components/home/RecentCardSkeleton";
 
 const Home = () => {
   useChangeDocTitle("Resnime");
@@ -85,7 +86,7 @@ const Home = () => {
         >
           {loading
             ? Array.from({ length: 8 }, (_, index) => (
-                <Skeleton key={index} h="132px" borderRadius="10px" />
+                <RecentCardSkeleton key={index} />
               ))
             : recent.map((anime) => (
                 <RecentCard key={anime.id} anime={anime} />

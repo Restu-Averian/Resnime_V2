@@ -24,7 +24,14 @@ const HeroBanner = ({ anime, loading }) => {
   const genres = anime?.genres?.slice(0, 4) || [];
 
   if (loading) {
-    return <Skeleton h={{ base: "420px", md: "340px" }} borderRadius="14px" />;
+    return (
+      <Skeleton
+        w="full"
+        maxW="100%"
+        minH={{ base: "420px", md: "340px" }}
+        borderRadius="14px"
+      />
+    );
   }
 
   if (!anime) return null;
@@ -43,33 +50,6 @@ const HeroBanner = ({ anime, loading }) => {
       boxShadow="0 24px 80px rgba(0,0,0,0.35)"
       position="relative"
     >
-      <IconButton
-        aria-label="Previous featured anime"
-        position="absolute"
-        left={4}
-        top="50%"
-        transform="translateY(-50%)"
-        display={{ base: "none", md: "inline-flex" }}
-        borderRadius="full"
-        bg="rgba(255,255,255,0.12)"
-        color="white"
-      >
-        <ChevronLeft />
-      </IconButton>
-      <IconButton
-        aria-label="Next featured anime"
-        position="absolute"
-        right={4}
-        top="50%"
-        transform="translateY(-50%)"
-        display={{ base: "none", md: "inline-flex" }}
-        borderRadius="full"
-        bg="rgba(255,255,255,0.12)"
-        color="white"
-      >
-        <ChevronRight />
-      </IconButton>
-
       <Stack
         w="full"
         maxW={{ base: "calc(100vw - 80px)", md: "620px" }}
@@ -141,17 +121,6 @@ const HeroBanner = ({ anime, loading }) => {
           >
             <PlayCircle size={18} />
             Watch Now
-          </Button>
-          <Button
-            as={Link}
-            to={animePath(anime)}
-            variant="outline"
-            borderRadius="14px"
-            color="white"
-            borderColor="rgba(255,255,255,0.26)"
-          >
-            <Info size={18} />
-            More Info
           </Button>
         </HStack>
       </Stack>
