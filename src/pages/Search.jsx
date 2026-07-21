@@ -4,8 +4,8 @@ import { useSearchParams } from "react-router-dom";
 import ErrorPage from "../components/global/ErrorPage";
 import Pagination from "../components/global/Pagination";
 import SearchHeader from "../components/search/SearchHeader";
-import SearchResultItem from "../components/search/SearchResultItem";
-import SearchResultSkeleton from "../components/search/SearchResultSkeleton";
+import AnimeCard from "../components/global/anime-card/AnimeCard";
+import AnimeCardSkeleton from "../components/global/anime-card/AnimeCardSkeleton";
 import imageError from "../assets/image_error.png";
 import useChangeDocTitle from "../hooks/useChangeDocTitle";
 import useFetchData from "../hooks/useFetchData";
@@ -71,7 +71,7 @@ const Search = () => {
         <Stack gap={3}>
           <SimpleGrid columns={{ base: 1, xl: 2 }} gap={3.5}>
             {Array.from({ length: 10 }).map((_, i) => (
-              <SearchResultSkeleton key={i} />
+              <AnimeCardSkeleton key={i} />
             ))}
           </SimpleGrid>
         </Stack>
@@ -79,7 +79,7 @@ const Search = () => {
         <Stack gap={3}>
           <SimpleGrid columns={{ base: 1, xl: 2 }} gap={3.5}>
             {results.map((anime) => (
-              <SearchResultItem anime={anime} key={anime.id} />
+              <AnimeCard anime={anime} key={anime.id} />
             ))}
           </SimpleGrid>
 

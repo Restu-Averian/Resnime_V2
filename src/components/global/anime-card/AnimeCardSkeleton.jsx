@@ -1,6 +1,6 @@
 import { Box, HStack, Skeleton, SkeletonText, Stack } from "@chakra-ui/react";
 
-const SearchResultSkeleton = () => {
+const AnimeCardSkeleton = () => {
   return (
     <Box
       display="grid"
@@ -76,4 +76,4 @@ const SearchResultSkeleton = () => {
   );
 };
 
-export default SearchResultSkeleton;
+export default AnimeCardSkeleton;

@@ -2,10 +2,10 @@ import { useMemo } from "react";
 import { Badge, Box, HStack, Icon, Stack, Text } from "@chakra-ui/react";
 import { PlaySquare, Star } from "lucide-react";
 import { Link } from "react-router-dom";
-import Image from "../global/Image";
-import { animePath, compactText } from "../home/utils";
+import Image from "../Image";
+import { animePath, compactText } from "../../home/utils";
 
-const SearchResultItem = ({ anime }) => {
+const AnimeCard = ({ anime }) => {
   const genres = anime?.genres?.slice(0, 3) || [];
   const extraGenres = Math.max((anime?.genres?.length || 0) - genres.length, 0);
 
@@ -126,6 +126,7 @@ const SearchResultItem = ({ anime }) => {
               {genre}
             </Badge>
           ))}
+
           {extraGenres > 0 && (
             <Badge
               color="#d8dcec"
@@ -178,4 +179,4 @@ const SearchResultItem = ({ anime }) => {
   );
 };
 
-export default SearchResultItem;
+export default AnimeCard;
