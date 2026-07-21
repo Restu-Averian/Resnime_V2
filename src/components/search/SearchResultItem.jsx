@@ -26,7 +26,7 @@ const infoParts = (anime) =>
     anime?.status || "Recently Updated",
   ].filter(Boolean);
 
-const SearchResultCard = ({ anime }) => {
+const SearchResultItem = ({ anime }) => {
   const genres = anime?.genres?.slice(0, 3) || [];
   const extraGenres = Math.max((anime?.genres?.length || 0) - genres.length, 0);
   const score = formatScore(anime?.score);
@@ -168,4 +168,4 @@ const SearchResultCard = ({ anime }) => {
   );
 };
 
-export default SearchResultCard;
+export default SearchResultItem;

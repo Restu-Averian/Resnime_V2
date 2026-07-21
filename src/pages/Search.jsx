@@ -5,7 +5,7 @@ import ErrorPage from "../components/global/ErrorPage";
 import Loading from "../components/global/Loading";
 import Pagination from "../components/global/Pagination";
 import SearchHeader from "../components/search/SearchHeader";
-import SearchResultCard from "../components/search/SearchResultCard";
+import SearchResultItem from "../components/search/SearchResultItem";
 import imageError from "../assets/image_error.png";
 import useChangeDocTitle from "../hooks/useChangeDocTitle";
 import useFetchData from "../hooks/useFetchData";
@@ -68,7 +68,7 @@ const Search = () => {
         <Stack gap={3}>
           <SimpleGrid columns={{ base: 1, xl: 2 }} gap={3.5}>
             {results.map((anime) => (
-              <SearchResultCard anime={anime} key={anime.id} />
+              <SearchResultItem anime={anime} key={anime.id} />
             ))}
           </SimpleGrid>
 
