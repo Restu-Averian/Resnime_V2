@@ -8,7 +8,7 @@ const isSearchPath = (path) => !path?.startsWith("/anime/");
 const useFetchData = (path) => {
   const [state, setState] = useState({
     data: [],
-    loading: false,
+    loading: true,
     error: "",
   });
 

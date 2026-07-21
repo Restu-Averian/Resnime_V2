@@ -2,10 +2,10 @@ import { Grid, SimpleGrid, Stack, Text } from "@chakra-ui/react";
 import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import ErrorPage from "../components/global/ErrorPage";
-import Loading from "../components/global/Loading";
 import Pagination from "../components/global/Pagination";
 import SearchHeader from "../components/search/SearchHeader";
 import SearchResultItem from "../components/search/SearchResultItem";
+import SearchResultSkeleton from "../components/search/SearchResultSkeleton";
 import imageError from "../assets/image_error.png";
 import useChangeDocTitle from "../hooks/useChangeDocTitle";
 import useFetchData from "../hooks/useFetchData";
@@ -28,6 +28,7 @@ const Search = () => {
   const results = data?.results || [];
 
   const currentPage = Number(data?.currentPage || pageValue || 1);
+
   const handleSetPage = (nextPage) => {
     setSearchParam((prev) => {
       const params = new URLSearchParams(prev);
@@ -63,7 +64,13 @@ const Search = () => {
           src={imageError}
         />
       ) : loading ? (
-        <Loading />
+        <Stack gap={3}>
+          <SimpleGrid columns={{ base: 1, xl: 2 }} gap={3.5}>
+            {Array.from({ length: 10 }).map((_, i) => (
+              <SearchResultSkeleton key={i} />
+            ))}
+          </SimpleGrid>
+        </Stack>
       ) : results.length ? (
         <Stack gap={3}>
           <SimpleGrid columns={{ base: 1, xl: 2 }} gap={3.5}>

@@ -39,6 +39,7 @@ const SearchHeader = ({ searchVal, loading, totalResults }) => {
         alignSelf={{ base: "stretch", md: "center" }}
       >
         <Text
+          as="div"
           color="#c7cedc"
           fontSize={{ base: "sm", md: "md" }}
           whiteSpace="nowrap"

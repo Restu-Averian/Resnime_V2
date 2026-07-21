@@ -1,36 +1,46 @@
+import { useMemo } from "react";
 import { Badge, Box, HStack, Icon, Stack, Text } from "@chakra-ui/react";
 import { PlaySquare, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import Image from "../global/Image";
 import { animePath, compactText } from "../home/utils";
 
-const formatScore = (score) =>
-  typeof score === "number" && Number.isFinite(score) ? score.toFixed(2) : null;
-
-const inferType = (anime) => {
-  const title = anime?.title?.romaji || "";
-  const type = anime?.type?.trim();
-
-  if (type) return type.toUpperCase();
-  if (/ova/i.test(title)) return "OVA";
-  if (/movie/i.test(title)) return "MOVIE";
-  return "TV";
-};
-
-const infoParts = (anime) =>
-  [
-    anime?.totalEpisodes
-      ? `${anime.totalEpisodes} ${Number(anime.totalEpisodes) === 1 ? "Episode" : "Episodes"}`
-      : inferType(anime),
-    anime?.releaseDate || anime?.season || null,
-    anime?.status || "Recently Updated",
-  ].filter(Boolean);
-
 const SearchResultItem = ({ anime }) => {
   const genres = anime?.genres?.slice(0, 3) || [];
   const extraGenres = Math.max((anime?.genres?.length || 0) - genres.length, 0);
-  const score = formatScore(anime?.score);
-  const parts = infoParts(anime);
+
+  const score = useMemo(() => {
+    const score = anime?.score;
+    return typeof score === "number" && Number.isFinite(score)
+      ? score?.toFixed(2)
+      : null;
+  }, [anime?.score]);
+
+  const animeType = useMemo(() => {
+    const title = anime?.title?.romaji || "";
+    const type = anime?.type?.trim();
+
+    if (type) return type.toUpperCase();
+    if (/ova/i.test(title)) return "OVA";
+    if (/movie/i.test(title)) return "MOVIE";
+    return "TV";
+  }, [anime?.title?.romaji, anime?.type]);
+
+  const parts = useMemo(() => {
+    return [
+      anime?.totalEpisodes
+        ? `${anime.totalEpisodes} ${Number(anime.totalEpisodes) === 1 ? "Episode" : "Episodes"}`
+        : animeType,
+      anime?.releaseDate || anime?.season || null,
+      anime?.status || null,
+    ].filter(Boolean);
+  }, [
+    anime?.totalEpisodes,
+    anime?.releaseDate,
+    anime?.season,
+    anime?.status,
+    animeType,
+  ]);
 
   return (
     <Box
@@ -78,7 +88,7 @@ const SearchResultItem = ({ anime }) => {
           lineHeight="22px"
           boxShadow="0 0 16px rgba(236, 95, 154, 0.22)"
         >
-          {inferType(anime)}
+          {animeType}
         </Badge>
 
         <Text
