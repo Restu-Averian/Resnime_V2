@@ -51,6 +51,10 @@ const Search = () => {
         searchVal={searchVal}
         loading={loading}
         totalResults={results.length}
+        page={currentPage}
+        hasNextPage={data?.hasNextPage}
+        onPrev={() => handleSetPage(currentPage - 1)}
+        onNext={() => handleSetPage(currentPage + 1)}
       />
 
       {error ? (

@@ -5,19 +5,12 @@ import {
   HStack,
   Heading,
   Icon,
-  IconButton,
   Skeleton,
   Stack,
   Text,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Info,
-  PlayCircle,
-  Sparkles,
-} from "lucide-react";
+import { PlayCircle, Sparkles } from "lucide-react";
 import { compactText, animePath } from "./utils";
 
 const HeroBanner = ({ anime, loading }) => {

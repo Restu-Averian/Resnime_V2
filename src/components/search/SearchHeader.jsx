@@ -1,7 +1,16 @@
 import { Flex, HStack, Icon, Spinner, Stack, Text } from "@chakra-ui/react";
 import { Sparkle } from "lucide-react";
+import Pagination from "../global/Pagination";
 
-const SearchHeader = ({ searchVal, loading, totalResults }) => {
+const SearchHeader = ({
+  searchVal,
+  loading,
+  totalResults,
+  page,
+  hasNextPage,
+  onPrev,
+  onNext,
+}) => {
   return (
     <Flex
       justify="space-between"
@@ -27,7 +36,15 @@ const SearchHeader = ({ searchVal, loading, totalResults }) => {
           </Text>
         </HStack>
         <Text color="#aeb7cb" fontSize={{ base: "sm", md: "md" }}>
-          Results for{" "}
+          {loading ? (
+            <HStack gap={2} as="span" display="inline-flex">
+              <Spinner size="xs" />
+              <span>Searching</span>
+            </HStack>
+          ) : (
+            `${totalResults} results found`
+          )}{" "}
+          for{" "}
           <Text as="span" color="#ff73a0">
             &quot;{searchVal || "anime"}&quot;
           </Text>
@@ -38,21 +55,14 @@ const SearchHeader = ({ searchVal, loading, totalResults }) => {
         gap={{ base: 3, md: 8 }}
         alignSelf={{ base: "stretch", md: "center" }}
       >
-        <Text
-          as="div"
-          color="#c7cedc"
-          fontSize={{ base: "sm", md: "md" }}
-          whiteSpace="nowrap"
-        >
-          {loading ? (
-            <HStack gap={2}>
-              <Spinner size="xs" />
-              <span>Searching</span>
-            </HStack>
-          ) : (
-            `${totalResults} results found`
-          )}
-        </Text>
+        <Pagination
+          page={page}
+          hasNextPage={hasNextPage}
+          loading={loading}
+          onPrev={onPrev}
+          onNext={onNext}
+          justify="flex-end"
+        />
       </HStack>
     </Flex>
   );
