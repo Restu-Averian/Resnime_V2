@@ -43,10 +43,10 @@ import imageError from "../assets/image_error.png";
 import { sortAnime } from "../services/animeService";
 
 const CharacterAnime = lazy(
-  () => import("../components/detail-anime/character-anime/CharacterAnime"),
+  () => import("../components/detail-anime/characters/CharacterAnime"),
 );
 const EpisodesAnime = lazy(
-  () => import("../components/detail-anime/episodes-anime/EpisodesAnime"),
+  () => import("../components/detail-anime/episodes/EpisodesAnime"),
 );
 
 const tabs = [
