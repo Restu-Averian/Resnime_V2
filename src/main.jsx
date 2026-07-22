@@ -5,7 +5,6 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "./components/ui/provider.jsx";
 import Layout from "./components/global/Layout.jsx";
 import "./style/main.css";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import ErrorBoundary from "./components/global/ErrorBoundary.jsx";
 import FallbackErr from "./pages/FallbackErr.jsx";
 

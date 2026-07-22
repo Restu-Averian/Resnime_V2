@@ -1,6 +1,5 @@
 import { Button, Icon, Text } from "@chakra-ui/react";
 import { CircleCheck } from "lucide-react";
-import PropTypes from "prop-types";
 
 const GenreListItem = ({ genre, active, onClick }) => (
   <Button
@@ -33,11 +32,5 @@ const GenreListItem = ({ genre, active, onClick }) => (
     {active ? <CircleCheck size={20} fill="#ff5f8f" color="#ffedf3" /> : null}
   </Button>
 );
-
-GenreListItem.propTypes = {
-  genre: PropTypes.object,
-  active: PropTypes.bool,
-  onClick: PropTypes.func,
-};
 
 export default GenreListItem;

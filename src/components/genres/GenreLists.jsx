@@ -7,7 +7,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Grid2X2 } from "lucide-react";
-import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import GenreListItem from "./GenreListItem";
 
@@ -44,11 +43,6 @@ const GenreLists = ({ filteredGenres, selectedGenre }) => {
       )}
     </Stack>
   );
-};
-
-GenreLists.propTypes = {
-  filteredGenres: PropTypes.array,
-  selectedGenre: PropTypes.string,
 };
 
 export default GenreLists;

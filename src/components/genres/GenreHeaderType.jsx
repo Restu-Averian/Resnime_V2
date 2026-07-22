@@ -1,6 +1,5 @@
 import { Flex, Heading, HStack, Icon, Stack, Text } from "@chakra-ui/react";
 import { Swords } from "lucide-react";
-import PropTypes from "prop-types";
 import { GENRES } from "../../constants/genres";
 
 const GenreHeaderType = ({
@@ -32,13 +31,6 @@ const GenreHeaderType = ({
       </Stack>
     </Flex>
   );
-};
-
-GenreHeaderType.propTypes = {
-  selectedGenre: PropTypes.string,
-  genreLabel: PropTypes.string,
-  loading: PropTypes.bool,
-  resultsCount: PropTypes.number,
 };
 
 export default GenreHeaderType;
