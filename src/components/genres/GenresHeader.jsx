@@ -1,4 +1,11 @@
-import { Flex, Heading, Input, InputGroup, Stack, Text } from "@chakra-ui/react";
+import {
+  Flex,
+  Heading,
+  Input,
+  InputGroup,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { Search } from "lucide-react";
 
 const GenresHeader = ({ genreQuery, setGenreQuery }) => {
