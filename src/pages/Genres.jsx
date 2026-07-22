@@ -29,7 +29,6 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import ErrorPage from "../components/global/ErrorPage";
-import Pagination from "../components/global/Pagination";
 import GenresHeader from "../components/genres/GenresHeader";
 import GenreLists from "../components/genres/GenreLists";
 import AnimeCard from "../components/global/anime-card/AnimeCard";
@@ -171,28 +170,28 @@ const Genres = () => {
       >
         <Flex
           justify="space-between"
-          align={{ base: "stretch", md: "center" }}
+          align={{ base: "flex-start", md: "center" }}
           direction={{ base: "column", md: "row" }}
           gap={3}
         >
-          <HStack gap={3}>
-            <Icon
-              as={
-                genres.find((item) => item.value === selectedGenre)?.icon ||
-                Swords
-              }
-              boxSize={5}
-              color="#ff5f8f"
-            />
-            <Heading as="h2" fontSize="xl">
-              {genreLabel} Anime
-            </Heading>
-          </HStack>
-          <HStack gap={4} justify={{ base: "space-between", md: "flex-end" }}>
+          <Stack gap={1}>
+            <HStack gap={3}>
+              <Icon
+                as={
+                  genres.find((item) => item.value === selectedGenre)?.icon ||
+                  Swords
+                }
+                boxSize={5}
+                color="#ff5f8f"
+              />
+              <Heading as="h2" fontSize="xl">
+                {genreLabel} Anime
+              </Heading>
+            </HStack>
             <Text color="#aeb7cb" fontSize="sm">
               {state.loading ? "Loading" : `${results.length} results`}
             </Text>
-          </HStack>
+          </Stack>
         </Flex>
 
         {state.error ? (
@@ -228,24 +227,7 @@ const Genres = () => {
             <Text>No anime found for this genre.</Text>
           </Grid>
         )}
-
-        <Pagination
-          page={currentPage}
-          hasNextPage={state.data?.hasNextPage}
-          loading={state.loading}
-          onPrev={() => setPage(currentPage - 1)}
-          onNext={() => setPage(currentPage + 1)}
-          justify="center"
-        />
       </Stack>
-
-      <Text color="#8993aa" textAlign="center" fontSize="sm">
-        Results provided by{" "}
-        <Text as="span" color="#ff5f8f" fontWeight="700">
-          AniPub
-        </Text>{" "}
-        API • /api/findbyGenre/:genre?Page=1
-      </Text>
     </Stack>
   );
 };
