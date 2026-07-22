@@ -1,9 +1,8 @@
 import { normalizePlayerUrl } from "../services/stream.js";
 import { ANIPUB_API_BASE_URL } from "../constants/index.js";
+import placeholderImage from "../assets/placeholder.png";
 
 const titleFallback = "Untitled Anime";
-
-const placeholderImage = "/placeholder.png";
 
 const getImage = (anime) =>
   toAssetUrl(anime?.ImagePath || anime?.Image || anime?.poster);

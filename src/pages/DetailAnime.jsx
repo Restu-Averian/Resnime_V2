@@ -510,7 +510,6 @@ const DetailAnime = () => {
                   );
                 })}
               </HStack>
-
             </Flex>
 
             {activeTab === "episodes" && (

@@ -44,9 +44,7 @@ const SidebarListMenu = () => {
             borderRadius="8px"
             color={active ? "#ff6d8f" : "gray.300"}
             bg={active ? "rgba(255, 109, 143, 0.13)" : "transparent"}
-            borderLeft={
-              active ? "3px solid #ff6d8f" : "3px solid transparent"
-            }
+            borderLeft={active ? "3px solid #ff6d8f" : "3px solid transparent"}
             _hover={{ textDecoration: "none", bg: "rgba(255,255,255,0.06)" }}
           >
             <Icon as={item.icon} boxSize={5} />

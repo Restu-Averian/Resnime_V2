@@ -1,11 +1,5 @@
-import {
-  Box,
-  Flex,
-  Grid,
-  Skeleton,
-  Stack,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { Box, Flex, Grid, Stack } from "@chakra-ui/react";
+import { useEffect, useState, useRef } from "react";
 import useChangeDocTitle from "../hooks/useChangeDocTitle";
 import {
   getHomeBannerAnime,
@@ -14,6 +8,7 @@ import {
 import HomeSectionHeader from "../components/home/HomeSectionHeader";
 import HeroBanner from "../components/home/HeroBanner";
 import RecentCard from "../components/home/RecentCard";
+import RecentCardSkeleton from "../components/home/RecentCardSkeleton";
 
 const Home = () => {
   useChangeDocTitle("Resnime");
@@ -23,30 +18,43 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const controllerRef = useRef(null);
+
+  const fetchData = async () => {
+    const signal = controllerRef.current?.signal;
+    if (!signal) return;
+
+    try {
+      const featured = await getHomeBannerAnime(signal);
+      if (!signal.aborted) setBanner(featured);
+    } catch {
+      // Abaikan error banner agar page tetap lanjut load
+    }
+
+    try {
+      const recentlyUpdated = await getRecentlyUpdatedAnime(page, signal, 8);
+      if (!signal.aborted) setRecent(recentlyUpdated.results);
+    } catch (err) {
+      if (!err?.cancelled && !signal.aborted) {
+        setError(err?.message || "Unable to load homepage.");
+      }
+    } finally {
+      if (!signal.aborted) setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const controller = new AbortController();
+    controllerRef.current = new AbortController();
     setLoading(true);
     setError("");
 
-    Promise.all([
-      getHomeBannerAnime(controller.signal),
-      getRecentlyUpdatedAnime(page, controller.signal, 8),
-    ])
-      .then(([featured, recentlyUpdated]) => {
-        if (controller.signal.aborted) return;
-        setBanner(featured);
-        setRecent(recentlyUpdated.results);
-      })
-      .catch((err) => {
-        if (err?.cancelled || controller.signal.aborted) return;
-        setError(err?.message || "Unable to load homepage.");
-      })
-      .finally(() => {
-        if (!controller.signal.aborted) setLoading(false);
-      });
+    fetchData();
 
-    return () => controller.abort();
+    return () => {
+      if (controllerRef.current) {
+        controllerRef.current.abort();
+      }
+    };
   }, [page]);
 
   return (
@@ -78,7 +86,7 @@ const Home = () => {
         >
           {loading
             ? Array.from({ length: 8 }, (_, index) => (
-                <Skeleton key={index} h="132px" borderRadius="10px" />
+                <RecentCardSkeleton key={index} />
               ))
             : recent.map((anime) => (
                 <RecentCard key={anime.id} anime={anime} />

@@ -1,279 +1,41 @@
-import {
-  Badge,
-  Box,
-  Button,
-  Flex,
-  Grid,
-  HStack,
-  Icon,
-  IconButton,
-  SimpleGrid,
-  Spinner,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
-import {
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  Filter,
-  PlaySquare,
-  Sparkle,
-  Star,
-} from "lucide-react";
+import { Grid, SimpleGrid, Stack, Text } from "@chakra-ui/react";
 import { useMemo } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import ErrorPage from "../components/global/ErrorPage";
-import Image from "../components/global/Image";
-import Loading from "../components/global/Loading";
-import { animePath, compactText } from "../components/home/utils";
+import Pagination from "../components/global/Pagination";
+import SearchHeader from "../components/search/SearchHeader";
+import AnimeCard from "../components/global/anime-card/AnimeCard";
+import AnimeCardSkeleton from "../components/global/anime-card/AnimeCardSkeleton";
 import imageError from "../assets/image_error.png";
 import useChangeDocTitle from "../hooks/useChangeDocTitle";
 import useFetchData from "../hooks/useFetchData";
 
-const fallbackQuery = "";
+const Search = () => {
+  const [searchParam, setSearchParam] = useSearchParams();
 
-const formatScore = (score) =>
-  typeof score === "number" && Number.isFinite(score) ? score.toFixed(2) : null;
+  const { searchVal, pageValue, path } = useMemo(() => {
+    const q = searchParam?.get("q") || "";
+    const page = searchParam?.get("page");
+    return {
+      searchVal: q,
+      pageValue: page,
+      path: `/${encodeURIComponent(q)}${page ? `?page=${page}` : ""}`,
+    };
+  }, [searchParam]);
 
-const inferType = (anime) => {
-  const title = anime?.title?.romaji || "";
-  const type = anime?.type?.trim();
+  const { data, loading, error, refetch } = useFetchData(path);
 
-  if (type) return type.toUpperCase();
-  if (/ova/i.test(title)) return "OVA";
-  if (/movie/i.test(title)) return "MOVIE";
-  return "TV";
-};
+  const results = data?.results || [];
 
-const infoParts = (anime) =>
-  [
-    anime?.totalEpisodes
-      ? `${anime.totalEpisodes} ${Number(anime.totalEpisodes) === 1 ? "Episode" : "Episodes"}`
-      : inferType(anime),
-    anime?.releaseDate || anime?.season || null,
-    anime?.status || "Recently Updated",
-  ].filter(Boolean);
-
-const SearchResultCard = ({ anime }) => {
-  const genres = anime?.genres?.slice(0, 3) || [];
-  const extraGenres = Math.max((anime?.genres?.length || 0) - genres.length, 0);
-  const score = formatScore(anime?.score);
-  const parts = infoParts(anime);
-
-  return (
-    <Box
-      as={Link}
-      to={animePath(anime)}
-      display="grid"
-      gridTemplateColumns={{
-        base: "96px minmax(0, 1fr)",
-        sm: "132px minmax(0, 1fr)",
-      }}
-      gap={{ base: 3, md: 5 }}
-      p={{ base: 3, md: 3 }}
-      minH={{ base: "150px", md: "188px" }}
-      borderRadius="9px"
-      border="1px solid rgba(165, 183, 226, 0.16)"
-      bg="linear-gradient(145deg, rgba(20, 27, 50, 0.88), rgba(13, 20, 39, 0.94))"
-      boxShadow="inset 0 1px 0 rgba(255,255,255,0.03), 0 14px 35px rgba(0,0,0,0.12)"
-      overflow="hidden"
-      position="relative"
-      _hover={{
-        borderColor: "rgba(255, 109, 143, 0.42)",
-        bg: "linear-gradient(145deg, rgba(27, 34, 60, 0.9), rgba(15, 23, 43, 0.96))",
-        textDecoration: "none",
-      }}
-    >
-      <Image
-        src={anime?.image}
-        alt={anime?.title?.romaji || "Anime poster"}
-        w={{ base: "96px", sm: "132px" }}
-        h={{ base: "124px", sm: "172px" }}
-        borderRadius="8px"
-        objectFit="cover"
-      />
-
-      <Stack gap={{ base: 2, md: 2.5 }} minW={0} pr={{ base: 0, sm: 14 }}>
-        <Badge
-          alignSelf="flex-start"
-          bg="#ec5f9a"
-          color="white"
-          borderRadius="7px"
-          px={2}
-          h="22px"
-          fontSize="xs"
-          fontWeight="bold"
-          lineHeight="22px"
-          boxShadow="0 0 16px rgba(236, 95, 154, 0.22)"
-        >
-          {inferType(anime)}
-        </Badge>
-
-        <Text
-          as="h3"
-          color="#f5f7ff"
-          fontSize={{ base: "md", md: "lg" }}
-          fontWeight="800"
-          lineHeight="1.16"
-          overflowWrap="anywhere"
-        >
-          {anime?.title?.romaji || "Untitled Anime"}
-        </Text>
-
-        <Text
-          color="#c3cadb"
-          fontSize={{ base: "sm", md: "sm" }}
-          lineHeight="1.35"
-        >
-          {compactText(anime?.description || "No synopsis available yet.", 108)}
-        </Text>
-
-        <HStack gap={2} flexWrap="wrap">
-          {genres.map((genre) => (
-            <Badge
-              key={genre}
-              color="#d8dcec"
-              bg="rgba(255,255,255,0.055)"
-              border="1px solid rgba(255,255,255,0.08)"
-              borderRadius="999px"
-              px={3}
-              py={1}
-              fontSize="xs"
-              fontWeight="medium"
-            >
-              {genre}
-            </Badge>
-          ))}
-          {extraGenres > 0 && (
-            <Badge
-              color="#d8dcec"
-              bg="rgba(255,255,255,0.055)"
-              border="1px solid rgba(255,255,255,0.08)"
-              borderRadius="999px"
-              px={3}
-              py={1}
-              fontSize="xs"
-              fontWeight="medium"
-            >
-              +{extraGenres}
-            </Badge>
-          )}
-        </HStack>
-
-        <HStack
-          color="#b8c0d2"
-          fontSize={{ base: "xs", md: "sm" }}
-          gap={2.5}
-          flexWrap="wrap"
-          mt="auto"
-        >
-          <Icon as={PlaySquare} boxSize={3.5} color="#ff7da1" />
-          {parts.map((part, index) => (
-            <HStack key={`${part}-${index}`} gap={2.5}>
-              {index > 0 && <Text color="#737b92">•</Text>}
-              <Text color={part === "Recently Updated" ? "#ff73a0" : "inherit"}>
-                {part}
-              </Text>
-            </HStack>
-          ))}
-        </HStack>
-      </Stack>
-
-      {score && (
-        <HStack
-          position="absolute"
-          top={{ base: 3, md: 5 }}
-          right={{ base: 3, md: 4 }}
-          gap={1}
-          color="#ffd43b"
-          fontSize={{ base: "sm", md: "md" }}
-        >
-          <Star size={16} fill="currentColor" />
-          <Text color="#dce2f0">{score}</Text>
-        </HStack>
-      )}
-    </Box>
-  );
-};
-
-const SearchPagination = ({ data, pageValue, setSearchParam }) => {
   const currentPage = Number(data?.currentPage || pageValue || 1);
-  const setPage = (nextPage) => {
+
+  const handleSetPage = (nextPage) => {
     setSearchParam((prev) => {
       const params = new URLSearchParams(prev);
       params.set("page", String(nextPage));
       return params;
     });
   };
-
-  return (
-    <HStack justify="center" gap={3} pt={1}>
-      <IconButton
-        aria-label="Previous page"
-        variant="outline"
-        size="sm"
-        borderRadius="8px"
-        borderColor="rgba(255,255,255,0.16)"
-        color="#dce2f0"
-        bg="rgba(255,255,255,0.03)"
-        disabled={currentPage <= 1}
-        onClick={() => setPage(currentPage - 1)}
-      >
-        <ChevronLeft size={18} />
-      </IconButton>
-      <Button
-        size="sm"
-        minW="44px"
-        borderRadius="8px"
-        bg="#ef5f9b"
-        color="white"
-        _hover={{ bg: "#ef5f9b" }}
-      >
-        {currentPage}
-      </Button>
-      {data?.hasNextPage && (
-        <Button
-          size="sm"
-          minW="44px"
-          borderRadius="8px"
-          variant="outline"
-          borderColor="rgba(255,255,255,0.16)"
-          color="#dce2f0"
-          bg="rgba(255,255,255,0.03)"
-          onClick={() => setPage(currentPage + 1)}
-        >
-          {currentPage + 1}
-        </Button>
-      )}
-      <IconButton
-        aria-label="Next page"
-        variant="outline"
-        size="sm"
-        borderRadius="8px"
-        borderColor="rgba(255,255,255,0.16)"
-        color="#dce2f0"
-        bg="rgba(255,255,255,0.03)"
-        disabled={!data?.hasNextPage}
-        onClick={() => setPage(currentPage + 1)}
-      >
-        <ChevronRight size={18} />
-      </IconButton>
-    </HStack>
-  );
-};
-
-const Search = () => {
-  const [searchParam, setSearchParam] = useSearchParams();
-
-  const searchVal = useMemo(
-    () => searchParam?.get("q") || fallbackQuery,
-    [searchParam],
-  );
-  const pageValue = useMemo(() => searchParam?.get("page"), [searchParam]);
-  const path = `/${encodeURIComponent(searchVal)}${pageValue ? `?page=${pageValue}` : ""}`;
-  const { data, loading, error, refetch } = useFetchData(path);
-  const results = data?.results || [];
 
   useChangeDocTitle(searchVal ? `Resnime | ${searchVal}` : "Resnime | Search");
 
@@ -285,71 +47,15 @@ const Search = () => {
       px={{ base: 0, md: 0 }}
       color="#f5f7ff"
     >
-      <Flex
-        justify="space-between"
-        align={{ base: "flex-start", md: "center" }}
-        direction={{ base: "column", md: "row" }}
-        gap={4}
-      >
-        <Stack gap={1}>
-          <HStack gap={4}>
-            <Icon
-              as={Sparkle}
-              boxSize={{ base: 6, md: 8 }}
-              color="#ff73a0"
-              fill="#ff73a0"
-            />
-            <Text
-              as="h1"
-              fontSize={{ base: "3xl", md: "4xl" }}
-              fontWeight="900"
-              lineHeight={1}
-            >
-              Search Results
-            </Text>
-          </HStack>
-          <Text color="#aeb7cb" fontSize={{ base: "sm", md: "md" }}>
-            Results for{" "}
-            <Text as="span" color="#ff73a0">
-              &quot;{searchVal || "anime"}&quot;
-            </Text>
-          </Text>
-        </Stack>
-
-        <HStack
-          gap={{ base: 3, md: 8 }}
-          alignSelf={{ base: "stretch", md: "center" }}
-        >
-          <Text
-            color="#c7cedc"
-            fontSize={{ base: "sm", md: "md" }}
-            whiteSpace="nowrap"
-          >
-            {loading ? (
-              <HStack gap={2}>
-                <Spinner size="xs" />
-                <span>Searching</span>
-              </HStack>
-            ) : (
-              `${results.length} results found`
-            )}
-          </Text>
-          <Button
-            variant="outline"
-            borderColor="rgba(255, 109, 143, 0.35)"
-            color="#f1f4fb"
-            bg="rgba(255,255,255,0.025)"
-            borderRadius="8px"
-            h="42px"
-            px={4}
-            _hover={{ bg: "rgba(255,109,143,0.1)" }}
-          >
-            <Filter size={17} />
-            <Text as="span">Filter</Text>
-            <ChevronDown size={16} />
-          </Button>
-        </HStack>
-      </Flex>
+      <SearchHeader
+        searchVal={searchVal}
+        loading={loading}
+        totalResults={results.length}
+        page={currentPage}
+        hasNextPage={data?.hasNextPage}
+        onPrev={() => handleSetPage(currentPage - 1)}
+        onNext={() => handleSetPage(currentPage + 1)}
+      />
 
       {error ? (
         <ErrorPage
@@ -362,18 +68,29 @@ const Search = () => {
           src={imageError}
         />
       ) : loading ? (
-        <Loading />
+        <Stack gap={3}>
+          <SimpleGrid columns={{ base: 1, xl: 2 }} gap={3.5}>
+            {Array.from({ length: 10 }).map((_, i) => (
+              <AnimeCardSkeleton key={i} />
+            ))}
+          </SimpleGrid>
+        </Stack>
       ) : results.length ? (
         <Stack gap={3}>
           <SimpleGrid columns={{ base: 1, xl: 2 }} gap={3.5}>
             {results.map((anime) => (
-              <SearchResultCard anime={anime} key={anime.id} />
+              <AnimeCard anime={anime} key={anime.id} />
             ))}
           </SimpleGrid>
-          <SearchPagination
-            data={data}
-            pageValue={pageValue}
-            setSearchParam={setSearchParam}
+
+          <Pagination
+            page={currentPage}
+            hasNextPage={data?.hasNextPage}
+            loading={loading}
+            onPrev={() => handleSetPage(currentPage - 1)}
+            onNext={() => handleSetPage(currentPage + 1)}
+            justify="flex-end"
+            pt={1}
           />
         </Stack>
       ) : (
