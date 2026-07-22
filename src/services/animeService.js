@@ -5,7 +5,7 @@ import {
   fmtAnimeListResponse,
   fmtAnimeSortResponse,
   fmtAnimeStreamingDetail,
-} from "../adapters/animeMapper.js";
+} from "../helpers/animeMapper.js";
 import { ANIPUB_API_BASE_URL } from "../constants/index.js";
 
 const client = axios.create({

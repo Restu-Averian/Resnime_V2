@@ -69,7 +69,7 @@ const normalizeAnime = (anime) => {
   };
 };
 
-const createEpisode = (entry, fallbackNumber, fallbackImage) => {
+export const fmtEpisodeResponse = (entry, fallbackNumber, fallbackImage) => {
   const playerUrl = normalizePlayerUrl(entry?.link);
   if (!playerUrl) return null;
 
@@ -126,7 +126,7 @@ export const fmtAnimeStreamingDetail = (rawStreaming) => {
   const episodes = [];
 
   entries.forEach((entry) => {
-    const episode = createEpisode(entry, episodes.length + 1, local?.poster);
+    const episode = fmtEpisodeResponse(entry, episodes.length + 1, local?.poster);
     if (!episode || usedUrls.has(episode.playerUrl)) return;
 
     usedUrls.add(episode.playerUrl);
