@@ -14,7 +14,6 @@ import Loading from "../components/global/Loading";
 import useChangeDocTitle from "../hooks/useChangeDocTitle";
 import Box from "../components/global/Box";
 import ErrorPage from "../components/global/ErrorPage";
-import imageError from "../assets/image_error.png";
 import { sortAnime } from "../services/animeService";
 import { TAB_DATAS } from "../constants/detail-anime";
 
@@ -116,7 +115,6 @@ const DetailAnime = () => {
           }}
           title="Error"
           subTitle={error}
-          src={imageError}
         />
       ) : loading ? (
         <Loading />
