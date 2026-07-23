@@ -12,9 +12,6 @@ import {
 import { PlayCircle } from "lucide-react";
 import { useEpisodeAnimeContext } from "./EpisodesAnimeContextProvider";
 
-const episodeLabel = (count) =>
-  `${count} Episode${Number(count) === 1 ? "" : "s"}`;
-
 const EpisodesAnimeList = ({ sortMode, setSortMode }) => {
   const { data, openModalVideo, episodeValParam } = useEpisodeAnimeContext();
   const episodes = data?.episodes || [];
@@ -48,7 +45,7 @@ const EpisodesAnimeList = ({ sortMode, setSortMode }) => {
             fontSize={{ base: "sm", md: "md" }}
             lineHeight={1.2}
           >
-            {episodeLabel(episodes.length)}
+            {episodes.length} Episode{episodes.length === 1 ? "" : "s"}
           </Text>
         </HStack>
 

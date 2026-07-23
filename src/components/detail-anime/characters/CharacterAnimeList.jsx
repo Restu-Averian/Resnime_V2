@@ -32,7 +32,7 @@ const CharacterAnimeList = ({ data, onOpenVA }) => {
             display="block"
             pt={1}
             variant="outline"
-            colorPalette={ROLES[char?.role]}
+            colorPalette={ROLES[char?.role] || "teal"}
             borderRadius="full"
           >
             <Tag.Label>{char?.role}</Tag.Label>

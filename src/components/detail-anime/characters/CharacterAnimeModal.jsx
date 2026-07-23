@@ -28,7 +28,7 @@ const CharacterAnimeModal = ({ isOpen, onClose, charactersSelected }) => {
         {charactersSelected?.voiceActors?.length > 0 ? (
           <SimpleGrid columns={sm ? 2 : 3} spacing={5}>
             {charactersSelected?.voiceActors?.map((va) => (
-              <Box key={va?.id}>
+              <Box key={va?.id || va?.name?.full}>
                 <BgImage
                   src={va?.image}
                   w={120}

@@ -143,12 +143,12 @@ src/
 
 ## Routes
 
-| Route                    | Purpose                                                                 |
-| ------------------------ | ----------------------------------------------------------------------- |
-| `/`                      | Homepage with featured and recently updated anime.                      |
-| `/search?q=title&page=1` | Search results with pagination.                                         |
-| `/anime/:id/:anime_name` | Anime detail page with episode, overview, characters, and reviews tabs. |
-| `*`                      | Not found page.                                                         |
+| Route                    | Purpose                                                        |
+| ------------------------ | -------------------------------------------------------------- |
+| `/`                      | Homepage with featured and recently updated anime.             |
+| `/search?q=title&page=1` | Search results with pagination.                                |
+| `/anime/:id/:anime_name` | Anime detail page with episode, overview, and characters tabs. |
+| `*`                      | Not found page.                                                |
 
 ## External Content and Provider Disclaimer
 
@@ -171,7 +171,7 @@ belong to their respective owners.
 - Download support is not implemented in the current app UI.
 - Sidebar items such as New Episodes, Genres, Bookmarks, and History currently
   route to search-oriented views rather than dedicated persisted features.
-- Characters, recommendations, relations, and reviews may be empty when the
+- Characters, recommendations, and relations may be empty when the
   normalized provider response does not include usable data.
 
 ## Development Status
