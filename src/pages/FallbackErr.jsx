@@ -1,4 +1,3 @@
-import imageError from "../assets/image_error.png";
 import ErrorPage from "../components/global/ErrorPage";
 
 const FallbackErr = ({ error, isNavbar = false }) => {
@@ -10,7 +9,6 @@ const FallbackErr = ({ error, isNavbar = false }) => {
         },
         text: "Refresh",
       }}
-      src={imageError}
       subTitle={error}
       title={`Error ${isNavbar ? "in navbar" : ""}`}
     />

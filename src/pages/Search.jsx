@@ -6,7 +6,6 @@ import Pagination from "../components/global/Pagination";
 import SearchHeader from "../components/search/SearchHeader";
 import AnimeCard from "../components/global/anime-card/AnimeCard";
 import AnimeCardSkeleton from "../components/global/anime-card/AnimeCardSkeleton";
-import imageError from "../assets/image_error.png";
 import useChangeDocTitle from "../hooks/useChangeDocTitle";
 import useFetchData from "../hooks/useFetchData";
 
@@ -65,7 +64,6 @@ const Search = () => {
           }}
           title="Error"
           subTitle={error}
-          src={imageError}
         />
       ) : loading ? (
         <Stack gap={3}>

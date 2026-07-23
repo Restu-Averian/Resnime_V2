@@ -1,7 +1,6 @@
 import { Grid, SimpleGrid, Stack, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import imageError from "../assets/image_error.png";
 import GenreHeaderType from "../components/genres/GenreHeaderType";
 import GenreLists from "../components/genres/GenreLists";
 import GenresHeader from "../components/genres/GenresHeader";
@@ -144,7 +143,6 @@ const Genres = () => {
             }}
             title="Error"
             subTitle={state.error}
-            src={imageError}
           />
         ) : state.loading ? (
           <SimpleGrid columns={{ base: 1, xl: 2 }} gap={3.5}>
