@@ -145,7 +145,11 @@ const DetailAnime = () => {
                 gap={{ base: 1, md: 5 }}
                 overflowX="auto"
               >
-                {TAB_DATAS.map((tab) => {
+                {TAB_DATAS.filter(
+                  (tab) =>
+                    tab.id !== "characters" ||
+                    detailData?.characters?.length > 0,
+                ).map((tab) => {
                   const active = activeTab === tab.id;
 
                   return (
@@ -213,24 +217,9 @@ const DetailAnime = () => {
             )}
 
             {activeTab === "characters" && (
-              <>
-                <Box showIf={detailData?.characters?.length > 0} useSuspense>
-                  <CharacterAnime data={detailData} />
-                </Box>
-
-                {!detailData?.characters?.length && (
-                  <ChakraBox
-                    minH="160px"
-                    display="grid"
-                    placeItems="center"
-                    border="1px solid rgba(255,255,255,0.1)"
-                    borderRadius="12px"
-                    color="gray.400"
-                  >
-                    No characters available.
-                  </ChakraBox>
-                )}
-              </>
+              <Box useSuspense>
+                <CharacterAnime data={detailData} />
+              </Box>
             )}
           </ChakraBox>
 

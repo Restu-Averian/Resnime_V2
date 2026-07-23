@@ -6,6 +6,7 @@ const EpisodesAnime = ({ data, sortMode, setSortMode }) => {
   return (
     <EpisodesAnimeContextProvider data={data}>
       <EpisodesAnimeList sortMode={sortMode} setSortMode={setSortMode} />
+
       <EpisodesAnimeStreamingModal />
     </EpisodesAnimeContextProvider>
   );

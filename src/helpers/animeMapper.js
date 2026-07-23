@@ -44,6 +44,7 @@ const normalizeAnime = (anime) => {
 
   return {
     id: getId(anime),
+    malId: anime?.MALID || anime?.MALId || null,
     title: {
       romaji: title,
       english: title,
@@ -126,7 +127,11 @@ export const fmtAnimeStreamingDetail = (rawStreaming) => {
   const episodes = [];
 
   entries.forEach((entry) => {
-    const episode = fmtEpisodeResponse(entry, episodes.length + 1, local?.poster);
+    const episode = fmtEpisodeResponse(
+      entry,
+      episodes.length + 1,
+      local?.poster,
+    );
     if (!episode || usedUrls.has(episode.playerUrl)) return;
 
     usedUrls.add(episode.playerUrl);
@@ -139,7 +144,48 @@ export const fmtAnimeStreamingDetail = (rawStreaming) => {
   };
 };
 
-export const fmtAnimeDetailResponse = (rawAnime, streaming = {}) => {
+export const fmtJikanCharacter = (item) => {
+  const char = item?.character;
+  const role = item?.role ? String(item.role).toUpperCase() : "SUPPORTING";
+
+  const voiceActors = Array.isArray(item?.voice_actors)
+    ? item.voice_actors.map((va) => ({
+        id: va?.person?.mal_id,
+        name: {
+          full: va?.person?.name || "",
+        },
+        image:
+          va?.person?.images?.jpg?.image_url ||
+          va?.person?.images?.webp?.image_url ||
+          placeholderImage,
+        language: va?.language || "",
+      }))
+    : [];
+
+  return {
+    id: char?.mal_id,
+    name: {
+      full: char?.name || "",
+    },
+    image:
+      char?.images?.jpg?.image_url ||
+      char?.images?.webp?.image_url ||
+      placeholderImage,
+    role,
+    voiceActors,
+  };
+};
+
+export const fmtAnimeCharactersResponse = (rawList) => {
+  if (!Array.isArray(rawList)) return [];
+  return rawList.map(fmtJikanCharacter).filter((char) => char?.id);
+};
+
+export const fmtAnimeDetailResponse = (
+  rawAnime,
+  streaming = {},
+  characters = [],
+) => {
   const local = getAnimePayload(rawAnime);
   const anime = normalizeAnime(local);
   const episodeFallbackImage =
@@ -161,6 +207,6 @@ export const fmtAnimeDetailResponse = (rawAnime, streaming = {}) => {
     streamingError: streaming?.error || "",
     relations: [],
     recommendations: [],
-    characters: [],
+    characters: Array.isArray(characters) ? characters : [],
   };
 };

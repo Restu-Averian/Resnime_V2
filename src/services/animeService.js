@@ -1,15 +1,24 @@
 import axios from "axios";
 import {
+  fmtAnimeCharactersResponse,
   fmtAnimeDetailResponse,
   fmtAnimeGenreResponse,
   fmtAnimeListResponse,
   fmtAnimeSortResponse,
   fmtAnimeStreamingDetail,
 } from "../helpers/animeMapper.js";
-import { ANIPUB_API_BASE_URL } from "../constants/index.js";
+import { ANIPUB_API_BASE_URL, JIKAN_API_BASE_URL } from "../constants/index.js";
 
 const client = axios.create({
   baseURL: ANIPUB_API_BASE_URL,
+  timeout: 15000,
+  headers: {
+    Accept: "application/json",
+  },
+});
+
+const jikanClient = axios.create({
+  baseURL: JIKAN_API_BASE_URL,
   timeout: 15000,
   headers: {
     Accept: "application/json",
@@ -203,6 +212,32 @@ export const getAnimeByGenre = async (genre, page = 1, signal) => {
   return fmtAnimeGenreResponse(data, currentPage);
 };
 
+const getAnimeCharacters = async (malId, signal) => {
+  const numericMalId = Number(malId);
+  if (!Number.isInteger(numericMalId) || numericMalId < 1) {
+    return [];
+  }
+
+  try {
+    const response = await jikanClient.get(
+      `/anime/${numericMalId}/characters`,
+      {
+        signal,
+      },
+    );
+    return fmtAnimeCharactersResponse(response?.data?.data);
+  } catch (error) {
+    if (
+      error?.cancelled ||
+      axios.isCancel(error) ||
+      error?.code === "ERR_CANCELED"
+    ) {
+      throw error;
+    }
+    return [];
+  }
+};
+
 const getAnimeDetail = async (id, signal) => {
   const animeId = toValidAnimeId(id);
   const detail = await fetch(`/anime/api/details/${animeId}`, {
@@ -214,32 +249,42 @@ const getAnimeDetail = async (id, signal) => {
     throw new Error("Anime not found.");
   }
 
-  let streaming = {
-    status: "unavailable",
-    episodes: [],
-    error: "",
-  };
+  const malId =
+    detail?.local?.MALID ||
+    detail?.local?.MALId ||
+    detail?.MALID ||
+    detail?.MALId;
 
-  try {
-    const streamingData = await fetch(`/v1/api/details/${animeId}`, {
-      signal,
-      fallbackMessage: "Unable to check streaming availability.",
+  const streamingPromise = fetch(`/v1/api/details/${animeId}`, {
+    signal,
+    fallbackMessage: "Unable to check streaming availability.",
+  })
+    .then((streamingData) => fmtAnimeStreamingDetail(streamingData))
+    .catch((error) => {
+      if (error?.cancelled) throw error;
+      return {
+        status: error?.status === 404 ? "unavailable" : "error",
+        episodes: [],
+        error:
+          error?.status === 404
+            ? ""
+            : error?.message || "Unable to check streaming availability.",
+      };
     });
-    streaming = fmtAnimeStreamingDetail(streamingData);
-  } catch (error) {
-    if (error?.cancelled) throw error;
-    if (error?.status === 404) {
-      return fmtAnimeDetailResponse(detail, streaming);
-    }
 
-    streaming = {
-      status: "error",
-      episodes: [],
-      error: error?.message || "Unable to check streaming availability.",
-    };
-  }
+  const charactersPromise = malId
+    ? getAnimeCharacters(malId, signal).catch((error) => {
+        if (error?.cancelled) throw error;
+        return [];
+      })
+    : Promise.resolve([]);
 
-  return fmtAnimeDetailResponse(detail, streaming);
+  const [streaming, characters] = await Promise.all([
+    streamingPromise,
+    charactersPromise,
+  ]);
+
+  return fmtAnimeDetailResponse(detail, streaming, characters);
 };
 
 export const getAnimeByPath = (path, signal) => {

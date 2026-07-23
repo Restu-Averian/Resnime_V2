@@ -10,7 +10,7 @@ const CharacterAnime = ({ data }) => {
 
   const charactersSelected = useMemo(() => {
     return data?.characters?.find((char) => char?.id === idChar);
-  }, [idChar]);
+  }, [idChar, data?.characters]);
 
   return (
     <CardData useDefault header={<Heading>Characters</Heading>}>
