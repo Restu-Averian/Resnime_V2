@@ -6,6 +6,8 @@ import {
   Flex,
   Heading,
   HStack,
+  Icon,
+  Image,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -15,7 +17,9 @@ import {
   ChevronDown,
   ChevronUp,
   Copy,
+  Heart,
   Home,
+  Menu,
   RotateCw,
   ShieldCheck,
 } from "lucide-react";
@@ -91,114 +95,174 @@ const ErrorPage = ({
       textAlign="center"
       justifyContent="center"
       alignItems="center"
-      py={{ base: 6, md: 10 }}
-      px={4}
+      py={{ base: 0, md: 10 }}
+      px={{ base: 0, md: 4 }}
       color="white"
       position="relative"
       overflow="hidden"
       gap={0}
     >
-      {/* 2-Column Horizontal Card */}
       <Flex
         w="100%"
-        maxW="920px"
-        minH="480px"
-        bg="rgba(15, 17, 26, 0.9)"
+        maxW={{ base: "430px", lg: "920px" }}
+        minH={{ base: "auto", lg: "480px" }}
+        bg={{
+          base: "linear-gradient(180deg, rgba(3, 8, 20, 0.98), rgba(9, 13, 27, 0.96))",
+          lg: "rgba(15, 17, 26, 0.9)",
+        }}
         backdropFilter="blur(20px)"
         border="1px solid rgba(233, 69, 96, 0.2)"
-        borderRadius="24px"
-        boxShadow="0 25px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(233, 69, 96, 0.1)"
+        borderRadius={{ base: "28px", lg: "24px" }}
+        boxShadow={{
+          base: "0 24px 70px rgba(0, 0, 0, 0.58), 0 0 36px rgba(233, 69, 96, 0.08)",
+          lg: "0 25px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(233, 69, 96, 0.1)",
+        }}
         overflow="hidden"
         flexDir={{ base: "column", lg: "row" }}
         position="relative"
         zIndex={2}
       >
-        {/* Left Side: Background Image */}
+        <Flex
+          display={{ base: "flex", lg: "none" }}
+          alignItems="center"
+          justifyContent="space-between"
+          h="72px"
+          px={5}
+          borderBottom="1px solid rgba(255, 255, 255, 0.08)"
+          bg="rgba(4, 9, 22, 0.58)"
+        >
+          <HStack gap={3}>
+            <Image src="/icon.png" alt="Resnime logo" w="34px" h="34px" />
+            <Text fontSize="25px" fontWeight="800" color="white" lineHeight="1">
+              Resnime
+            </Text>
+          </HStack>
+          <Flex
+            as="button"
+            type="button"
+            aria-label="Open menu"
+            alignItems="center"
+            justifyContent="center"
+            w="46px"
+            h="46px"
+            borderRadius="full"
+            border="1px solid rgba(255, 255, 255, 0.14)"
+            bg="rgba(255, 255, 255, 0.08)"
+            color="white"
+          >
+            <Menu size={25} />
+          </Flex>
+        </Flex>
+
         <Box
           w={{ base: "100%", lg: "42%" }}
-          minH={{ base: "260px", sm: "320px", lg: "auto" }}
+          minH={{ base: "min(68vw, 292px)", lg: "auto" }}
           bgImage={`url(${src})`}
           bgSize="cover"
-          bgPosition="center"
+          bgPosition={{ base: "center 38%", lg: "center" }}
           position="relative"
         >
           <Box
             position="absolute"
             inset={0}
             bg={{
-              base: "linear-gradient(to bottom, rgba(15,17,26,0) 50%, rgba(15,17,26,0.95) 100%)",
+              base: "radial-gradient(circle at 50% 34%, rgba(255,75,114,0.08), transparent 45%), linear-gradient(to bottom, rgba(15,17,26,0) 48%, rgba(15,17,26,0.86) 100%)",
               lg: "linear-gradient(to right, rgba(15,17,26,0) 60%, rgba(15,17,26,0.95) 100%)",
             }}
           />
         </Box>
 
-        {/* Right Side: Content Stack */}
         <Stack
           flex={1}
-          p={{ base: 6, sm: 8 }}
-          gap={5}
+          m={{ base: "0 18px 18px", lg: 0 }}
+          mt={{ base: "-6px", lg: 0 }}
+          p={{ base: 4, sm: 5, lg: 8 }}
+          gap={{ base: 4, lg: 5 }}
           alignItems="center"
           justifyContent="center"
+          bg={{
+            base: "linear-gradient(180deg, rgba(20, 23, 39, 0.9), rgba(12, 16, 31, 0.94))",
+            lg: "transparent",
+          }}
+          border={{
+            base: "1px solid rgba(255, 75, 114, 0.26)",
+            lg: "none",
+          }}
+          borderRadius={{ base: "24px", lg: 0 }}
+          boxShadow={{
+            base: "0 0 28px rgba(255, 75, 114, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.04)",
+            lg: "none",
+          }}
         >
-          {/* Warning Circle Icon */}
           <Flex
             alignItems="center"
             justifyContent="center"
-            w="44px"
-            h="44px"
+            w={{ base: "54px", lg: "44px" }}
+            h={{ base: "54px", lg: "44px" }}
             borderRadius="full"
-            border="1px solid rgba(233, 69, 96, 0.4)"
+            border={{
+              base: "2px solid rgba(255, 75, 114, 0.84)",
+              lg: "1px solid rgba(233, 69, 96, 0.4)",
+            }}
             bg="rgba(233, 69, 96, 0.1)"
             color="#E94560"
-            boxShadow="0 0 15px rgba(233, 69, 96, 0.2)"
+            boxShadow={{
+              base: "0 0 22px rgba(233, 69, 96, 0.36)",
+              lg: "0 0 15px rgba(233, 69, 96, 0.2)",
+            }}
           >
-            <AlertCircle size={22} />
+            <AlertCircle size={28} />
           </Flex>
 
-          {/* Title & Subtitle */}
           <Stack gap={2} textAlign="center" w="100%">
             <Heading
               as="h2"
-              fontSize={{ base: "20px", sm: "24px" }}
-              fontWeight="700"
+              fontSize={{ base: "28px", sm: "30px", lg: "24px" }}
+              fontWeight={{ base: "800", lg: "700" }}
               color="white"
-              letterSpacing="-0.01em"
+              letterSpacing="0"
+              lineHeight="1.1"
             >
               {title}
             </Heading>
             <Text
-              fontSize="14px"
+              fontSize={{ base: "16px", lg: "14px" }}
               color="#94A3B8"
-              lineHeight="1.6"
+              lineHeight={{ base: "1.5", lg: "1.6" }}
               whiteSpace="pre-line"
+              maxW={{ base: "330px", lg: "none" }}
+              mx="auto"
             >
               {subTitle}
             </Text>
           </Stack>
 
-          {/* Technical Details Accordion */}
           <Box w="100%">
             <Flex
               alignItems="center"
               justifyContent="space-between"
               bg="rgba(255, 255, 255, 0.03)"
               border="1px solid rgba(255, 255, 255, 0.08)"
-              borderRadius={showDetails ? "12px 12px 0 0" : "12px"}
+              borderRadius={showDetails ? "18px 18px 0 0" : "18px"}
               px={4}
-              py={3}
+              py={{ base: 3, lg: 3 }}
               cursor="pointer"
               onClick={() => setShowDetails((prev) => !prev)}
               _hover={{ bg: "rgba(255, 255, 255, 0.05)" }}
               transition="all 0.2s"
             >
-              <Text fontSize="13px" fontWeight="500" color="#94A3B8">
+              <Text
+                fontSize={{ base: "14px", lg: "13px" }}
+                fontWeight="500"
+                color={{ base: "#CBD5E1", lg: "#94A3B8" }}
+              >
                 Technical details
               </Text>
               <HStack gap={3} alignItems="center">
                 <Box
                   as="button"
-                  fontSize="12px"
-                  fontWeight="500"
+                  fontSize={{ base: "13px", lg: "12px" }}
+                  fontWeight={{ base: "600", lg: "500" }}
                   color="#FF4B72"
                   _hover={{ color: "#FF6B8B", textDecoration: "underline" }}
                   onClick={handleCopy}
@@ -207,15 +271,15 @@ const ErrorPage = ({
                   border="none"
                 >
                   <Flex alignItems="center" gap={1.5}>
-                    {copied ? <Check size={14} /> : <Copy size={14} />}
+                    {copied ? <Check size={16} /> : <Copy size={16} />}
                     {copied ? "Copied!" : "Copy error details"}
                   </Flex>
                 </Box>
                 <Box color="#94A3B8">
                   {showDetails ? (
-                    <ChevronUp size={16} />
+                    <ChevronUp size={18} />
                   ) : (
-                    <ChevronDown size={16} />
+                    <ChevronDown size={18} />
                   )}
                 </Box>
               </HStack>
@@ -225,15 +289,16 @@ const ErrorPage = ({
                 bg="rgba(10, 12, 18, 0.7)"
                 border="1px solid rgba(255, 255, 255, 0.08)"
                 borderTop="none"
-                borderRadius="0 0 12px 12px"
-                p={3}
+                borderRadius="0 0 18px 18px"
+                p={{ base: 3, lg: 3 }}
                 textAlign="left"
               >
                 <Text
                   fontFamily="monospace"
-                  fontSize="12px"
+                  fontSize={{ base: "13px", lg: "12px" }}
                   color="#CBD5E1"
-                  wordBreak="break-all"
+                  lineHeight="1.6"
+                  wordBreak="break-word"
                 >
                   {displayTechnicalDetails}
                 </Text>
@@ -241,17 +306,18 @@ const ErrorPage = ({
             )}
           </Box>
 
-          {/* Action Buttons */}
-          <HStack gap={3} w="100%" flexDir={{ base: "column", sm: "row" }}>
+          <HStack gap={3} w="100%" flexDir={{ base: "column", lg: "row" }}>
             <Button
               flex={1}
-              w={{ base: "100%", sm: "auto" }}
-              h="44px"
+              w={{ base: "100%", lg: "auto" }}
+              h={{ base: "64px", lg: "44px" }}
+              minH={{ base: "64px", lg: "44px" }}
               bg="linear-gradient(135deg, #FF4B72 0%, #E94560 100%)"
               color="white"
-              fontWeight="600"
-              fontSize="14px"
-              borderRadius="12px"
+              fontWeight={{ base: "700", lg: "600" }}
+              fontSize={{ base: "20px", lg: "14px" }}
+              lineHeight="1"
+              borderRadius={{ base: "18px", lg: "12px" }}
               _hover={{
                 opacity: 0.92,
                 transform: "translateY(-1px)",
@@ -261,22 +327,24 @@ const ErrorPage = ({
               transition="all 0.2s"
               onClick={primaryClick}
             >
-              <Flex alignItems="center" gap={2}>
-                <RotateCw size={16} />
-                {btnAction?.text || "Try Again"}
+              <Flex alignItems="center" gap={3}>
+                <Icon as={RotateCw} boxSize={{ base: "26px", lg: "16px" }} />
+                {btnAction?.text || "Refresh"}
               </Flex>
             </Button>
 
             <Button
               flex={1}
-              w={{ base: "100%", sm: "auto" }}
-              h="44px"
+              w={{ base: "100%", lg: "auto" }}
+              h={{ base: "64px", lg: "44px" }}
+              minH={{ base: "64px", lg: "44px" }}
               bg="rgba(255, 255, 255, 0.05)"
               color="white"
               border="1px solid rgba(255, 255, 255, 0.12)"
-              fontWeight="500"
-              fontSize="14px"
-              borderRadius="12px"
+              fontWeight={{ base: "700", lg: "500" }}
+              fontSize={{ base: "20px", lg: "14px" }}
+              lineHeight="1"
+              borderRadius={{ base: "18px", lg: "12px" }}
               _hover={{
                 bg: "rgba(255, 255, 255, 0.1)",
                 borderColor: "rgba(255, 255, 255, 0.2)",
@@ -284,43 +352,49 @@ const ErrorPage = ({
               transition="all 0.2s"
               onClick={secondaryClick}
             >
-              <Flex alignItems="center" gap={2}>
-                <Home size={16} />
+              <Flex alignItems="center" gap={3}>
+                <Icon as={Home} boxSize={{ base: "26px", lg: "16px" }} />
                 {secondaryBtnAction?.text || "Back to Home"}
               </Flex>
             </Button>
           </HStack>
 
-          {/* Bottom Callout Banner */}
           <Flex
             w="100%"
             alignItems="center"
-            justifyContent="center"
-            gap={2.5}
+            justifyContent="space-between"
+            gap={4}
             bg="rgba(233, 69, 96, 0.04)"
             border="1px solid rgba(233, 69, 96, 0.15)"
-            borderRadius="14px"
-            py={3}
+            borderRadius={{ base: "18px", lg: "14px" }}
+            py={{ base: 3, lg: 3 }}
             px={4}
           >
-            <Flex
-              alignItems="center"
-              justifyContent="center"
-              w="22px"
-              h="22px"
-              borderRadius="full"
-              border="1px solid rgba(233, 69, 96, 0.4)"
-              color="#E94560"
-              flexShrink={0}
-            >
-              <ShieldCheck size={13} />
-            </Flex>
-            <Text fontSize="13px" color="#94A3B8" textAlign="center">
-              No worries — your watchlist and browsing progress are safe.{" "}
-              <Text as="span" color="#FF4B72">
-                ♥
+            <HStack gap={4} minW={0}>
+              <Flex
+                alignItems="center"
+                justifyContent="center"
+                w={{ base: "36px", lg: "22px" }}
+                h={{ base: "36px", lg: "22px" }}
+                borderRadius="full"
+                border="1px solid rgba(233, 69, 96, 0.4)"
+                color="#E94560"
+                flexShrink={0}
+              >
+                <ShieldCheck size={18} />
+              </Flex>
+              <Text
+                fontSize={{ base: "14px", lg: "13px" }}
+                color="#94A3B8"
+                textAlign={{ base: "left", lg: "center" }}
+                lineHeight="1.45"
+              >
+                No worries — your watchlist and browsing progress are safe.
               </Text>
-            </Text>
+            </HStack>
+            <Box color="#FF4B72" flexShrink={0}>
+              <Heart size={22} fill="currentColor" />
+            </Box>
           </Flex>
         </Stack>
       </Flex>
