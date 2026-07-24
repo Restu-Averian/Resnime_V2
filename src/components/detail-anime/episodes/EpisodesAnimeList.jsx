@@ -10,8 +10,8 @@ import {
 import { useState, useMemo, useEffect } from "react";
 import { useEpisodeAnimeContext } from "../../../context/EpisodesAnimeContextProvider";
 import EpisodesAnimeOrder from "./EpisodesAnimeOrder";
-import EpisodesAnimePagination from "./EpisodesAnimePagination";
 import EpisodesAnimeListItem from "./EpisodesAnimeListItem";
+import Pagination from "../../global/Pagination";
 
 const EpisodesAnimeList = ({ sortMode, setSortMode }) => {
   const { data, openModalVideo, episodeValParam } = useEpisodeAnimeContext();
@@ -73,11 +73,12 @@ const EpisodesAnimeList = ({ sortMode, setSortMode }) => {
           <HStack gap={{ base: 4, md: 6 }} flexWrap="wrap">
             <EpisodesAnimeOrder sortMode={sortMode} setSortMode={setSortMode} />
 
-            {episodes.length > 10 && (
-              <EpisodesAnimePagination
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
+            {episodes.length > 10 && totalPages > 1 && (
+              <Pagination
+                page={currentPage}
                 totalPages={totalPages}
+                onPrev={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                onNext={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 buttonSize="32px"
               />
             )}
@@ -112,17 +113,6 @@ const EpisodesAnimeList = ({ sortMode, setSortMode }) => {
           );
         })}
       </SimpleGrid>
-
-      {episodes.length > 10 && totalPages > 1 && (
-        <Flex justify="center" mt={{ base: 6, md: 8 }}>
-          <EpisodesAnimePagination
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalPages={totalPages}
-            buttonSize="36px"
-          />
-        </Flex>
-      )}
     </ChakraBox>
   );
 };
