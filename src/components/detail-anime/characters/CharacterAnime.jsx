@@ -12,57 +12,11 @@ import {
 } from "@chakra-ui/react";
 import { Check, ChevronDown, Globe2, Info, MoreVertical } from "lucide-react";
 import Image from "../../global/Image";
-
-const languageColors = {
-  Japanese: {
-    color: "#ff7896",
-    bg: "rgba(255, 109, 143, 0.13)",
-    border: "rgba(255, 109, 143, 0.42)",
-  },
-  English: {
-    color: "#60a5fa",
-    bg: "rgba(96, 165, 250, 0.12)",
-    border: "rgba(96, 165, 250, 0.38)",
-  },
-  "Spanish (LA)": {
-    color: "#2dd4bf",
-    bg: "rgba(45, 212, 191, 0.12)",
-    border: "rgba(45, 212, 191, 0.38)",
-  },
-  "Portuguese (BR)": {
-    color: "#c4a7ff",
-    bg: "rgba(196, 167, 255, 0.12)",
-    border: "rgba(196, 167, 255, 0.38)",
-  },
-};
+import CharacterAnimeRoleBadge from "./CharacterAnimeRoleBadge";
+import { LANGUAGE_COLORS } from "../../../constants/detail-anime/detail-anime-characters";
 
 const getName = (person) => person?.name?.full || "";
 const getRole = (role) => (role ? String(role).toUpperCase() : "");
-
-const RoleBadge = ({ role }) => {
-  if (!role) return null;
-
-  const supporting = role === "SUPPORTING";
-
-  return (
-    <Badge
-      alignSelf="center"
-      px={3}
-      py={0.5}
-      borderRadius="6px"
-      fontSize="10px"
-      fontWeight="700"
-      lineHeight={1.2}
-      color={supporting ? "#facc15" : "#ff7896"}
-      bg={supporting ? "rgba(250, 204, 21, 0.12)" : "rgba(255, 109, 143, 0.14)"}
-      border={`1px solid ${
-        supporting ? "rgba(250, 204, 21, 0.38)" : "rgba(255, 109, 143, 0.38)"
-      }`}
-    >
-      {role}
-    </Badge>
-  );
-};
 
 const CharacterAnime = ({ data }) => {
   const characters = Array.isArray(data?.characters) ? data.characters : [];
@@ -194,7 +148,7 @@ const CharacterAnime = ({ data }) => {
                   >
                     {name}
                   </Text>
-                  <RoleBadge role={role} />
+                  <CharacterAnimeRoleBadge role={role} />
                 </Stack>
               </Button>
             );
@@ -235,7 +189,10 @@ const CharacterAnime = ({ data }) => {
                 >
                   {getName(charactersSelected)}
                 </Text>
-                <RoleBadge role={getRole(charactersSelected?.role)} />
+
+                <CharacterAnimeRoleBadge
+                  role={getRole(charactersSelected?.role)}
+                />
               </HStack>
               <Text color="gray.400" fontSize="sm">
                 {getRole(charactersSelected?.role)
@@ -264,7 +221,7 @@ const CharacterAnime = ({ data }) => {
           <Stack gap={2}>
             {visibleVoiceActors.map((va) => {
               const lang = va?.language || "";
-              const langStyle = languageColors[lang] || {
+              const langStyle = LANGUAGE_COLORS[lang] || {
                 color: "#cbd5e1",
                 bg: "rgba(203, 213, 225, 0.1)",
                 border: "rgba(203, 213, 225, 0.24)",

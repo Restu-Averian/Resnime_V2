@@ -15,7 +15,7 @@ import useChangeDocTitle from "../hooks/useChangeDocTitle";
 import Box from "../components/global/Box";
 import ErrorPage from "../components/global/ErrorPage";
 import { sortAnime } from "../services/animeService";
-import { TAB_DATAS } from "../constants/detail-anime";
+import { TAB_DATAS } from "../constants/detail-anime/detail-anime";
 
 const BannerHeroAnime = lazy(
   () => import("../components/detail-anime/banner-hero/BannerHeroAnime"),
