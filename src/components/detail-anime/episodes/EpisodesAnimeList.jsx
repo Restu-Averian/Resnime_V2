@@ -3,18 +3,38 @@ import {
   Flex,
   Heading,
   HStack,
-  Icon,
-  Select,
   SimpleGrid,
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { PlayCircle } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
 import { useEpisodeAnimeContext } from "../../../context/EpisodesAnimeContextProvider";
+import EpisodesAnimeOrder from "./EpisodesAnimeOrder";
+import EpisodesAnimePagination from "./EpisodesAnimePagination";
+import EpisodesAnimeListItem from "./EpisodesAnimeListItem";
 
 const EpisodesAnimeList = ({ sortMode, setSortMode }) => {
   const { data, openModalVideo, episodeValParam } = useEpisodeAnimeContext();
+
   const episodes = data?.episodes || [];
+
+  const itemsPerPage = 10;
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil(episodes.length / itemsPerPage) || 1;
+
+  const paginatedEpisodes = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return episodes.slice(start, start + itemsPerPage);
+  }, [episodes, currentPage]);
+
+  const currentStart = (currentPage - 1) * itemsPerPage + 1;
+  const currentEnd = Math.min(currentPage * itemsPerPage, episodes.length);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [sortMode, episodes.length]);
 
   return (
     <ChakraBox
@@ -49,134 +69,60 @@ const EpisodesAnimeList = ({ sortMode, setSortMode }) => {
           </Text>
         </HStack>
 
-        <HStack gap={3} color="gray.300">
-          <Text fontSize="sm">Order:</Text>
-          <Select.Root
-            size="sm"
-            value={[sortMode || "episode-asc"]}
-            onValueChange={({ value }) => {
-              setSortMode?.(value?.[0] || "episode-asc");
-            }}
-          >
-            <Select.HiddenSelect aria-label="Order episodes" />
-            <Select.Control
-              minW={{ base: "160px", md: "178px" }}
-              border="1px solid rgba(255,255,255,0.13)"
-              borderRadius="12px"
-              bg="rgba(255,255,255,0.035)"
-            >
-              <Select.Trigger border="0" px={4}>
-                <Select.ValueText placeholder="Ascending" />
-              </Select.Trigger>
-              <Select.IndicatorGroup>
-                <Select.Indicator />
-              </Select.IndicatorGroup>
-            </Select.Control>
-            <Select.Positioner>
-              <Select.Content bg="#08101f" borderColor="rgba(255,255,255,0.14)">
-                <Select.Item item="episode-asc">
-                  Ascending
-                  <Select.ItemIndicator />
-                </Select.Item>
-                <Select.Item item="episode-desc">
-                  Descending
-                  <Select.ItemIndicator />
-                </Select.Item>
-              </Select.Content>
-            </Select.Positioner>
-          </Select.Root>
-        </HStack>
+        <Stack gap={2} align={{ base: "flex-start", md: "flex-end" }}>
+          <HStack gap={{ base: 4, md: 6 }} flexWrap="wrap">
+            <EpisodesAnimeOrder sortMode={sortMode} setSortMode={setSortMode} />
+
+            {episodes.length > 10 && (
+              <EpisodesAnimePagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPages={totalPages}
+                buttonSize="32px"
+              />
+            )}
+          </HStack>
+
+          {episodes.length > 0 && (
+            <Text fontSize="xs" color="gray.500" pr={{ base: 0, md: 1 }}>
+              Showing {currentStart}-{currentEnd}{" "}
+              <Text as="span" color="gray.600" mx={1}>
+                |
+              </Text>{" "}
+              10 episodes per page
+            </Text>
+          )}
+        </Stack>
       </Flex>
 
       <SimpleGrid
         columns={{ base: 1, sm: 2, lg: 3, xl: 4, "2xl": 6 }}
         gap={{ base: 4, md: 5 }}
       >
-        {episodes.map((episode) => {
+        {paginatedEpisodes.map((episode) => {
           const isActive = episode?.id === episodeValParam;
 
           return (
-            <ChakraBox
+            <EpisodesAnimeListItem
               key={episode?.id}
-              as="button"
-              type="button"
-              cursor="pointer"
-              textAlign="center"
-              minH={{ base: "128px", md: "146px" }}
-              display="grid"
-              placeItems="center"
-              border={
-                isActive
-                  ? "1px solid rgba(255,109,143,0.85)"
-                  : "1px solid rgba(255,109,143,0.34)"
-              }
-              borderRadius="10px"
-              overflow="hidden"
-              bg={
-                isActive
-                  ? "linear-gradient(145deg, #ff3f73 0%, #bd1e54 100%)"
-                  : "rgba(255,255,255,0.025)"
-              }
-              color="white"
-              boxShadow={
-                isActive
-                  ? "0 16px 42px rgba(255,55,104,0.26), inset 0 1px 0 rgba(255,255,255,0.2)"
-                  : "inset 0 1px 0 rgba(255,255,255,0.04)"
-              }
-              transition="180ms ease"
-              _hover={{
-                transform: "translateY(-2px)",
-                borderColor: "rgba(255,109,143,0.85)",
-                bg: "linear-gradient(145deg, #ff4d7e 0%, #ca245c 100%)",
-                boxShadow:
-                  "0 16px 42px rgba(255,55,104,0.26), inset 0 1px 0 rgba(255,255,255,0.2)",
-                "& .episode-label": {
-                  color: "white",
-                },
-                "& .episode-play-icon": {
-                  opacity: 1,
-                  transform: "translateY(0)",
-                },
-              }}
-              _focusVisible={{
-                outline: "2px solid #ff6d8f",
-                outlineOffset: "3px",
-              }}
-              onClick={(e) => {
-                openModalVideo(e, episode?.id);
-              }}
-            >
-              <Stack gap={2} align="center">
-                <Text
-                  className="episode-label"
-                  color={isActive ? "white" : "gray.300"}
-                  fontSize={{ base: "sm", md: "md" }}
-                  lineHeight={1}
-                  transition="180ms ease"
-                >
-                  Episode
-                </Text>
-                <Text
-                  fontSize={{ base: "4xl", md: "5xl" }}
-                  fontWeight="bold"
-                  lineHeight={1}
-                >
-                  {episode?.number}
-                </Text>
-
-                <Icon
-                  className="episode-play-icon"
-                  as={PlayCircle}
-                  boxSize={6}
-                  opacity={isActive ? 1 : 0}
-                  transform={isActive ? "translateY(0)" : "translateY(4px)"}
-                  transition="180ms ease"
-                />
-              </Stack>
-            </ChakraBox>
+              episode={episode}
+              isActive={isActive}
+              openModalVideo={openModalVideo}
+            />
           );
         })}
       </SimpleGrid>
+
+      {episodes.length > 10 && totalPages > 1 && (
+        <Flex justify="center" mt={{ base: 6, md: 8 }}>
+          <EpisodesAnimePagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={totalPages}
+            buttonSize="36px"
+          />
+        </Flex>
+      )}
     </ChakraBox>
   );
 };
