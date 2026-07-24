@@ -7,7 +7,7 @@ const Layout = ({ children }) => {
   const navigate = useNavigate();
 
   return (
-    <Flex minH="100vh" bg="#050b16" color="white" overflowX="hidden">
+    <Flex minH="100vh" bg="#050b16" color="white">
       <Sidebar />
 
       <Stack
@@ -15,8 +15,8 @@ const Layout = ({ children }) => {
         gap={0}
         flex={1}
         minW={0}
-        w={{ base: "100vw", lg: "calc(100vw - 270px)" }}
-        maxW={{ base: "100vw", lg: "calc(100vw - 270px)" }}
+        w={{ base: "100%", lg: "calc(100% - 270px)" }}
+        maxW={{ base: "100%", lg: "calc(100% - 270px)" }}
         ml={{ base: 0, lg: "270px" }}
       >
         <Box
@@ -29,7 +29,6 @@ const Layout = ({ children }) => {
           bg="rgba(5, 11, 22, 0.86)"
           backdropFilter="blur(18px)"
           borderBottom="1px solid rgba(255,255,255,0.04)"
-          overflowX="hidden"
         >
           <Stack
             direction={{ base: "column", md: "row" }}
@@ -54,9 +53,7 @@ const Layout = ({ children }) => {
             <Kbd display={{ base: "none", md: "inline-flex" }}>/</Kbd>
           </Stack>
         </Box>
-        <Box className="content" overflowX="hidden">
-          {children}
-        </Box>
+        <Box className="content">{children}</Box>
       </Stack>
     </Flex>
   );

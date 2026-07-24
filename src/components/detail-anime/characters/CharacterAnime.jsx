@@ -43,6 +43,8 @@ const CharacterAnime = ({ data }) => {
         h={idChar ? "auto" : "0px"}
         overflow="hidden"
         transition="all 0.3s ease"
+        position="sticky"
+        top="180px"
       >
         <CharacterAnimeVoiceActors
           charactersSelected={charactersSelected}
