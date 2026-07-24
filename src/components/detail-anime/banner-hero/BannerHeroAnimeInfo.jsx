@@ -1,5 +1,6 @@
 import {
   Badge,
+  Box,
   Button,
   Heading,
   HStack,
@@ -7,6 +8,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Bookmark, Play, Star } from "lucide-react";
+import { useState } from "react";
 
 const getTitle = (data, fallback) => data?.title?.romaji || decodeURI(fallback);
 
@@ -18,6 +20,19 @@ const getTitle = (data, fallback) => data?.title?.romaji || decodeURI(fallback);
  * @param {Function} props.onWatch
  */
 const BannerHeroAnimeInfo = ({ data, animeName, onWatch }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isClamped, setIsClamped] = useState(true);
+
+  const handleToggle = () => {
+    if (isExpanded) {
+      setIsExpanded(false);
+      setTimeout(() => setIsClamped(true), 350);
+    } else {
+      setIsClamped(false);
+      setIsExpanded(true);
+    }
+  };
+
   const title = getTitle(data, animeName);
   const genres = data?.genres?.slice(0, 5) || [];
 
@@ -56,9 +71,7 @@ const BannerHeroAnimeInfo = ({ data, animeName, onWatch }) => {
 
           {data?.releaseDate && <Text>{data.releaseDate}</Text>}
 
-          {data?.totalEpisodes && (
-            <Text>{data.totalEpisodes} Episodes</Text>
-          )}
+          {data?.totalEpisodes && <Text>{data.totalEpisodes} Episodes</Text>}
 
           {data?.type && <Text>{data.type}</Text>}
         </Stack>
@@ -80,15 +93,39 @@ const BannerHeroAnimeInfo = ({ data, animeName, onWatch }) => {
         )}
       </Stack>
 
-      <Text
-        color="gray.200"
-        lineClamp={4}
-        maxW="full"
-        textAlign={{ base: "center", md: "left" }}
-        overflowWrap="anywhere"
-      >
-        {data?.description}
-      </Text>
+      <Stack gap={1} align={{ base: "center", md: "flex-start" }} w="full">
+        <Box
+          overflow="hidden"
+          transition="max-height 0.4s ease-in-out"
+          maxH={isExpanded ? "1000px" : "96px"}
+          w="full"
+        >
+          <Text
+            color="gray.200"
+            lineClamp={isClamped ? 4 : "none"}
+            maxW="full"
+            textAlign={{ base: "center", md: "left" }}
+            overflowWrap="anywhere"
+          >
+            {data?.description}
+          </Text>
+        </Box>
+        {data?.description && data.description.length > 200 && (
+          <Button
+            variant="plain"
+            size="sm"
+            color="#ff5f92"
+            onClick={handleToggle}
+            _hover={{ bg: "transparent", color: "#ff84ab" }}
+            p={0}
+            h="auto"
+            fontWeight="bold"
+            cursor="pointer"
+          >
+            {isExpanded ? "Show less" : "Read more"}
+          </Button>
+        )}
+      </Stack>
 
       <HStack
         gap={2}
