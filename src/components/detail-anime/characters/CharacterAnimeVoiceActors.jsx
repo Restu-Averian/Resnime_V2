@@ -8,7 +8,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { ChevronDown, Globe2 } from "lucide-react";
+import { ChevronDown, Globe2, X } from "lucide-react";
 import Image from "../../global/Image";
 import CharacterAnimeRoleBadge from "./CharacterAnimeRoleBadge";
 import { LANGUAGE_COLORS } from "../../../constants/detail-anime/detail-anime-characters";
@@ -18,6 +18,7 @@ const CharacterAnimeVoiceActors = ({
   charactersSelected,
   voiceActors,
   visibleVoiceActors,
+  onClose,
 }) => {
   const characterRoleText = useMemo(() => {
     const role = getRole(charactersSelected?.role);
@@ -34,9 +35,24 @@ const CharacterAnimeVoiceActors = ({
       overflow="hidden"
     >
       <Stack gap={0} p={{ base: 4, md: 5 }}>
-        <Text color="#ff8fab" fontWeight="800" fontSize="sm" mb={4}>
-          Voice Actors
-        </Text>
+        <HStack justify="space-between" mb={4}>
+          <Text color="#ff8fab" fontWeight="800" fontSize="sm">
+            Voice Actors
+          </Text>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={onClose}
+            color="gray.400"
+            _hover={{ color: "white", bg: "rgba(255,255,255,0.1)" }}
+            p={0}
+            minW="auto"
+            h="auto"
+            aria-label="Close voice actors"
+          >
+            <X size={20} />
+          </Button>
+        </HStack>
 
         <HStack gap={4} pb={5}>
           <Image
