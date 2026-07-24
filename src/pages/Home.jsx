@@ -1,5 +1,6 @@
 import { Box, Flex, Grid, Stack } from "@chakra-ui/react";
 import { useEffect, useState, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import useChangeDocTitle from "../hooks/useChangeDocTitle";
 import {
   getHomeBannerAnime,
@@ -15,8 +16,13 @@ const Home = () => {
 
   const [banner, setBanner] = useState(null);
   const [recent, setRecent] = useState([]);
-  const [page, setPage] = useState(1);
+
+  const [searchParams] = useSearchParams();
+  const pageParam = searchParams.get("page");
+  const page = pageParam ? parseInt(pageParam, 10) : 1;
+
   const [loading, setLoading] = useState(true);
+  const [loadingBanner, setLoadingBanner] = useState(true);
   const [error, setError] = useState("");
   const controllerRef = useRef(null);
 
@@ -24,11 +30,13 @@ const Home = () => {
     const signal = controllerRef.current?.signal;
     if (!signal) return;
 
-    try {
-      const featured = await getHomeBannerAnime(signal);
-      if (!signal.aborted) setBanner(featured);
-    } catch {
-      // Abaikan error banner agar page tetap lanjut load
+    if (!banner) {
+      try {
+        const featured = await getHomeBannerAnime(signal);
+        if (!signal.aborted) setBanner(featured);
+      } catch {
+        // Abaikan error banner agar page tetap lanjut load
+      }
     }
 
     try {
@@ -39,7 +47,10 @@ const Home = () => {
         setError(err?.message || "Unable to load homepage.");
       }
     } finally {
-      if (!signal.aborted) setLoading(false);
+      if (!signal.aborted) {
+        setLoading(false);
+        setLoadingBanner(false);
+      }
     }
   };
 
@@ -59,7 +70,7 @@ const Home = () => {
 
   return (
     <Stack gap={6} maxW="1680px" mx="auto">
-      <HeroBanner anime={banner} loading={loading} />
+      <HeroBanner anime={banner} loading={loadingBanner} />
 
       {error && (
         <Box
@@ -74,7 +85,7 @@ const Home = () => {
       )}
 
       <Stack gap={3}>
-        <HomeSectionHeader page={page} setPage={setPage} loading={loading} />
+        <HomeSectionHeader loading={loading} />
 
         <Grid
           templateColumns={{
