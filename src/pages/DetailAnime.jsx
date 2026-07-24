@@ -1,5 +1,10 @@
 import { lazy, useEffect, useMemo, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import {
   Box as ChakraBox,
   Button,
@@ -40,7 +45,10 @@ const sortEpisodes = (episodes, direction) => {
 const DetailAnime = () => {
   const { id, anime_name } = useParams();
   const { pathname, state } = useLocation();
-  const [activeTab, setActiveTab] = useState("episodes");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const activeTab = searchParams?.get("tab") || "episodes";
+
   const [sortMode, setSortMode] = useState("episode-asc");
   const [sortError, setSortError] = useState("");
 
@@ -53,9 +61,49 @@ const DetailAnime = () => {
 
   useChangeDocTitle(`Resnime | ${decodeURI(anime_name)}`);
 
+  const sortedDetailData = useMemo(
+    () => ({
+      ...detailData,
+      episodes: sortEpisodes(detailData?.episodes, sortMode),
+    }),
+    [detailData, sortMode],
+  );
+
+  const setActiveTab = (tabId) => {
+    setSearchParams(
+      (prev) => {
+        prev?.set("tab", tabId);
+        return prev;
+      },
+      { replace: true },
+    );
+  };
+
+  const scrollToEpisodes = () => {
+    setActiveTab("episodes");
+
+    requestAnimationFrame(() => {
+      document.getElementById("detail-tabs")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+
+  useEffect(() => {
+    if (loading || !detailData) return;
+
+    const hasCharacters =
+      Array.isArray(detailData?.characters) && detailData.characters.length > 0;
+
+    if (activeTab === "characters" && !hasCharacters) {
+      setActiveTab("episodes");
+    }
+  }, [activeTab, detailData, loading]);
 
   useEffect(() => {
     if (!detailData?.id) return;
@@ -78,24 +126,6 @@ const DetailAnime = () => {
 
     return () => controller.abort();
   }, [detailData?.genres, detailData?.id, detailData?.title?.romaji, sortMode]);
-
-  const sortedDetailData = useMemo(
-    () => ({
-      ...detailData,
-      episodes: sortEpisodes(detailData?.episodes, sortMode),
-    }),
-    [detailData, sortMode],
-  );
-
-  const scrollToEpisodes = () => {
-    setActiveTab("episodes");
-    requestAnimationFrame(() => {
-      document.getElementById("detail-tabs")?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    });
-  };
 
   return (
     <Stack direction="column" gap={7} maxW="1680px" mx="auto">
@@ -162,7 +192,9 @@ const DetailAnime = () => {
                       borderBottom={
                         active ? "2px solid #ff6d8f" : "2px solid transparent"
                       }
-                      onClick={() => setActiveTab(tab.id)}
+                      onClick={() => {
+                        setActiveTab(tab.id);
+                      }}
                       _hover={{
                         bg: "rgba(255,255,255,0.06)",
                         color: active ? "#ff6d8f" : "white",
