@@ -70,7 +70,7 @@ const normalizeAnime = (anime) => {
   };
 };
 
-export const fmtEpisodeResponse = (entry, fallbackNumber, fallbackImage) => {
+const fmtEpisodeResponse = (entry, fallbackNumber, fallbackImage) => {
   const playerUrl = normalizePlayerUrl(entry?.link);
   if (!playerUrl) return null;
 
@@ -144,7 +144,7 @@ export const fmtAnimeStreamingDetail = (rawStreaming) => {
   };
 };
 
-export const fmtJikanCharacter = (item) => {
+const fmtJikanCharacter = (item) => {
   const char = item?.character;
   const role = item?.role ? String(item.role).toUpperCase() : "SUPPORTING";
 
