@@ -27,8 +27,9 @@ const Pagination = ({
         color="gray.400"
         transition="all 0.2s"
         _hover={{
-          bg: "rgba(255,255,255,0.06)",
-          borderColor: "rgba(255,255,255,0.2)",
+          bg: "rgba(255,109,143,0.1)",
+          borderColor: "rgba(255,109,143,0.5)",
+          color: "#ff6d8f",
         }}
         _disabled={{
           opacity: 0.4,
@@ -36,6 +37,7 @@ const Pagination = ({
           _hover: {
             bg: "rgba(255,255,255,0.02)",
             borderColor: "rgba(255,255,255,0.12)",
+            color: "gray.400",
           },
         }}
         disabled={page <= 1 || loading}
@@ -60,14 +62,15 @@ const Pagination = ({
         display="grid"
         placeItems="center"
         border="1px solid"
-        borderColor="rgba(255,109,143,0.34)"
+        borderColor="rgba(255,255,255,0.12)"
         borderRadius="8px"
-        bg="rgba(255,109,143,0.05)"
-        color="#ff6d8f"
+        bg="rgba(255,255,255,0.02)"
+        color="gray.400"
         transition="all 0.2s"
         _hover={{
           bg: "rgba(255,109,143,0.1)",
           borderColor: "rgba(255,109,143,0.5)",
+          color: "#ff6d8f",
         }}
         _disabled={{
           opacity: 0.4,
@@ -78,6 +81,7 @@ const Pagination = ({
           _hover: {
             bg: "rgba(255,255,255,0.02)",
             borderColor: "rgba(255,255,255,0.12)",
+            color: "gray.400",
           },
         }}
         disabled={
