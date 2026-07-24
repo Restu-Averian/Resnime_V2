@@ -8,7 +8,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { ChevronDown, Globe2, MoreVertical } from "lucide-react";
+import { ChevronDown, Globe2 } from "lucide-react";
 import Image from "../../global/Image";
 import CharacterAnimeRoleBadge from "./CharacterAnimeRoleBadge";
 import { LANGUAGE_COLORS } from "../../../constants/detail-anime/detail-anime-characters";
@@ -134,9 +134,6 @@ const CharacterAnimeVoiceActors = ({
                 <Text color="gray.300" fontSize="sm">
                   Voice Actor
                 </Text>
-                <Box color="gray.300" aria-hidden="true">
-                  <MoreVertical size={18} />
-                </Box>
               </HStack>
             );
           })}
