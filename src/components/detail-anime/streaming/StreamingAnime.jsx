@@ -10,17 +10,15 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { Info, RotateCcw, Star, X } from "lucide-react";
+import { RotateCcw, Star, X, Clock3, Monitor, Calendar } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import formatWord from "../../../helpers/formatWord";
 import { getStreamOrigin } from "../../../services/stream.js";
 import StreamingAnimeAlertClosePlayer from "./StreamingAnimeAlertClosePlayer";
 import { useEpisodeAnimeContext } from "../../../context/EpisodesAnimeContextProvider";
 import StreamingAnimePlayer from "./StreamingAnimePlayer";
-import StreamingAnimeMetadataScore from "./StreamingAnimeMetadataScore";
 import StreamingAnimeDescription from "./StreamingAnimeDescription";
 import StreamingAnimeGenres from "./StreamingAnimeGenres";
-import StreamingAnimeAired from "./StreamingAnimeAired";
 import StreamingAnimeAction from "./StreamingAnimeAction";
 
 const StreamingAnime = () => {
@@ -48,13 +46,6 @@ const StreamingAnime = () => {
   const title = data?.title?.romaji || "Anime";
   const score = data?.averageScore || data?.score;
   const aired = selectedEpisode?.releaseDate || data?.releaseDate;
-  const meta = [
-    data?.type,
-    data?.status,
-    data?.totalEpisodes && `${data.totalEpisodes} episodes`,
-  ]
-    .filter(Boolean)
-    .join(" / ");
   const genres = data?.genres?.slice(0, 3) || [];
   const previewImage = selectedEpisode?.image || data?.cover || data?.image;
 
@@ -135,19 +126,29 @@ const StreamingAnime = () => {
                 <X size={22} />
               </IconButton>
 
-              <HStack gap={4} mb={6} pr={{ base: 12, md: 16 }} align="center">
-                <Box color="#ff5f92" lineHeight={0}>
+              <HStack
+                gap={4}
+                mb={6}
+                pr={{ base: 12, md: 16 }}
+                align="flex-start"
+              >
+                <Box color="#ff5f92" mt={1}>
                   <Star size={26} />
                 </Box>
-                <Heading
-                  as="h3"
-                  fontSize={{ base: "2xl", md: "3xl" }}
-                  lineHeight={1.15}
-                  overflowWrap="anywhere"
-                >
-                  Episode {selectedEpisode?.number || episodeValParam || ""}{" "}
-                  {episodeName && `- ${episodeName}`}
-                </Heading>
+                <Stack gap={1}>
+                  <Heading
+                    as="h3"
+                    fontSize={{ base: "2xl", md: "3xl" }}
+                    lineHeight={1.15}
+                    overflowWrap="anywhere"
+                  >
+                    Episode {selectedEpisode?.number || episodeValParam || ""}
+                  </Heading>
+                  <Text color="gray.400" fontSize="md">
+                    Episode {selectedEpisode?.number || episodeValParam || ""}{" "}
+                    {episodeName && `- ${episodeName}`}
+                  </Text>
+                </Stack>
               </HStack>
 
               <Flex
@@ -165,50 +166,74 @@ const StreamingAnime = () => {
                     episodeName={episodeName}
                   />
 
-                  <HStack
-                    justify="space-between"
-                    gap={4}
-                    color="gray.200"
-                    flexWrap="wrap"
-                    px={{ base: 1, md: 4 }}
-                  >
-                    <HStack gap={3}>
-                      <Info size={20} />
-                      <Text fontSize={{ base: "sm", md: "md" }}>
-                        Download is currently unavailable.
-                      </Text>
+                  <Stack gap={4} px={{ base: 1, md: 2 }} mt={2}>
+                    <HStack
+                      gap={{ base: 4, md: 6 }}
+                      flexWrap="wrap"
+                      color="gray.200"
+                    >
+                      {score && (
+                        <HStack gap={2}>
+                          <Star size={18} color="#ffd166" fill="#ffd166" />
+                          <Text fontWeight="bold" fontSize="md">
+                            {score}
+                          </Text>
+                        </HStack>
+                      )}
+
+                      {data?.status && (
+                        <HStack gap={2}>
+                          <Clock3 size={18} />
+                          <Text fontSize="sm">{data.status}</Text>
+                        </HStack>
+                      )}
+
+                      {data?.totalEpisodes && (
+                        <HStack gap={2}>
+                          <Monitor size={18} />
+                          <Text fontSize="sm">
+                            {data.totalEpisodes} episodes
+                          </Text>
+                        </HStack>
+                      )}
+
+                      {aired && (
+                        <HStack gap={2}>
+                          <Calendar size={18} />
+                          <Text fontSize="sm">Aired {aired}</Text>
+                        </HStack>
+                      )}
                     </HStack>
+
+                    <StreamingAnimeGenres genres={genres} />
+
                     {streamError && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        borderRadius="10px"
-                        borderColor="rgba(255,255,255,0.15)"
-                        onClick={() => setStreamError("")}
-                      >
-                        <RotateCcw size={16} />
-                        Retry
-                      </Button>
+                      <HStack>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          borderRadius="10px"
+                          borderColor="rgba(255,255,255,0.15)"
+                          onClick={() => setStreamError("")}
+                        >
+                          <RotateCcw size={16} />
+                          Retry
+                        </Button>
+                      </HStack>
                     )}
-                  </HStack>
+                  </Stack>
                 </Stack>
 
                 <Stack
                   gap={6}
-                  flex={{ base: "1", lg: "0 0 296px" }}
+                  flex={{ base: "1", lg: "0 0 320px" }}
                   pt={{ base: 0, lg: 2 }}
                 >
-                  <StreamingAnimeMetadataScore score={score} meta={meta} />
-
                   <StreamingAnimeDescription
                     data={data}
                     title={title}
                     episodeName={episodeName}
                   />
-
-                  <StreamingAnimeGenres genres={genres} />
-
-                  <StreamingAnimeAired aired={aired} />
 
                   <Box h="1px" bg="rgba(255,255,255,0.11)" />
 

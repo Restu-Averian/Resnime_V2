@@ -6,7 +6,7 @@ const StreamingAnimeDescription = ({ data, title, episodeName }) => {
       color="gray.100"
       fontSize={{ base: "md", md: "lg" }}
       lineHeight={1.7}
-      lineClamp={4}
+      lineClamp={6}
     >
       {data?.description || `${title} continues with ${episodeName}.`}
     </Text>

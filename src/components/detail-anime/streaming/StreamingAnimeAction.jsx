@@ -29,9 +29,9 @@ const StreamingAnimeAction = ({ requestClose }) => {
   };
 
   return (
-    <Stack gap={4}>
-      <Stack gap={3}>
-        <Text color="#ff5f92" fontSize="sm" fontWeight="bold">
+    <Stack gap={4} flex="1">
+      <Stack gap={3} flex="1" justify="center">
+        <Text color="#ff5f92" fontSize="sm" fontWeight="bold" mb={3}>
           Episode Navigation
         </Text>
 
@@ -134,6 +134,7 @@ const StreamingAnimeAction = ({ requestClose }) => {
       </Stack>
 
       <Button
+        mt="auto"
         h="56px"
         borderRadius="10px"
         variant="outline"
