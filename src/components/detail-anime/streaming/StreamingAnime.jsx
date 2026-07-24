@@ -14,9 +14,8 @@ import { Info, RotateCcw, Star, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import formatWord from "../../../helpers/formatWord";
 import { getStreamOrigin } from "../../../services/stream.js";
-import AlertDialog from "../../global/AlertDialog";
+import StreamingAnimeAlertClosePlayer from "./StreamingAnimeAlertClosePlayer";
 import { useEpisodeAnimeContext } from "../../../context/EpisodesAnimeContextProvider";
-
 import StreamingAnimePlayer from "./StreamingAnimePlayer";
 import StreamingAnimeMetadataScore from "./StreamingAnimeMetadataScore";
 import StreamingAnimeDescription from "./StreamingAnimeDescription";
@@ -226,7 +225,7 @@ const StreamingAnime = () => {
         </Dialog.Positioner>
       </Portal>
 
-      <AlertDialog
+      <StreamingAnimeAlertClosePlayer
         isOpen={isOpenAlert}
         onCancel={() => {
           setisOpenAlert(false);
