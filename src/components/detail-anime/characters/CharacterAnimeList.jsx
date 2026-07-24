@@ -62,6 +62,14 @@ const CharacterAnimeList = ({ characters, selectedId, setIdChar }) => {
                   selected ? "0 0 28px rgba(255,109,143,0.13)" : "none"
                 }
                 transition="border-color 160ms ease, background 160ms ease"
+                _hover={{
+                  border: selected
+                    ? "1px solid rgba(255,109,143,0.78)"
+                    : "1px solid rgba(255,255,255,0.15)",
+                  bg: selected
+                    ? "rgba(255,109,143,0.08)"
+                    : "rgba(255,255,255,0.04)",
+                }}
               >
                 {selected && (
                   <Box
