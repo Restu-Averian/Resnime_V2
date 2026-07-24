@@ -10,7 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { PlayCircle } from "lucide-react";
-import { useEpisodeAnimeContext } from "./EpisodesAnimeContextProvider";
+import { useEpisodeAnimeContext } from "../../../context/EpisodesAnimeContextProvider";
 
 const EpisodesAnimeList = ({ sortMode, setSortMode }) => {
   const { data, openModalVideo, episodeValParam } = useEpisodeAnimeContext();

@@ -16,7 +16,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import formatWord from "../../../helpers/formatWord";
 import { getStreamOrigin } from "../../../services/stream.js";
 import AlertDialog from "../../global/AlertDialog";
-import { useEpisodeAnimeContext } from "./EpisodesAnimeContextProvider";
+import { useEpisodeAnimeContext } from "../../../context/EpisodesAnimeContextProvider";
 
 const EpisodesAnimeStreamingModal = () => {
   const [isOpenAlert, setisOpenAlert] = useState(false);

@@ -1,4 +1,4 @@
-import EpisodesAnimeContextProvider from "./EpisodesAnimeContextProvider";
+import EpisodesAnimeContextProvider from "../../../context/EpisodesAnimeContextProvider";
 import EpisodesAnimeList from "./EpisodesAnimeList";
 import EpisodesAnimeStreamingModal from "./EpisodesAnimeStreamingModal";
 
