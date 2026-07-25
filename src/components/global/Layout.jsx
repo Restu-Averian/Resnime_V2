@@ -1,6 +1,7 @@
 import { Box, Flex, HStack, Image, Kbd, Stack, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./sidebar";
+import SidebarListMenu from "./sidebar/SidebarListMenu";
 import NavbarSearchBox from "./navbar/NavbarSearchBox";
 
 const Layout = ({ children }) => {
@@ -53,8 +54,27 @@ const Layout = ({ children }) => {
             <Kbd display={{ base: "none", md: "inline-flex" }}>/</Kbd>
           </Stack>
         </Box>
-        <Box className="content">{children}</Box>
+        <Box className="content" pb={{ base: "112px", lg: 8 }}>
+          {children}
+        </Box>
       </Stack>
+
+      <Box
+        display={{ base: "block", lg: "none" }}
+        position="fixed"
+        left={{ base: 4, md: 8 }}
+        right={{ base: 4, md: 8 }}
+        bottom={{ base: 3, md: 4 }}
+        zIndex={30}
+        borderRadius="14px"
+        bg="rgba(5, 11, 22, 0.88)"
+        border="1px solid rgba(255,255,255,0.09)"
+        boxShadow="0 18px 48px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.04)"
+        backdropFilter="blur(18px)"
+        overflow="hidden"
+      >
+        <SidebarListMenu variant="mobile" />
+      </Box>
     </Flex>
   );
 };
