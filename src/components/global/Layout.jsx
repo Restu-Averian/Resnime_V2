@@ -1,4 +1,13 @@
-import { Box, Flex, HStack, Image, Kbd, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  HStack,
+  Image,
+  Kbd,
+  Stack,
+  Text,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./sidebar";
 import SidebarListMenu from "./sidebar/SidebarListMenu";
@@ -6,10 +15,11 @@ import NavbarSearchBox from "./navbar/NavbarSearchBox";
 
 const Layout = ({ children }) => {
   const navigate = useNavigate();
+  const isDesktop = useBreakpointValue({ base: false, lg: true });
 
   return (
     <Flex minH="100vh" bg="#050b16" color="white">
-      <Sidebar />
+      {isDesktop && <Sidebar />}
 
       <Stack
         direction="column"
@@ -59,22 +69,23 @@ const Layout = ({ children }) => {
         </Box>
       </Stack>
 
-      <Box
-        display={{ base: "block", lg: "none" }}
-        position="fixed"
-        left={{ base: 4, md: 8 }}
-        right={{ base: 4, md: 8 }}
-        bottom={{ base: 3, md: 4 }}
-        zIndex={30}
-        borderRadius="14px"
-        bg="rgba(5, 11, 22, 0.88)"
-        border="1px solid rgba(255,255,255,0.09)"
-        boxShadow="0 18px 48px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.04)"
-        backdropFilter="blur(18px)"
-        overflow="hidden"
-      >
-        <SidebarListMenu variant="mobile" />
-      </Box>
+      {!isDesktop && (
+        <Box
+          position="fixed"
+          left={{ base: 4, md: 8 }}
+          right={{ base: 4, md: 8 }}
+          bottom={{ base: 3, md: 4 }}
+          zIndex={30}
+          borderRadius="14px"
+          bg="rgba(5, 11, 22, 0.88)"
+          border="1px solid rgba(255,255,255,0.09)"
+          boxShadow="0 18px 48px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.04)"
+          backdropFilter="blur(18px)"
+          overflow="hidden"
+        >
+          <SidebarListMenu variant="mobile" />
+        </Box>
+      )}
     </Flex>
   );
 };
