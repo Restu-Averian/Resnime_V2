@@ -78,7 +78,9 @@ const EpisodesAnimeList = ({ sortMode, setSortMode }) => {
                 page={currentPage}
                 totalPages={totalPages}
                 onPrev={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                onNext={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                onNext={() =>
+                  setCurrentPage((p) => Math.min(totalPages, p + 1))
+                }
                 buttonSize="32px"
               />
             )}
@@ -97,7 +99,7 @@ const EpisodesAnimeList = ({ sortMode, setSortMode }) => {
       </Flex>
 
       <SimpleGrid
-        columns={{ base: 1, sm: 2, lg: 3, xl: 4, "2xl": 6 }}
+        columns={{ base: 2, lg: 3, xl: 4, "2xl": 6 }}
         gap={{ base: 4, md: 5 }}
       >
         {paginatedEpisodes.map((episode) => {

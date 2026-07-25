@@ -12,7 +12,12 @@ const Pagination = ({
   ...rest
 }) => {
   return (
-    <HStack gap={3} {...rest}>
+    <HStack
+      gap={3}
+      w={{ base: "100%", md: "auto" }}
+      justifyContent={{ base: "flex-end", md: "flex-start" }}
+      {...rest}
+    >
       <Button
         w={buttonSize}
         h={buttonSize}
