@@ -105,28 +105,47 @@ const Genres = () => {
   };
 
   return (
-    <Stack
+    <Grid
+      templateColumns={{ base: "1fr", lg: "350px 1fr", xl: "380px 1fr" }}
       minH="calc(100vh - 88px)"
-      gap={4}
-      p={{ base: 4, md: 7 }}
-      borderRadius="12px"
-      border="1px solid rgba(165, 183, 226, 0.18)"
-      bg="radial-gradient(circle at top left, rgba(255, 95, 143, 0.08), transparent 36%), linear-gradient(180deg, rgba(8, 14, 30, 0.92), rgba(5, 11, 22, 0.98))"
+      gap={6}
+      p={{ base: 4, md: 6 }}
       color="#f5f7ff"
+      alignItems="flex-start"
+      overflowX={{ base: "hidden", lg: "visible" }}
     >
-      <GenresHeader genreQuery={genreQuery} setGenreQuery={setGenreQuery} />
-
-      <GenreLists
-        filteredGenres={filteredGenres}
-        selectedGenre={selectedGenre}
-      />
-
+      {/* Left panel - Genres */}
       <Stack
-        gap={4}
-        p={{ base: 3, md: 5 }}
-        borderRadius="10px"
-        border="1px solid rgba(165, 183, 226, 0.14)"
-        bg="rgba(255,255,255,0.025)"
+        gap={6}
+        p={{ base: 4, md: 5 }}
+        borderRadius="16px"
+        border="1px solid rgba(165, 183, 226, 0.1)"
+        bg="rgba(12, 16, 28, 0.6)"
+        backdropFilter="blur(10px)"
+        minW={0}
+        position={{ base: "static", lg: "sticky" }}
+        top={{ lg: "104px" }}
+        maxH={{ lg: "calc(100vh - 128px)" }}
+        overflowY={{ lg: "auto" }}
+      >
+        <GenresHeader genreQuery={genreQuery} setGenreQuery={setGenreQuery} />
+
+        <GenreLists
+          filteredGenres={filteredGenres}
+          selectedGenre={selectedGenre}
+        />
+      </Stack>
+
+      {/* Right panel - Anime list */}
+      <Stack
+        gap={5}
+        p={{ base: 4, md: 6 }}
+        borderRadius="16px"
+        border="1px solid rgba(165, 183, 226, 0.1)"
+        bg="rgba(12, 16, 28, 0.6)"
+        backdropFilter="blur(10px)"
+        minH="100%"
+        minW={0}
       >
         <GenreHeaderType
           selectedGenre={selectedGenre}
@@ -168,7 +187,7 @@ const Genres = () => {
           </Grid>
         )}
       </Stack>
-    </Stack>
+    </Grid>
   );
 };
 

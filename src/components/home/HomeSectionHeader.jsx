@@ -1,8 +1,21 @@
 import { Flame } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 import SectionHeader from "./SectionHeader";
 import Pagination from "../global/Pagination";
 
-const HomeSectionHeader = ({ page, setPage, loading }) => {
+const HomeSectionHeader = ({ loading }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pageParam = searchParams.get("page");
+  const page = pageParam ? parseInt(pageParam, 10) : 1;
+
+  const handleSetPage = (nextPage) => {
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+      params.set("page", String(nextPage));
+      return params;
+    });
+  };
+
   return (
     <SectionHeader
       icon={Flame}
@@ -11,8 +24,8 @@ const HomeSectionHeader = ({ page, setPage, loading }) => {
         <Pagination
           page={page}
           loading={loading}
-          onPrev={() => setPage((value) => Math.max(value - 1, 1))}
-          onNext={() => setPage((value) => value + 1)}
+          onPrev={() => handleSetPage(Math.max(page - 1, 1))}
+          onNext={() => handleSetPage(page + 1)}
         />
       }
     />
