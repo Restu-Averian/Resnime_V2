@@ -2,9 +2,9 @@ import { Flex, HStack, Heading, Icon } from "@chakra-ui/react";
 
 const SectionHeader = ({ icon, title, action }) => (
   <Flex
-    direction={{ base: "column", md: "row" }}
+    direction="row"
     justify="space-between"
-    align={{ base: "stretch", md: "center" }}
+    align="center"
     gap={3}
   >
     <HStack gap={2}>

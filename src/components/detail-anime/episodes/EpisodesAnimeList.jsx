@@ -13,8 +13,9 @@ import EpisodesAnimeOrder from "./EpisodesAnimeOrder";
 import EpisodesAnimeListItem from "./EpisodesAnimeListItem";
 import Pagination from "../../global/Pagination";
 
-const EpisodesAnimeList = ({ sortMode, setSortMode }) => {
-  const { data, openModalVideo, episodeValParam } = useEpisodeAnimeContext();
+const EpisodesAnimeList = () => {
+  const { data, openModalVideo, episodeValParam, sortMode } =
+    useEpisodeAnimeContext();
 
   const episodes = data?.episodes || [];
 
@@ -25,9 +26,14 @@ const EpisodesAnimeList = ({ sortMode, setSortMode }) => {
   const totalPages = Math.ceil(episodes.length / itemsPerPage) || 1;
 
   const paginatedEpisodes = useMemo(() => {
+    const sorted = [...episodes].sort((a, b) => {
+      const numA = Number(a?.number ?? a?.id) || 0;
+      const numB = Number(b?.number ?? b?.id) || 0;
+      return sortMode === "episode-desc" ? numB - numA : numA - numB;
+    });
     const start = (currentPage - 1) * itemsPerPage;
-    return episodes.slice(start, start + itemsPerPage);
-  }, [episodes, currentPage]);
+    return sorted.slice(start, start + itemsPerPage);
+  }, [episodes, currentPage, sortMode]);
 
   const currentStart = (currentPage - 1) * itemsPerPage + 1;
   const currentEnd = Math.min(currentPage * itemsPerPage, episodes.length);
@@ -46,7 +52,7 @@ const EpisodesAnimeList = ({ sortMode, setSortMode }) => {
       py={{ base: 5, md: 6 }}
     >
       <Flex
-        align={{ base: "flex-start", md: "center" }}
+        align={{ base: "flex-start", md: "flex-start" }}
         justify="space-between"
         direction={{ base: "column", md: "row" }}
         gap={4}
@@ -69,9 +75,14 @@ const EpisodesAnimeList = ({ sortMode, setSortMode }) => {
           </Text>
         </HStack>
 
-        <Stack gap={2} align={{ base: "flex-start", md: "flex-end" }}>
-          <HStack gap={{ base: 4, md: 6 }} flexWrap="wrap">
-            <EpisodesAnimeOrder sortMode={sortMode} setSortMode={setSortMode} />
+        <Stack gap={2} align={{ base: "stretch", md: "flex-end" }} w={{ base: "100%", md: "auto" }}>
+          <HStack
+            gap={{ base: 3, md: 6 }}
+            align={{ base: "flex-end", md: "center" }}
+            justify="space-between"
+            w={{ base: "100%", md: "auto" }}
+          >
+            <EpisodesAnimeOrder />
 
             {episodes.length > 10 && totalPages > 1 && (
               <Pagination
@@ -87,7 +98,12 @@ const EpisodesAnimeList = ({ sortMode, setSortMode }) => {
           </HStack>
 
           {episodes.length > 0 && (
-            <Text fontSize="xs" color="gray.500" pr={{ base: 0, md: 1 }}>
+            <Text
+              fontSize="xs"
+              color="gray.500"
+              pr={{ base: 0, md: 1 }}
+              textAlign="right"
+            >
               Showing {currentStart}-{currentEnd}{" "}
               <Text as="span" color="gray.600" mx={1}>
                 |

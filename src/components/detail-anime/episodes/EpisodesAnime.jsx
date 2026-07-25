@@ -2,10 +2,10 @@ import EpisodesAnimeContextProvider from "../../../context/EpisodesAnimeContextP
 import EpisodesAnimeList from "./EpisodesAnimeList";
 import StreamingAnime from "../streaming/StreamingAnime";
 
-const EpisodesAnime = ({ data, sortMode, setSortMode }) => {
+const EpisodesAnime = ({ data }) => {
   return (
     <EpisodesAnimeContextProvider data={data}>
-      <EpisodesAnimeList sortMode={sortMode} setSortMode={setSortMode} />
+      <EpisodesAnimeList />
 
       <StreamingAnime />
     </EpisodesAnimeContextProvider>

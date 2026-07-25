@@ -35,25 +35,29 @@ const SearchHeader = ({
             Search Results
           </Text>
         </HStack>
-        <Text color="#aeb7cb" fontSize={{ base: "sm", md: "md" }}>
-          {loading ? (
-            <HStack gap={2} as="span" display="inline-flex">
-              <Spinner size="xs" />
-              <span>Searching</span>
-            </HStack>
-          ) : (
-            `${totalResults} results found`
-          )}{" "}
-          for{" "}
-          <Text as="span" color="#ff73a0">
-            &quot;{searchVal || "anime"}&quot;
+        {searchVal && (
+          <Text color="#aeb7cb" fontSize={{ base: "sm", md: "md" }}>
+            {loading ? (
+              <HStack gap={2} as="span" display="inline-flex">
+                <Spinner size="xs" />
+                <span>Searching</span>
+              </HStack>
+            ) : (
+              `${totalResults} results found`
+            )}{" "}
+            for{" "}
+            <Text as="span" color="#ff73a0">
+              &quot;{searchVal}&quot;
+            </Text>
           </Text>
-        </Text>
+        )}
       </Stack>
 
       <HStack
         gap={{ base: 3, md: 8 }}
         alignSelf={{ base: "stretch", md: "center" }}
+        justify="flex-end"
+        w={{ base: "100%", md: "auto" }}
       >
         <Pagination
           page={page}

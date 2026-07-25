@@ -1,16 +1,35 @@
-import { Button, Stack, Text, HStack, Box } from "@chakra-ui/react";
+import {
+  Button,
+  Stack,
+  Text,
+  HStack,
+  Select,
+  createListCollection,
+} from "@chakra-ui/react";
+import { useMemo } from "react";
 import { useEpisodeAnimeContext } from "../../../context/EpisodesAnimeContextProvider";
 
 const StreamingAnimeAction = ({ requestClose }) => {
   const { data, episodeValParam, openModalVideo } = useEpisodeAnimeContext();
 
   const episodes = data?.episodes || [];
-  const currentIndex = episodes.findIndex((ep) => ep.id === episodeValParam);
+  const currentIndex = episodes.findIndex(
+    (ep) => String(ep.id) === String(episodeValParam),
+  );
   const totalEpisodes = episodes.length;
 
   const hasPrev = currentIndex > 0;
   const hasNext = currentIndex !== -1 && currentIndex < totalEpisodes - 1;
   const currentEpisodeNum = currentIndex !== -1 ? currentIndex + 1 : 0;
+
+  const episodeCollection = useMemo(() => {
+    return createListCollection({
+      items: episodes.map((ep, idx) => ({
+        label: `Episode ${ep.number || idx + 1}`,
+        value: String(ep.id),
+      })),
+    });
+  }, [episodes]);
 
   const handlePrev = (e) => {
     if (hasPrev) {
@@ -22,10 +41,6 @@ const StreamingAnimeAction = ({ requestClose }) => {
     if (hasNext) {
       openModalVideo(e, episodes[currentIndex + 1].id);
     }
-  };
-
-  const handleSelect = (e) => {
-    openModalVideo(null, e.target.value);
   };
 
   return (
@@ -51,59 +66,53 @@ const StreamingAnimeAction = ({ requestClose }) => {
             &lt; Prev
           </Button>
 
-          <Box flex="1" position="relative">
-            <Box
-              as="select"
-              value={episodeValParam || ""}
-              onChange={handleSelect}
-              w="100%"
+          <Select.Root
+            collection={episodeCollection}
+            size="sm"
+            flex="1"
+            value={episodeValParam ? [String(episodeValParam)] : []}
+            onValueChange={(e) => {
+              if (e.value?.[0]) {
+                openModalVideo(null, e.value[0]);
+              }
+            }}
+          >
+            <Select.HiddenSelect aria-label="Select episode" />
+
+            <Select.Control
               h="40px"
               borderRadius="8px"
-              bg="transparent"
               border="1px solid rgba(255, 104, 152, 0.5)"
-              color="white"
-              px={3}
-              fontSize="sm"
-              outline="none"
-              cursor="pointer"
-              appearance="none"
-              _focusVisible={{
-                outline: "2px solid #ff6d8f",
-                outlineOffset: "2px",
-              }}
+              bg="transparent"
             >
-              {episodes?.map((ep, idx) => (
-                <option
-                  key={ep.id}
-                  value={ep.id}
-                  style={{ backgroundColor: "#0a1027", color: "white" }}
-                >
-                  Episode {ep.number || idx + 1}
-                </option>
-              ))}
-            </Box>
-            <Box
-              position="absolute"
-              right="12px"
-              top="50%"
-              transform="translateY(-50%)"
-              pointerEvents="none"
-              color="white"
-            >
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+              <Select.Trigger border="0" px={3} h="100%">
+                <Select.ValueText
+                  placeholder="Select episode"
+                  color="white"
+                  fontSize="sm"
+                />
+              </Select.Trigger>
+
+              <Select.IndicatorGroup px={2}>
+                <Select.Indicator color="white" />
+              </Select.IndicatorGroup>
+            </Select.Control>
+
+            <Select.Positioner zIndex={1500}>
+              <Select.Content
+                bg="#0a1027"
+                borderColor="rgba(255, 104, 152, 0.3)"
+                maxH="240px"
               >
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </Box>
-          </Box>
+                {episodeCollection.items.map((item) => (
+                  <Select.Item item={item} key={item.value} color="white">
+                    {item.label}
+                    <Select.ItemIndicator />
+                  </Select.Item>
+                ))}
+              </Select.Content>
+            </Select.Positioner>
+          </Select.Root>
 
           <Button
             flex="1"

@@ -15,7 +15,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import useFetchData from "../hooks/useFetchData";
-import Loading from "../components/global/Loading";
+import DetailAnimeSkeleton from "../components/detail-anime/DetailAnimeSkeleton";
 import useChangeDocTitle from "../hooks/useChangeDocTitle";
 import Box from "../components/global/Box";
 import ErrorPage from "../components/global/ErrorPage";
@@ -34,13 +34,6 @@ const EpisodesAnime = lazy(
 const OverviewAnime = lazy(
   () => import("../components/detail-anime/overview/OverviewAnime"),
 );
-const sortEpisodes = (episodes, direction) => {
-  return [...(episodes || [])].sort((a, b) => {
-    const first = Number(a?.number) || 0;
-    const second = Number(b?.number) || 0;
-    return direction === "episode-desc" ? second - first : first - second;
-  });
-};
 
 const DetailAnime = () => {
   const { id, anime_name } = useParams();
@@ -49,7 +42,6 @@ const DetailAnime = () => {
 
   const activeTab = searchParams?.get("tab") || "episodes";
 
-  const [sortMode, setSortMode] = useState("episode-asc");
   const [sortError, setSortError] = useState("");
 
   const {
@@ -64,9 +56,8 @@ const DetailAnime = () => {
   const sortedDetailData = useMemo(
     () => ({
       ...detailData,
-      episodes: sortEpisodes(detailData?.episodes, sortMode),
     }),
-    [detailData, sortMode],
+    [detailData],
   );
 
   const setActiveTab = (tabId) => {
@@ -125,7 +116,7 @@ const DetailAnime = () => {
     });
 
     return () => controller.abort();
-  }, [detailData?.genres, detailData?.id, detailData?.title?.romaji, sortMode]);
+  }, [detailData?.genres, detailData?.id, detailData?.title?.romaji]);
 
   return (
     <Stack direction="column" gap={7} maxW="1680px" mx="auto">
@@ -147,7 +138,7 @@ const DetailAnime = () => {
           subTitle={error}
         />
       ) : loading ? (
-        <Loading />
+        <DetailAnimeSkeleton />
       ) : (
         <>
           <Box useSuspense>
@@ -219,12 +210,9 @@ const DetailAnime = () => {
                   showIf={sortedDetailData?.episodes?.length > 0}
                   useSuspense
                 >
-                  <EpisodesAnime
-                    data={sortedDetailData}
-                    sortMode={sortMode}
-                    setSortMode={setSortMode}
-                  />
+                  <EpisodesAnime data={sortedDetailData} />
                 </Box>
+
                 {!sortedDetailData?.episodes?.length && (
                   <ChakraBox
                     minH="160px"
