@@ -13,8 +13,7 @@ const Pagination = ({
   justify,
   ...rest
 }) => {
-  const resolvedJustify =
-    justifyContent || justify || { base: "flex-end", md: "flex-start" };
+  const resolvedJustify = justifyContent || justify || "flex-end";
 
   return (
     <HStack

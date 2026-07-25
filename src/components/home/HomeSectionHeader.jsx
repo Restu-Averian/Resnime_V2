@@ -26,6 +26,7 @@ const HomeSectionHeader = ({ loading }) => {
           loading={loading}
           onPrev={() => handleSetPage(Math.max(page - 1, 1))}
           onNext={() => handleSetPage(page + 1)}
+          justify="flex-end"
         />
       }
     />
