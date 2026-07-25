@@ -112,6 +112,7 @@ const Genres = () => {
       p={{ base: 4, md: 6 }}
       color="#f5f7ff"
       alignItems="flex-start"
+      overflowX={{ base: "hidden", lg: "visible" }}
     >
       {/* Left panel - Genres */}
       <Stack
@@ -121,8 +122,14 @@ const Genres = () => {
         border="1px solid rgba(165, 183, 226, 0.1)"
         bg="rgba(12, 16, 28, 0.6)"
         backdropFilter="blur(10px)"
+        minW={0}
+        position={{ base: "static", lg: "sticky" }}
+        top={{ lg: "104px" }}
+        maxH={{ lg: "calc(100vh - 128px)" }}
+        overflowY={{ lg: "auto" }}
       >
         <GenresHeader genreQuery={genreQuery} setGenreQuery={setGenreQuery} />
+
         <GenreLists
           filteredGenres={filteredGenres}
           selectedGenre={selectedGenre}
@@ -138,6 +145,7 @@ const Genres = () => {
         bg="rgba(12, 16, 28, 0.6)"
         backdropFilter="blur(10px)"
         minH="100%"
+        minW={0}
       >
         <GenreHeaderType
           selectedGenre={selectedGenre}
