@@ -56,6 +56,8 @@ const SearchHeader = ({
       <HStack
         gap={{ base: 3, md: 8 }}
         alignSelf={{ base: "stretch", md: "center" }}
+        justify="flex-end"
+        w={{ base: "100%", md: "auto" }}
       >
         <Pagination
           page={page}

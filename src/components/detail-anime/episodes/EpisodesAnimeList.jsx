@@ -52,7 +52,7 @@ const EpisodesAnimeList = () => {
       py={{ base: 5, md: 6 }}
     >
       <Flex
-        align={{ base: "flex-start", md: "center" }}
+        align={{ base: "flex-start", md: "flex-start" }}
         justify="space-between"
         direction={{ base: "column", md: "row" }}
         gap={4}
@@ -75,8 +75,13 @@ const EpisodesAnimeList = () => {
           </Text>
         </HStack>
 
-        <Stack gap={2} align={{ base: "flex-start", md: "flex-end" }}>
-          <HStack gap={{ base: 4, md: 6 }} flexWrap="wrap">
+        <Stack gap={2} align={{ base: "stretch", md: "flex-end" }} w={{ base: "100%", md: "auto" }}>
+          <HStack
+            gap={{ base: 3, md: 6 }}
+            align={{ base: "flex-end", md: "center" }}
+            justify="space-between"
+            w={{ base: "100%", md: "auto" }}
+          >
             <EpisodesAnimeOrder />
 
             {episodes.length > 10 && totalPages > 1 && (
@@ -93,7 +98,12 @@ const EpisodesAnimeList = () => {
           </HStack>
 
           {episodes.length > 0 && (
-            <Text fontSize="xs" color="gray.500" pr={{ base: 0, md: 1 }}>
+            <Text
+              fontSize="xs"
+              color="gray.500"
+              pr={{ base: 0, md: 1 }}
+              textAlign="right"
+            >
               Showing {currentStart}-{currentEnd}{" "}
               <Text as="span" color="gray.600" mx={1}>
                 |

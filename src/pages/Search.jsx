@@ -95,6 +95,7 @@ const Search = () => {
             onPrev={() => handleSetPage(currentPage - 1)}
             onNext={() => handleSetPage(currentPage + 1)}
             justify="flex-end"
+            w="100%"
             pt={1}
           />
         </Stack>
