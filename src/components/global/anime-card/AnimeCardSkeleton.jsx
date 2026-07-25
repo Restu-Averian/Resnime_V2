@@ -26,54 +26,40 @@ const AnimeCardSkeleton = () => {
         endColor="rgba(255,255,255,0.08)"
       />
 
-      <Stack gap={{ base: 2, md: 2.5 }} minW={0} pr={{ base: 0, sm: 14 }}>
-        <Skeleton
-          h="22px"
-          w="40px"
-          borderRadius="7px"
-          startColor="rgba(255,255,255,0.04)"
-          endColor="rgba(255,255,255,0.08)"
-        />
-
-        <SkeletonText
-          noOfLines={1}
-          skeletonHeight={{ base: "16px", md: "18px" }}
-          w="80%"
-          startColor="rgba(255,255,255,0.04)"
-          endColor="rgba(255,255,255,0.08)"
-        />
+      <Stack gap={{ base: 2, md: 2.5 }} minW={0}>
+        <HStack justify="space-between" align="center">
+          <Skeleton
+            h="22px"
+            w="40px"
+            borderRadius="7px"
+            startColor="rgba(255,255,255,0.04)"
+            endColor="rgba(255,255,255,0.08)"
+          />
+          <Skeleton
+            h="20px"
+            w="40px"
+            borderRadius="md"
+            startColor="rgba(255,255,255,0.04)"
+            endColor="rgba(255,255,255,0.08)"
+          />
+        </HStack>
 
         <SkeletonText
           noOfLines={2}
+          skeletonHeight={{ base: "16px", md: "18px" }}
+          w="80%"
+          spacing="2"
+          startColor="rgba(255,255,255,0.04)"
+          endColor="rgba(255,255,255,0.08)"
+        />
+
+        <SkeletonText
+          noOfLines={3}
           spacing="2"
           skeletonHeight="14px"
           startColor="rgba(255,255,255,0.04)"
           endColor="rgba(255,255,255,0.08)"
         />
-
-        <HStack gap={2} flexWrap="wrap">
-          <Skeleton
-            h="24px"
-            w="60px"
-            borderRadius="999px"
-            startColor="rgba(255,255,255,0.04)"
-            endColor="rgba(255,255,255,0.08)"
-          />
-          <Skeleton
-            h="24px"
-            w="70px"
-            borderRadius="999px"
-            startColor="rgba(255,255,255,0.04)"
-            endColor="rgba(255,255,255,0.08)"
-          />
-          <Skeleton
-            h="24px"
-            w="50px"
-            borderRadius="999px"
-            startColor="rgba(255,255,255,0.04)"
-            endColor="rgba(255,255,255,0.08)"
-          />
-        </HStack>
 
         <HStack gap={2.5} mt="auto">
           <Skeleton
@@ -90,16 +76,6 @@ const AnimeCardSkeleton = () => {
           />
         </HStack>
       </Stack>
-
-      <Skeleton
-        position="absolute"
-        top={{ base: 3, md: 5 }}
-        right={{ base: 3, md: 4 }}
-        h="20px"
-        w="40px"
-        startColor="rgba(255,255,255,0.04)"
-        endColor="rgba(255,255,255,0.08)"
-      />
     </Box>
   );
 };

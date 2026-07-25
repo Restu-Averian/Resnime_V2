@@ -6,9 +6,6 @@ import Image from "../Image";
 import { animePath, compactText } from "../../home/utils";
 
 const AnimeCard = ({ anime }) => {
-  const genres = anime?.genres?.slice(0, 3) || [];
-  const extraGenres = Math.max((anime?.genres?.length || 0) - genres.length, 0);
-
   const score = useMemo(() => {
     const score = anime?.score;
     return typeof score === "number" && Number.isFinite(score)
@@ -75,21 +72,31 @@ const AnimeCard = ({ anime }) => {
         objectFit="cover"
       />
 
-      <Stack gap={{ base: 2, md: 2.5 }} minW={0} pr={{ base: 0, sm: 14 }}>
-        <Badge
-          alignSelf="flex-start"
-          bg="#ec5f9a"
-          color="white"
-          borderRadius="7px"
-          px={2}
-          h="22px"
-          fontSize="xs"
-          fontWeight="bold"
-          lineHeight="22px"
-          boxShadow="0 0 16px rgba(236, 95, 154, 0.22)"
-        >
-          {animeType}
-        </Badge>
+      <Stack gap={{ base: 2, md: 2.5 }} minW={0}>
+        <HStack justify="space-between" align="center">
+          <Badge
+            bg="#ec5f9a"
+            color="white"
+            borderRadius="7px"
+            px={2}
+            h="22px"
+            fontSize="xs"
+            fontWeight="bold"
+            lineHeight="22px"
+            boxShadow="0 0 16px rgba(236, 95, 154, 0.22)"
+          >
+            {animeType}
+          </Badge>
+
+          {score && (
+            <HStack gap={1} color="#ffd43b" fontSize={{ base: "sm", md: "sm" }}>
+              <Star size={16} fill="currentColor" />
+              <Text color="#dce2f0" fontWeight="600">
+                {score}
+              </Text>
+            </HStack>
+          )}
+        </HStack>
 
         <Text
           as="h3"
@@ -98,6 +105,7 @@ const AnimeCard = ({ anime }) => {
           fontWeight="800"
           lineHeight="1.16"
           overflowWrap="anywhere"
+          lineClamp={2}
         >
           {anime?.title?.romaji || "Untitled Anime"}
         </Text>
@@ -106,42 +114,10 @@ const AnimeCard = ({ anime }) => {
           color="#c3cadb"
           fontSize={{ base: "sm", md: "sm" }}
           lineHeight="1.35"
+          lineClamp={3}
         >
           {compactText(anime?.description || "No synopsis available yet.", 108)}
         </Text>
-
-        <HStack gap={2} flexWrap="wrap">
-          {genres.map((genre) => (
-            <Badge
-              key={genre}
-              color="#d8dcec"
-              bg="rgba(255,255,255,0.055)"
-              border="1px solid rgba(255,255,255,0.08)"
-              borderRadius="999px"
-              px={3}
-              py={1}
-              fontSize="xs"
-              fontWeight="medium"
-            >
-              {genre}
-            </Badge>
-          ))}
-
-          {extraGenres > 0 && (
-            <Badge
-              color="#d8dcec"
-              bg="rgba(255,255,255,0.055)"
-              border="1px solid rgba(255,255,255,0.08)"
-              borderRadius="999px"
-              px={3}
-              py={1}
-              fontSize="xs"
-              fontWeight="medium"
-            >
-              +{extraGenres}
-            </Badge>
-          )}
-        </HStack>
 
         <HStack
           color="#b8c0d2"
@@ -151,6 +127,7 @@ const AnimeCard = ({ anime }) => {
           mt="auto"
         >
           <Icon as={PlaySquare} boxSize={3.5} color="#ff7da1" />
+
           {parts.map((part, index) => (
             <HStack key={`${part}-${index}`} gap={2.5}>
               {index > 0 && <Text color="#737b92">•</Text>}
@@ -161,20 +138,6 @@ const AnimeCard = ({ anime }) => {
           ))}
         </HStack>
       </Stack>
-
-      {score && (
-        <HStack
-          position="absolute"
-          top={{ base: 3, md: 5 }}
-          right={{ base: 3, md: 4 }}
-          gap={1}
-          color="#ffd43b"
-          fontSize={{ base: "sm", md: "md" }}
-        >
-          <Star size={16} fill="currentColor" />
-          <Text color="#dce2f0">{score}</Text>
-        </HStack>
-      )}
     </Box>
   );
 };

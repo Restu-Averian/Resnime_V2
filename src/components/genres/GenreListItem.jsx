@@ -1,35 +1,54 @@
-import { Button, Icon, Text } from "@chakra-ui/react";
-import { CircleCheck } from "lucide-react";
+import { Button, Flex, Icon, Text } from "@chakra-ui/react";
 
 const GenreListItem = ({ genre, active, onClick }) => (
   <Button
     type="button"
-    justifyContent="flex-start"
-    h="64px"
-    px={5}
-    gap={4}
-    borderRadius="8px"
+    display="flex"
+    flexDir="column"
+    justifyContent="center"
+    alignItems="center"
+    h="110px"
+    w="100%"
+    gap={3}
+    p={2}
+    borderRadius="16px"
     border={
-      active ? "1px solid #ff5f8f" : "1px solid rgba(165, 183, 226, 0.16)"
+      active ? "1px solid #ff5f8f" : "1px solid rgba(165, 183, 226, 0.08)"
     }
     bg={
       active
-        ? "linear-gradient(135deg, rgba(255, 95, 143, 0.18), rgba(255,255,255,0.045))"
-        : "linear-gradient(145deg, rgba(20, 27, 50, 0.78), rgba(13, 20, 39, 0.88))"
+        ? "linear-gradient(180deg, rgba(255, 95, 143, 0.1) 0%, rgba(255, 95, 143, 0.02) 100%)"
+        : "transparent"
     }
-    boxShadow={active ? "0 0 0 1px rgba(255, 95, 143, 0.18)" : "none"}
-    color="#f5f7ff"
+    boxShadow={active ? "0 0 20px rgba(255, 95, 143, 0.15)" : "none"}
+    color={active ? "#fff" : "#aeb7cb"}
     onClick={onClick}
     _hover={{
-      bg: "linear-gradient(145deg, rgba(31, 39, 68, 0.9), rgba(16, 24, 44, 0.96))",
-      borderColor: "rgba(255, 95, 143, 0.46)",
+      bg: "rgba(255, 95, 143, 0.05)",
+      borderColor: "rgba(255, 95, 143, 0.3)",
+      color: "#fff",
+      "& > div": {
+         borderColor: "rgba(255, 95, 143, 0.5)",
+      }
     }}
+    transition="all 0.2s"
   >
-    <Icon as={genre.icon} boxSize={5.5} color="#ff5f8f" />
-    <Text flex={1} textAlign="left" fontSize="sm" fontWeight="700">
+    <Flex
+      justify="center"
+      align="center"
+      w="44px"
+      h="44px"
+      borderRadius="full"
+      border="1px solid"
+      borderColor={active ? "#ff5f8f" : "rgba(255, 95, 143, 0.2)"}
+      boxShadow={active ? "0 0 15px rgba(255, 95, 143, 0.3)" : "none"}
+      transition="all 0.2s"
+    >
+      <Icon as={genre.icon} boxSize={5} color={active ? "#ff5f8f" : "#ff8ba8"} />
+    </Flex>
+    <Text fontSize="13px" fontWeight={active ? "600" : "500"}>
       {genre.label}
     </Text>
-    {active ? <CircleCheck size={20} fill="#ff5f8f" color="#ffedf3" /> : null}
   </Button>
 );
 
