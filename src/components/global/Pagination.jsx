@@ -9,13 +9,18 @@ const Pagination = ({
   onNext,
   loading,
   buttonSize = "32px",
+  justifyContent,
+  justify,
   ...rest
 }) => {
+  const resolvedJustify =
+    justifyContent || justify || { base: "flex-end", md: "flex-start" };
+
   return (
     <HStack
       gap={3}
-      w={{ base: "100%", md: "auto" }}
-      justifyContent={{ base: "flex-end", md: "flex-start" }}
+      w="100%"
+      justifyContent={resolvedJustify}
       {...rest}
     >
       <Button

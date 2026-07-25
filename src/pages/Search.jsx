@@ -1,5 +1,5 @@
 import { Grid, SimpleGrid, Stack, Text } from "@chakra-ui/react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ErrorPage from "../components/global/ErrorPage";
 import Pagination from "../components/global/Pagination";
@@ -8,19 +8,26 @@ import AnimeCard from "../components/global/anime-card/AnimeCard";
 import AnimeCardSkeleton from "../components/global/anime-card/AnimeCardSkeleton";
 import useChangeDocTitle from "../hooks/useChangeDocTitle";
 import useFetchData from "../hooks/useFetchData";
+import { RANDOM_INIT_SEARCH_ANIME } from "../constants/search";
+
+const getRandomDefaultQuery = () =>
+  RANDOM_INIT_SEARCH_ANIME[
+    Math.floor(Math.random() * RANDOM_INIT_SEARCH_ANIME.length)
+  ] || "Anime";
 
 const Search = () => {
   const [searchParam, setSearchParam] = useSearchParams();
+  const [defaultQuery] = useState(getRandomDefaultQuery);
 
   const { searchVal, pageValue, path } = useMemo(() => {
-    const q = searchParam?.get("q") || "";
+    const q = searchParam?.get("q") || defaultQuery;
     const page = searchParam?.get("page");
     return {
       searchVal: q,
       pageValue: page,
       path: `/${encodeURIComponent(q)}${page ? `?page=${page}` : ""}`,
     };
-  }, [searchParam]);
+  }, [searchParam, defaultQuery]);
 
   const { data, loading, error, refetch } = useFetchData(path);
 
@@ -76,7 +83,7 @@ const Search = () => {
       ) : results.length ? (
         <Stack gap={3}>
           <SimpleGrid columns={{ base: 1, xl: 2 }} gap={3.5}>
-            {results.map((anime) => (
+            {results?.map((anime) => (
               <AnimeCard anime={anime} key={anime.id} />
             ))}
           </SimpleGrid>
