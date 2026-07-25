@@ -15,7 +15,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import useFetchData from "../hooks/useFetchData";
-import Loading from "../components/global/Loading";
+import DetailAnimeSkeleton from "../components/detail-anime/DetailAnimeSkeleton";
 import useChangeDocTitle from "../hooks/useChangeDocTitle";
 import Box from "../components/global/Box";
 import ErrorPage from "../components/global/ErrorPage";
@@ -138,7 +138,7 @@ const DetailAnime = () => {
           subTitle={error}
         />
       ) : loading ? (
-        <Loading />
+        <DetailAnimeSkeleton />
       ) : (
         <>
           <Box useSuspense>
