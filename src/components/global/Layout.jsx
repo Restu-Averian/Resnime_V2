@@ -3,7 +3,6 @@ import {
   Flex,
   HStack,
   Image,
-  Kbd,
   Stack,
   Text,
   useBreakpointValue,
@@ -60,8 +59,6 @@ const Layout = ({ children }) => {
             </HStack>
 
             <NavbarSearchBox />
-
-            <Kbd display={{ base: "none", md: "inline-flex" }}>/</Kbd>
           </Stack>
         </Box>
         <Box className="content" pb={{ base: "112px", lg: 8 }}>

@@ -7,7 +7,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { Bookmark, Play, Star } from "lucide-react";
+import { Play, Star } from "lucide-react";
 import { useState } from "react";
 
 const getTitle = (data, fallback) => data?.title?.romaji || decodeURI(fallback);
@@ -166,16 +166,6 @@ const BannerHeroAnimeInfo = ({ data, animeName, onWatch }) => {
         >
           <Play size={18} fill="currentColor" />
           Watch Now
-        </Button>
-
-        <Button
-          variant="outline"
-          borderRadius="12px"
-          color="white"
-          borderColor="rgba(255,109,143,0.5)"
-        >
-          <Bookmark size={18} />
-          Bookmark
         </Button>
       </HStack>
     </Stack>
