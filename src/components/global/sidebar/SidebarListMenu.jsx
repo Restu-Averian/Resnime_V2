@@ -1,21 +1,21 @@
 import { Icon, Link as ChakraLink, Text, VStack } from "@chakra-ui/react";
 import { Link, useLocation } from "react-router-dom";
 import {
-  Bookmark,
-  Clapperboard,
+  // Bookmark,
+  // Clapperboard,
   Compass,
   Grid2X2,
-  History,
+  // History,
   Home,
 } from "lucide-react";
 
 const navItems = [
   { label: "Home", icon: Home, to: "/", activePath: "/" },
   { label: "Browse", icon: Compass, to: "/search", activePath: "/search" },
-  { label: "New Episodes", icon: Clapperboard, to: "/search" },
+  // { label: "New Episodes", icon: Clapperboard, to: "/search" },
   { label: "Genres", icon: Grid2X2, to: "/genres", activePath: "/genres" },
-  { label: "Bookmarks", icon: Bookmark, to: "/search" },
-  { label: "History", icon: History, to: "/search" },
+  // { label: "Bookmarks", icon: Bookmark, to: "/search" },
+  // { label: "History", icon: History, to: "/search" },
 ];
 
 const SidebarListMenu = () => {
