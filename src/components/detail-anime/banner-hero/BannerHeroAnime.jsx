@@ -1,5 +1,6 @@
-import { Box as ChakraBox, Flex, Image } from "@chakra-ui/react";
+import { Box as ChakraBox, Flex } from "@chakra-ui/react";
 import BannerHeroAnimeInfo from "./BannerHeroAnimeInfo";
+import Image from "../../global/Image";
 
 const getTitle = (data, fallback) => data?.title?.romaji || decodeURI(fallback);
 

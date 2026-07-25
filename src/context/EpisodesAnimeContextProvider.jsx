@@ -22,6 +22,8 @@ const EpisodesAnimeContextProvider = ({ data, children }) => {
 
   const [isStreamOpen, setIsStreamOpen] = useState(false);
   const [streamError, setStreamError] = useState("");
+  
+  const [sortMode, setSortMode] = useState("episode-asc");
 
   const episodeValParam = useMemo(() => {
     return episodeParam?.get("episode");
@@ -70,6 +72,8 @@ const EpisodesAnimeContextProvider = ({ data, children }) => {
         streamUrl: selectedEpisode?.playerUrl || "",
         streamError,
         setStreamError,
+        sortMode,
+        setSortMode,
       }}
     >
       {children}

@@ -1,15 +1,28 @@
-import { HStack, Select, Text } from "@chakra-ui/react";
+import { createListCollection, HStack, Select, Text } from "@chakra-ui/react";
+import { useEpisodeAnimeContext } from "../../../context/EpisodesAnimeContextProvider";
 
-const EpisodesAnimeOrder = ({ sortMode, setSortMode }) => {
+const orderCollection = createListCollection({
+  items: [
+    { label: "Ascending", value: "episode-asc" },
+    { label: "Descending", value: "episode-desc" },
+  ],
+});
+
+const EpisodesAnimeOrder = () => {
+  const { sortMode, setSortMode } = useEpisodeAnimeContext();
+
   return (
     <HStack gap={3} color="gray.300">
       <Text fontSize="sm">Order:</Text>
 
       <Select.Root
+        collection={orderCollection}
         size="sm"
         value={[sortMode || "episode-asc"]}
-        onValueChange={({ value }) => {
-          setSortMode?.(value?.[0] || "episode-asc");
+        onValueChange={(e) => {
+          if (e.value?.[0]) {
+            setSortMode?.(e.value[0]);
+          }
         }}
       >
         <Select.HiddenSelect aria-label="Order episodes" />
@@ -24,22 +37,19 @@ const EpisodesAnimeOrder = ({ sortMode, setSortMode }) => {
             <Select.ValueText placeholder="Ascending" />
           </Select.Trigger>
 
-          <Select.IndicatorGroup>
+          <Select.IndicatorGroup px={3}>
             <Select.Indicator />
           </Select.IndicatorGroup>
         </Select.Control>
 
-        <Select.Positioner>
+        <Select.Positioner zIndex={1500}>
           <Select.Content bg="#08101f" borderColor="rgba(255,255,255,0.14)">
-            <Select.Item item="episode-asc">
-              Ascending
-              <Select.ItemIndicator />
-            </Select.Item>
-
-            <Select.Item item="episode-desc">
-              Descending
-              <Select.ItemIndicator />
-            </Select.Item>
+            {orderCollection.items.map((item) => (
+              <Select.Item item={item} key={item.value}>
+                {item.label}
+                <Select.ItemIndicator />
+              </Select.Item>
+            ))}
           </Select.Content>
         </Select.Positioner>
       </Select.Root>
