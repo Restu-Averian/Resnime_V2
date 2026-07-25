@@ -30,9 +30,9 @@ const GenreLists = ({ filteredGenres, selectedGenre }) => {
           w="100%"
           minW={0}
           maxW="100%"
-          overflowX={{ base: "auto", md: "visible" }}
+          overflowX={{ base: "auto", lg: "visible" }}
           overflowY="hidden"
-          pb={{ base: 2, md: 0 }}
+          pb={{ base: 2, lg: 0 }}
           overscrollBehaviorX="contain"
           css={{
             "&::-webkit-scrollbar": {
@@ -49,14 +49,14 @@ const GenreLists = ({ filteredGenres, selectedGenre }) => {
           }}
         >
           <Grid
-            w={{ base: "max-content", md: "100%" }}
-            templateRows={{ base: "repeat(2, 110px)", md: "none" }}
+            w={{ base: "max-content", lg: "100%" }}
+            templateRows={{ base: "repeat(2, 110px)", lg: "none" }}
             templateColumns={{
               base: "none",
-              md: "repeat(3, minmax(0, 1fr))",
+              lg: "repeat(3, minmax(0, 1fr))",
             }}
-            gridAutoFlow={{ base: "column", md: "row" }}
-            gridAutoColumns={{ base: "144px", md: "auto" }}
+            gridAutoFlow={{ base: "column", lg: "row" }}
+            gridAutoColumns={{ base: "144px", lg: "auto" }}
             gap={3}
           >
             {filteredGenres.map((item, index) => (
@@ -64,7 +64,7 @@ const GenreLists = ({ filteredGenres, selectedGenre }) => {
                 key={item.value}
                 order={{
                   base: mobileOrder.get(item.value) ?? index,
-                  md: index,
+                  lg: index,
                 }}
               >
                 <GenreListItem
