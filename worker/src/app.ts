@@ -3,6 +3,7 @@ import { cors } from 'hono/cors';
 import { Bindings } from './types/bindings';
 import { successResponse, errorResponse } from './utils/response';
 import healthRouter from './routes/health';
+import readyRouter from './routes/ready';
 
 const app = new Hono<{ Bindings: Bindings }>();
 
@@ -28,6 +29,7 @@ app.get('/', (c) => {
 });
 
 app.route('/health', healthRouter);
+app.route('/ready', readyRouter);
 
 app.notFound((c) => {
 	return c.json(errorResponse('NOT_FOUND', 'Route not found'), 404);
