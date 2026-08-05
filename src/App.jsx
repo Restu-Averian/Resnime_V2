@@ -7,6 +7,7 @@ const DetailAnime = lazy(() => import("./pages/DetailAnime"));
 const Search = lazy(() => import("./pages/Search"));
 const Genres = lazy(() => import("./pages/Genres"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const ThemePreview = lazy(() => import("./dev/ThemePreview"));
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/search" Component={Search} />
         <Route path="/genres/:genre?" Component={Genres} />
         <Route path="/anime/:id/:anime_name" Component={DetailAnime} />
+        <Route path="/dev/theme" Component={ThemePreview} />
         <Route path="*" Component={NotFound} />
       </Routes>
     </Suspense>
