@@ -1,24 +1,35 @@
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
-import Suspense from "./components/global/Suspense";
+import { Container, Stack, Heading, Text, Button, Box } from "@chakra-ui/react";
 
-const Home = lazy(() => import("./pages/Home"));
-const DetailAnime = lazy(() => import("./pages/DetailAnime"));
-const Search = lazy(() => import("./pages/Search"));
-const Genres = lazy(() => import("./pages/Genres"));
-const NotFound = lazy(() => import("./pages/NotFound"));
 const ThemePreview = lazy(() => import("./dev/ThemePreview"));
+
+function HomePlaceholder() {
+  return (
+    <Container py="10">
+      <Stack gap="6">
+        <Heading textStyle="pageTitle">
+          Resnime
+        </Heading>
+
+        <Text color="fg.muted">
+          Frontend foundation is ready.
+        </Text>
+
+        <Button alignSelf="flex-start">
+          Primary Action
+        </Button>
+      </Stack>
+    </Container>
+  );
+}
 
 function App() {
   return (
-    <Suspense>
+    <Suspense fallback={<Box p="8">Loading...</Box>}>
       <Routes>
-        <Route path="/" Component={Home} />
-        <Route path="/search" Component={Search} />
-        <Route path="/genres/:genre?" Component={Genres} />
-        <Route path="/anime/:id/:anime_name" Component={DetailAnime} />
-        <Route path="/dev/theme" Component={ThemePreview} />
-        <Route path="*" Component={NotFound} />
+        <Route path="/" element={<HomePlaceholder />} />
+        <Route path="/dev/theme" element={<ThemePreview />} />
       </Routes>
     </Suspense>
   );
