@@ -36,18 +36,20 @@ export const genres = [
     description: "Magical worlds, quests, and distant adventures.",
     count: "42 anime",
     icon: "sword",
-    isSelected: true,
+    color: "accent.primary",
   },
   {
     name: "Romance",
     description: "Stories of affection, connection, and growing closer.",
     count: "27 anime",
     icon: "heart",
+    color: "accent.warmMuted",
   },
   {
     name: "Mystery",
     description: "Secrets, investigations, and stories worth unraveling.",
     count: "18 anime",
     icon: "search",
+    color: "fg.muted",
   },
 ];

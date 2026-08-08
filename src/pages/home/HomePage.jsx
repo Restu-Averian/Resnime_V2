@@ -1,5 +1,5 @@
 import { Box, Container, Grid, Stack } from "@chakra-ui/react";
-import HomeExploreGenre from "./components/HomeExploreGenre";
+import HomeExploreGenre from "./components/home-explore-genre";
 import HomeFinderAnime from "./components/HomeFinderAnime";
 import HomeHeroBanner from "./components/home-hero-banner";
 import HomePicksSection from "./components/home-picks";

@@ -1,6 +1,6 @@
 import { Feather } from "lucide-react";
 import { HStack, Stack, Text } from "@chakra-ui/react";
-import GenreRow from "./global/GenreRow";
+import HomeExploreGenreItem from "./HomeExploreGenreItem";
 
 function HomeExploreGenre({ genres }) {
   return (
@@ -29,7 +29,7 @@ function HomeExploreGenre({ genres }) {
 
       <Stack gap="0">
         {genres.map((genre) => (
-          <GenreRow key={genre.name} genre={genre} />
+          <HomeExploreGenreItem key={genre.name} genre={genre} />
         ))}
       </Stack>
     </Stack>

@@ -1,7 +1,7 @@
 import { Star } from "lucide-react";
 import { Box, Flex, HStack, Image, Text } from "@chakra-ui/react";
 
-function HomePickCard({ pick, imageUrl, variant = "default" }) {
+function HomePickCardItem({ pick, imageUrl, variant = "default" }) {
   const isMobile = variant === "mobile";
 
   return (
@@ -65,4 +65,4 @@ function HomePickCard({ pick, imageUrl, variant = "default" }) {
   );
 }
 
-export default HomePickCard;
+export default HomePickCardItem;

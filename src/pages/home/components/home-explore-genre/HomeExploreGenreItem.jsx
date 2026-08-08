@@ -7,12 +7,13 @@ const iconMap = {
   search: Search,
 };
 
-function GenreRow({ genre }) {
+function HomeExploreGenreItem({ genre }) {
   const Icon = iconMap[genre.icon];
-  const iconColor = genre.isSelected ? "accent.primary" : "accent.warmMuted";
 
   return (
     <Grid
+      role="group"
+      cursor="pointer"
       align="center"
       templateColumns={{
         base: "34px minmax(0, 1fr) auto",
@@ -24,13 +25,20 @@ function GenreRow({ genre }) {
       py={{ base: "3", md: "4" }}
       minH={{ base: "76px", md: "auto" }}
       borderRadius="control"
-      border={genre.isSelected ? "1px solid" : "1px solid transparent"}
-      borderColor={genre.isSelected ? "border.emphasized" : "transparent"}
-      bg={genre.isSelected ? "bg.surface" : "transparent"}
-      borderBottom={!genre.isSelected ? "1px solid" : undefined}
-      borderBottomColor={!genre.isSelected ? "border.subtle" : undefined}
+      border="1px solid transparent"
+      borderBottom="1px solid"
+      borderBottomColor="border.subtle"
+      transition="all 0.2s"
+      _hover={{
+        border: "1px solid",
+        borderColor: "border.emphasized",
+        bg: "bg.surface",
+      }}
     >
-      <Box color={iconColor}>
+      <Box
+        color={genre.color || "accent.primary"}
+        transition="color 0.2s"
+      >
         <Icon size={32} strokeWidth={1.25} />
       </Box>
 
@@ -55,7 +63,8 @@ function GenreRow({ genre }) {
 
       <HStack
         gap={{ base: "3", md: "7" }}
-        color={genre.isSelected ? "accent.primary" : "fg.muted"}
+        color={genre.color || "fg.muted"}
+        transition="color 0.2s"
       >
         <Text
           fontSize={{ base: "md", md: "md" }}
@@ -71,4 +80,4 @@ function GenreRow({ genre }) {
   );
 }
 
-export default GenreRow;
+export default HomeExploreGenreItem;
