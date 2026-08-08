@@ -30,7 +30,9 @@ function HomePicksSection({ picks, imageUrl }) {
 
             <Flex align="center" justify="center" gap="6" color="fg.muted">
               <ArrowLeft size={21} strokeWidth={1.4} />
-              <Text fontSize="md">Swipe to explore</Text>
+              <Text fontSize="sm" lineHeight="1.2">
+                Swipe to explore
+              </Text>
               <ArrowRight size={21} strokeWidth={1.4} />
             </Flex>
           </Stack>

@@ -29,8 +29,8 @@ function HomeHeroBanner({ hero }) {
       >
         <HomeHeroBannerCopy
           hero={hero}
-          titleSize={{ base: "3xl", md: "5xl" }}
-          titleMaxW={{ base: "260px", md: "620px", xl: "780px" }}
+          titleSize={{ base: "2xl", sm: "3xl", md: "4xl", xl: "5xl" }}
+          titleMaxW={{ base: "240px", sm: "300px", md: "560px", xl: "720px" }}
         />
       </Stack>
     </Box>

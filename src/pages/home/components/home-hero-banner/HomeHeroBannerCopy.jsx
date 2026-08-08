@@ -27,8 +27,8 @@ function HomeHeroBannerCopy({ hero, titleSize, titleMaxW }) {
       <Text
         color="fg.muted"
         fontSize={{ base: "sm", md: "md" }}
-        lineHeight="1.5"
-        maxW="300px"
+        lineHeight={{ base: "1.45", md: "1.55" }}
+        maxW={{ base: "280px", md: "340px" }}
         mb="4"
       >
         {hero.description}
@@ -42,6 +42,7 @@ function HomeHeroBannerCopy({ hero, titleSize, titleMaxW }) {
         borderRadius="md"
         px="4"
         fontWeight="normal"
+        fontSize={{ base: "sm", md: "md" }}
         border="1px solid"
         borderColor="whiteAlpha.100"
       >

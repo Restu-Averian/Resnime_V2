@@ -43,14 +43,18 @@ function HomePickCardItem({ pick, imageUrl, variant = "default" }) {
         <Text
           textStyle="cardTitle"
           color="fg.heading"
-          fontSize={isMobile ? "md" : { base: "lg", xl: "xl" }}
+          fontSize={isMobile ? "sm" : { base: "md", lg: "lg", xl: "xl" }}
           noOfLines={2}
           lineHeight="1.3"
         >
           {pick.title}
         </Text>
 
-        <HStack gap="1.5" color="fg.muted" fontSize={isMobile ? "xs" : "sm"}>
+        <HStack
+          gap="1.5"
+          color="fg.muted"
+          fontSize={isMobile ? "xs" : { base: "xs", xl: "sm" }}
+        >
           <Star
             size={isMobile ? 12 : 16}
             fill="var(--resnime-colors-rating-default)"

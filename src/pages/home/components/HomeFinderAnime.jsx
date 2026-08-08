@@ -9,6 +9,8 @@ function HomeFinderAnime({ promo }) {
       minH={{ base: "auto", md: "235px" }}
       align={{ base: "stretch", md: "center" }}
       gap={{ base: "4", md: "10" }}
+      w="full"
+      minW="0"
       overflow="hidden"
       p={{ base: "5", md: "10" }}
       position="relative"
@@ -38,20 +40,27 @@ function HomeFinderAnime({ promo }) {
         display={{ base: "flex", md: "none" }}
         align="center"
         gap="4"
+        w="full"
         position="relative"
       >
         <Box color="accent.primary" flex="0 0 auto">
-          <ScanSearch size={64} strokeWidth={1.15} />
+          <ScanSearch size={52} strokeWidth={1.15} />
         </Box>
 
-        <Stack gap={{ base: "2", md: "3" }} minW="0">
-          <Text textStyle="sectionTitle" color="fg.heading">
+        <Stack gap={{ base: "2", md: "3" }} minW="0" flex="1">
+          <Text
+            textStyle="sectionTitle"
+            color="fg.heading"
+            fontSize={{ base: "lg", sm: "xl" }}
+            lineHeight="1.2"
+          >
             {promo.title}
           </Text>
           <Text
             color="fg.default"
-            fontSize={{ base: "md", md: "lg" }}
-            lineHeight="1.7"
+            fontSize={{ base: "sm", sm: "md" }}
+            lineHeight={{ base: "1.55", md: "1.7" }}
+            overflowWrap="break-word"
           >
             {promo.description}
           </Text>
@@ -77,7 +86,11 @@ function HomeFinderAnime({ promo }) {
           <Text textStyle="sectionTitle" color="fg.heading">
             {promo.title}
           </Text>
-          <Text color="fg.default" fontSize="lg" lineHeight="1.7">
+          <Text
+            color="fg.default"
+            fontSize={{ md: "md", xl: "lg" }}
+            lineHeight="1.7"
+          >
             {promo.description}
           </Text>
         </Stack>
@@ -87,7 +100,7 @@ function HomeFinderAnime({ promo }) {
           flex="0 0 auto"
           color="accent.primary"
           fontFamily="heading"
-          fontSize="xl"
+          fontSize={{ md: "lg", xl: "xl" }}
           textDecoration="none"
           _hover={{ color: "accent.hover", textDecoration: "none" }}
         >
@@ -101,13 +114,13 @@ function HomeFinderAnime({ promo }) {
       <Link
         href="#"
         display={{ base: "inline-flex", md: "none" }}
-        alignSelf="flex-end"
+        alignSelf="flex-start"
         alignItems="center"
         gap="3"
         color="accent.primary"
         fontFamily="heading"
-        fontSize="lg"
-        lineHeight="1"
+        fontSize={{ base: "md", sm: "lg" }}
+        lineHeight="1.25"
         textDecoration="none"
         position="relative"
         _hover={{ color: "accent.hover", textDecoration: "none" }}
