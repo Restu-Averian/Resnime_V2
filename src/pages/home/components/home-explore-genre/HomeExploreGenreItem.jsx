@@ -1,5 +1,5 @@
 import { ArrowRight, Heart, Search, Sword } from "lucide-react";
-import { Box, Grid, HStack, Text } from "@chakra-ui/react";
+import { Box, Grid, HStack, Text, useBreakpointValue } from "@chakra-ui/react";
 
 const iconMap = {
   sword: Sword,
@@ -9,28 +9,33 @@ const iconMap = {
 
 function HomeExploreGenreItem({ genre }) {
   const Icon = iconMap[genre.icon];
+  const iconSize = useBreakpointValue({ base: 52, md: 32 });
 
   return (
     <Grid
       role="group"
       cursor="pointer"
       align="center"
+      justifyItems={{ base: "center", md: "stretch" }}
       templateColumns={{
-        base: "34px minmax(0, 1fr) auto",
+        base: "1fr",
         md: "42px minmax(0, 1fr) auto 22px",
       }}
-      columnGap={{ base: "3", md: "5" }}
-      rowGap="2"
-      px={{ base: "4", md: "5" }}
-      py={{ base: "3", md: "4" }}
-      minH={{ base: "76px", md: "auto" }}
-      borderRadius="control"
-      border="1px solid transparent"
-      borderBottom="1px solid"
+      rowGap={{ base: "3", md: "2" }}
+      columnGap="5"
+      flex={{ base: "0 0 230px", md: "initial" }}
+      w={{ base: "230px", md: "auto" }}
+      minH={{ base: "212px", md: "auto" }}
+      px={{ base: "7", md: "5" }}
+      py={{ base: "4", md: "4" }}
+      textAlign={{ base: "center", md: "left" }}
+      bg={{ base: "bg.subtle", md: "transparent" }}
+      border="1px solid"
+      borderColor={{ base: "border.default", md: "transparent" }}
       borderBottomColor="border.subtle"
+      borderRadius={{ base: "panel", md: "control" }}
       transition="all 0.2s"
       _hover={{
-        border: "1px solid",
         borderColor: "border.emphasized",
         bg: "bg.surface",
       }}
@@ -39,23 +44,24 @@ function HomeExploreGenreItem({ genre }) {
         color={genre.color || "accent.primary"}
         transition="color 0.2s"
       >
-        <Icon size={32} strokeWidth={1.25} />
+        <Icon size={iconSize} strokeWidth={1.25} />
       </Box>
 
       <Box minW="0">
         <Text
           textStyle="panelTitle"
           color="fg.heading"
-          fontSize={{ base: "xl", md: "lg" }}
-          lineHeight={{ base: "1.1", md: "1.3" }}
+          fontSize={{ base: "2xl", md: "lg" }}
+          lineHeight={{ base: "1", md: "1.3" }}
         >
           {genre.name}
         </Text>
 
         <Text
           color="fg.muted"
-          fontSize={{ base: "sm", md: "sm" }}
-          lineHeight={{ base: "1.45", md: "1.4" }}
+          fontSize="sm"
+          lineHeight={{ base: "1.35", md: "1.4" }}
+          mt={{ base: "2", md: "0" }}
         >
           {genre.description}
         </Text>
@@ -67,14 +73,16 @@ function HomeExploreGenreItem({ genre }) {
         transition="color 0.2s"
       >
         <Text
-          fontSize={{ base: "md", md: "md" }}
+          fontSize={{ base: "2xl", md: "md" }}
           lineHeight="1"
           whiteSpace="nowrap"
         >
           {genre.count}
         </Text>
 
-        <ArrowRight size={20} strokeWidth={1.6} />
+        <Box display={{ base: "none", md: "block" }}>
+          <ArrowRight size={20} strokeWidth={1.6} />
+        </Box>
       </HStack>
     </Grid>
   );
