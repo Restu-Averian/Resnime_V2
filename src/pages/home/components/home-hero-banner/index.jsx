@@ -13,7 +13,7 @@ function HomeHeroBanner({ hero }) {
         base: `linear-gradient(90deg, rgba(3, 17, 31, 0.98) 0%, rgba(3, 17, 31, 0.82) 45%, rgba(3, 17, 31, 0.1) 100%), url(${hero.imageUrl})`,
         md: `linear-gradient(90deg, rgba(3, 17, 31, 0.96) 0%, rgba(3, 17, 31, 0.8) 28%, rgba(3, 17, 31, 0.18) 62%, rgba(3, 17, 31, 0.06) 100%), url(${hero.imageUrl})`,
       }}
-      bgPosition={{ base: "center", md: "62% center", lg: "center" }}
+      bgPosition={{ base: "63% center", md: "62% center", lg: "center" }}
       bgRepeat="no-repeat"
       bgSize="cover"
       boxShadow="panel"
