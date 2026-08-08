@@ -23,10 +23,10 @@ function HomeExploreGenreItem({ genre }) {
       }}
       rowGap={{ base: "2.5", md: "2" }}
       columnGap="5"
-      flex={{ base: "0 0 205px", sm: "0 0 220px", md: "initial" }}
-      w={{ base: "205px", sm: "220px", md: "auto" }}
-      minH={{ base: "176px", sm: "188px", md: "auto" }}
-      px={{ base: "5", sm: "6", md: "5" }}
+      flex={{ base: "0 0 150px", md: "initial" }}
+      w={{ base: "150px", md: "auto" }}
+      h="auto"
+      px={{ base: "3", md: "5" }}
       py={{ base: "4", md: "4" }}
       textAlign={{ base: "center", md: "left" }}
       bg={{ base: "bg.subtle", md: "transparent" }}
@@ -48,9 +48,9 @@ function HomeExploreGenreItem({ genre }) {
         <Text
           textStyle="panelTitle"
           color="fg.heading"
-          fontSize={{ base: "xl", md: "lg" }}
-          lineHeight={{ base: "1.15", md: "1.3" }}
-          noOfLines={1}
+          fontSize={{ base: "sm", md: "lg" }}
+          lineHeight={{ base: "1.3", md: "1.3" }}
+          lineClamp={{ base: "2", md: "1" }}
         >
           {genre.name}
         </Text>
@@ -60,7 +60,7 @@ function HomeExploreGenreItem({ genre }) {
           fontSize={{ base: "sm", md: "sm", xl: "md" }}
           lineHeight={{ base: "1.45", md: "1.4" }}
           mt={{ base: "2", md: "0" }}
-          noOfLines={{ base: 2, md: 1, xl: 2 }}
+          lineClamp={{ base: "2", md: "1", xl: "2" }}
         >
           {genre.description}
         </Text>
