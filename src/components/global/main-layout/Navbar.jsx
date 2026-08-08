@@ -9,7 +9,13 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-function HomeNavbar({ items }) {
+const navItems = [
+  { label: "Home", href: "#", isActive: true },
+  { label: "Anime List", href: "#" },
+  { label: "Anime Finder", href: "#" },
+];
+
+function Navbar() {
   return (
     <Box
       as="header"
@@ -36,7 +42,7 @@ function HomeNavbar({ items }) {
           </Text>
 
           <HStack as="nav" display={{ base: "none", md: "flex" }} gap="9">
-            {items.map((item) => (
+            {navItems.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
@@ -78,4 +84,4 @@ function HomeNavbar({ items }) {
   );
 }
 
-export default HomeNavbar;
+export default Navbar;

@@ -1,7 +1,7 @@
 import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react";
 import { Box, Flex, HStack, SimpleGrid, Stack, Text } from "@chakra-ui/react";
 import HomePickCard from "./HomePickCard";
-import SectionHeader from "./global/SectionHeader";
+import SectionHeader from "../global/SectionHeader";
 
 function HomePicksSection({ picks, imageUrl }) {
   return (
