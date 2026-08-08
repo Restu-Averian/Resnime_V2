@@ -7,7 +7,7 @@ const mobileNavItems = [
   { label: "Anime Finder", href: "#", icon: Search },
 ];
 
-function Menu() {
+function MenuItemMobile() {
   return (
     <Flex
       as="nav"
@@ -56,4 +56,4 @@ function Menu() {
   );
 }
 
-export default Menu;
+export default MenuItemMobile;

@@ -8,7 +8,7 @@ import "@fontsource/inter/500.css";
 import "@fontsource/inter/600.css";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
-import Layout from "./components/global/main-layout";
+import Layout from "./components/global/layout";
 import { Provider } from "./components/ui/provider.jsx";
 import "./style/main.css";
 
