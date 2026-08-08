@@ -56,7 +56,7 @@ function HomeExploreGenreItem({ genre }) {
 
         <Text
           color="fg.muted"
-          fontSize="sm"
+          fontSize="xl"
           lineHeight={{ base: "1.35", md: "1.4" }}
           mt={{ base: "2", md: "0" }}
         >
@@ -70,11 +70,11 @@ function HomeExploreGenreItem({ genre }) {
         transition="color 0.2s"
       >
         <Text
-          fontSize={{ base: "2xl", md: "md" }}
+          fontSize={{ base: "lg", md: "md" }}
           lineHeight="1"
           whiteSpace="nowrap"
         >
-          {genre.count}
+          {genre.count} Anime
         </Text>
 
         <Box display={{ base: "none", md: "block" }}>
