@@ -6,7 +6,9 @@ function Layout({ children }) {
   return (
     <Box minH="100vh" bg="bg.canvas" pb={{ base: "92px", md: "0" }}>
       <Navbar />
+
       {children}
+
       <MenuItemMobile />
     </Box>
   );

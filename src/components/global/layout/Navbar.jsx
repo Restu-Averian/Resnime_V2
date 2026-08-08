@@ -1,12 +1,6 @@
 import MenuItemDesktop from "./menu-item/MenuItemDesktop";
 import { Search } from "lucide-react";
-import {
-  Box,
-  Container,
-  Flex,
-  IconButton,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Container, Flex, IconButton, Text } from "@chakra-ui/react";
 
 const navItems = [
   { label: "Home", href: "#", isActive: true },
@@ -18,6 +12,9 @@ function Navbar() {
   return (
     <Box
       as="header"
+      position="sticky"
+      top="0"
+      zIndex="sticky"
       borderBottom="1px solid"
       borderColor={{ base: "transparent", md: "border.default" }}
       bg="bg.subtle"
