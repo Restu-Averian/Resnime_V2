@@ -33,22 +33,22 @@ export const finderPromo = {
 export const genres = [
   {
     name: "Fantasy",
-    description: "Magical worlds, quests, and distant adventures.",
-    count: "42 anime",
+    description: "Magical worlds and distant adventures.",
+    count: 42,
     icon: "sword",
     color: "accent.primary",
   },
   {
     name: "Romance",
-    description: "Stories of affection, connection, and growing closer.",
-    count: "27 anime",
+    description: "Stories of affection, connection, and growth.",
+    count: 27,
     icon: "heart",
     color: "accent.warmMuted",
   },
   {
     name: "Mystery",
-    description: "Secrets, investigations, and stories worth unraveling.",
-    count: "18 anime",
+    description: "Secrets, investigations, and stories that unfold.",
+    count: 18,
     icon: "search",
     color: "fg.muted",
   },

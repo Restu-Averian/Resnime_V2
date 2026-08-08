@@ -40,10 +40,7 @@ function HomeExploreGenreItem({ genre }) {
         bg: "bg.surface",
       }}
     >
-      <Box
-        color={genre.color || "accent.primary"}
-        transition="color 0.2s"
-      >
+      <Box color={genre.color || "accent.primary"} transition="color 0.2s">
         <Icon size={iconSize} strokeWidth={1.25} />
       </Box>
 
