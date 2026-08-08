@@ -4,15 +4,25 @@ import GenreRow from "./global/GenreRow";
 
 function HomeExploreGenre({ genres }) {
   return (
-    <Stack layerStyle="panel" minH="235px" gap="3" p={{ base: "6", md: "7" }}>
-      <HStack gap="3">
+    <Stack
+      layerStyle={{ base: "none", md: "panel" }}
+      minH={{ base: "auto", md: "235px" }}
+      gap={{ base: "4", md: "3" }}
+      p={{ base: "0", md: "7" }}
+    >
+      <HStack gap={{ base: "4", md: "3" }}>
         <Feather
-          size={19}
+          size={28}
           strokeWidth={1.5}
           color="var(--resnime-colors-accent-muted)"
         />
 
-        <Text textStyle="sectionTitle" color="fg.heading">
+        <Text
+          textStyle="sectionTitle"
+          color="fg.heading"
+          fontSize={{ base: "3xl", md: "2xl" }}
+          lineHeight="1"
+        >
           Explore by Genre
         </Text>
       </HStack>

@@ -5,11 +5,12 @@ function HomeFinderAnime({ promo }) {
   return (
     <Flex
       layerStyle="panel"
-      minH="235px"
-      align="center"
-      gap={{ base: "7", md: "10" }}
+      direction={{ base: "column", md: "row" }}
+      minH={{ base: "auto", md: "235px" }}
+      align={{ base: "stretch", md: "center" }}
+      gap={{ base: "4", md: "10" }}
       overflow="hidden"
-      p={{ base: "7", md: "10" }}
+      p={{ base: "5", md: "10" }}
       position="relative"
     >
       <Box
@@ -33,12 +34,17 @@ function HomeFinderAnime({ promo }) {
         opacity="0.4"
       />
 
-      <Box color="accent.primary" flex="0 0 auto" position="relative">
-        <ScanSearch size={118} strokeWidth={1.15} />
-      </Box>
+      <HStack
+        display={{ base: "flex", md: "none" }}
+        align="center"
+        gap="4"
+        position="relative"
+      >
+        <Box color="accent.primary" flex="0 0 auto">
+          <ScanSearch size={64} strokeWidth={1.15} />
+        </Box>
 
-      <Stack gap="5" maxW="430px" position="relative">
-        <Stack gap="3">
+        <Stack gap={{ base: "2", md: "3" }} minW="0">
           <Text textStyle="sectionTitle" color="fg.heading">
             {promo.title}
           </Text>
@@ -50,9 +56,35 @@ function HomeFinderAnime({ promo }) {
             {promo.description}
           </Text>
         </Stack>
+      </HStack>
+
+      <Box
+        display={{ base: "none", md: "block" }}
+        color="accent.primary"
+        flex="0 0 auto"
+        position="relative"
+      >
+        <ScanSearch size={118} strokeWidth={1.15} />
+      </Box>
+
+      <Stack
+        display={{ base: "none", md: "flex" }}
+        gap="5"
+        maxW="430px"
+        position="relative"
+      >
+        <Stack gap="3">
+          <Text textStyle="sectionTitle" color="fg.heading">
+            {promo.title}
+          </Text>
+          <Text color="fg.default" fontSize="lg" lineHeight="1.7">
+            {promo.description}
+          </Text>
+        </Stack>
 
         <Link
           href="#"
+          flex="0 0 auto"
           color="accent.primary"
           fontFamily="heading"
           fontSize="xl"
@@ -65,6 +97,24 @@ function HomeFinderAnime({ promo }) {
           </HStack>
         </Link>
       </Stack>
+
+      <Link
+        href="#"
+        display={{ base: "inline-flex", md: "none" }}
+        alignSelf="flex-end"
+        alignItems="center"
+        gap="3"
+        color="accent.primary"
+        fontFamily="heading"
+        fontSize="lg"
+        lineHeight="1"
+        textDecoration="none"
+        position="relative"
+        _hover={{ color: "accent.hover", textDecoration: "none" }}
+      >
+        <Text>{promo.cta}</Text>
+        <ArrowRight size={18} strokeWidth={1.7} />
+      </Link>
     </Flex>
   );
 }

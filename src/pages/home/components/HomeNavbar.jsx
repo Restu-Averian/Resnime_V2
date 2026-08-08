@@ -1,27 +1,41 @@
-import { Box, Container, Flex, HStack, Link, Text } from "@chakra-ui/react";
+import { Search } from "lucide-react";
+import {
+  Box,
+  Container,
+  Flex,
+  HStack,
+  IconButton,
+  Link,
+  Text,
+} from "@chakra-ui/react";
 
 function HomeNavbar({ items }) {
   return (
     <Box
       as="header"
       borderBottom="1px solid"
-      borderColor="border.default"
+      borderColor={{ base: "transparent", md: "border.default" }}
       bg="bg.subtle"
     >
       <Container maxW="1600px" px={{ base: "5", xl: "10" }}>
-        <Flex align="center" justify="space-between" minH="72px" gap="8">
+        <Flex
+          align="center"
+          justify="space-between"
+          minH={{ base: "86px", md: "72px" }}
+          gap="8"
+        >
           <Text
             as="a"
             href="#"
             textStyle="display"
-            fontSize={{ base: "3xl", md: "4xl" }}
+            fontSize={{ base: "4xl", md: "4xl" }}
             color="fg.heading"
             lineHeight="1"
           >
             Resnime
           </Text>
 
-          <HStack as="nav" gap={{ base: "5", md: "9" }}>
+          <HStack as="nav" display={{ base: "none", md: "flex" }} gap="9">
             {items.map((item) => (
               <Link
                 key={item.label}
@@ -47,6 +61,17 @@ function HomeNavbar({ items }) {
               </Link>
             ))}
           </HStack>
+
+          <IconButton
+            aria-label="Search anime"
+            display={{ base: "inline-flex", md: "none" }}
+            variant="ghost"
+            size="lg"
+            color="fg.heading"
+            _hover={{ bg: "transparent", color: "accent.hover" }}
+          >
+            <Search size={34} strokeWidth={1.5} />
+          </IconButton>
         </Flex>
       </Container>
     </Box>

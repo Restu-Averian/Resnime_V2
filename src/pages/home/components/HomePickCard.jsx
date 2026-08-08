@@ -1,16 +1,25 @@
 import { Star } from "lucide-react";
 import { Box, Flex, HStack, Image, Text } from "@chakra-ui/react";
 
-function HomePickCard({ pick, imageUrl }) {
+function HomePickCard({ pick, imageUrl, variant = "default" }) {
+  const isMobile = variant === "mobile";
+
   return (
     <Flex
       layerStyle="interactiveSurface"
+      direction={isMobile ? "column" : "row"}
       overflow="hidden"
-      h={{ base: "168px", md: "160px", xl: "168px" }}
+      w={isMobile ? "212px" : "auto"}
+      h={isMobile ? "330px" : { base: "168px", md: "160px", xl: "168px" }}
       align="stretch"
       boxShadow="media"
     >
-      <Box flex="0 0 54%" maxW="220px" minW="150px" overflow="hidden">
+      <Box
+        flex={isMobile ? "0 0 178px" : "0 0 54%"}
+        maxW={isMobile ? "none" : "220px"}
+        minW={isMobile ? "0" : "150px"}
+        overflow="hidden"
+      >
         <Image
           src={imageUrl}
           alt=""
@@ -22,11 +31,19 @@ function HomePickCard({ pick, imageUrl }) {
         />
       </Box>
 
-      <Flex direction="column" justify="center" gap="6" px="5" py="4" minW="0">
+      <Flex
+        direction="column"
+        justify={isMobile ? "space-between" : "center"}
+        gap={isMobile ? "3" : "6"}
+        px={isMobile ? "5" : "5"}
+        py={isMobile ? "4" : "4"}
+        minW="0"
+        flex="1"
+      >
         <Text
           textStyle="cardTitle"
           color="fg.heading"
-          fontSize={{ base: "lg", xl: "xl" }}
+          fontSize={isMobile ? "2xl" : { base: "lg", xl: "xl" }}
           noOfLines={2}
         >
           {pick.title}
