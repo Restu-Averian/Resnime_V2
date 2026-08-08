@@ -63,7 +63,7 @@ homeRouter.use('*', async (c, next) => {
 	c.header('Cache-Control', 'no-store');
 });
 
-homeRouter.get('/', async (c) => {
+homeRouter.get('/api/home', async (c) => {
 	if (!c.env.TURSO_DATABASE_URL || !c.env.TURSO_AUTH_TOKEN) {
 		console.error('Turso local credentials must be configured.');
 
@@ -87,7 +87,9 @@ homeRouter.get('/', async (c) => {
 						photo
 					FROM anime_info
 					WHERE id = ?
+					ORDER BY rating desc
 					LIMIT 1;
+					
 				`,
 				args: [FEATURED_ANIME_ID],
 			}),
@@ -102,7 +104,8 @@ homeRouter.get('/', async (c) => {
 						type,
 						photo
 					FROM anime_info
-					WHERE id IN (${TONIGHTS_PICK_IDS.map(() => '?').join(', ')});
+					WHERE id IN (${TONIGHTS_PICK_IDS.map(() => '?').join(', ')})
+					ORDER BY updated_at desc;
 				`,
 				args: [...TONIGHTS_PICK_IDS],
 			}),
