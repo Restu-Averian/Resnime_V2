@@ -13,6 +13,12 @@ function HomePickCardItem({ pick, variant = "desktop" }) {
       h={isMobile ? "214px" : { base: "168px", md: "160px", xl: "168px" }}
       align="stretch"
       boxShadow="media"
+      cursor="pointer"
+      transition="transform 0.2s ease, box-shadow 0.2s ease"
+      _hover={{
+        transform: "translateY(-2px)",
+        boxShadow: "mediaHover",
+      }}
     >
       <Box
         flex={isMobile ? "0 0 130px" : "0 0 54%"}

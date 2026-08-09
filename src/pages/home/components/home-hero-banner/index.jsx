@@ -23,14 +23,12 @@ function HomeHeroBanner({ hero }) {
         gap={{ base: "0", md: "5" }}
         justify={{ base: "flex-start", md: "center" }}
         minH={{ base: "280px", md: "420px", lg: "340px" }}
-        maxW={{ base: "100%", md: "580px" }}
         px={{ base: "5", md: "12" }}
         py={{ base: "6", md: "12" }}
       >
         <HomeHeroBannerCopy
           hero={hero}
           titleSize={{ base: "2xl", sm: "3xl", md: "4xl", xl: "5xl" }}
-          titleMaxW={{ base: "240px", sm: "300px", md: "560px", xl: "720px" }}
         />
       </Stack>
     </Box>

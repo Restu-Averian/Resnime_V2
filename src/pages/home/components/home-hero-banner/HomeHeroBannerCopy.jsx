@@ -1,7 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { Box, Button, Heading, Stack, Text } from "@chakra-ui/react";
 
-function HomeHeroBannerCopy({ hero, titleSize, titleMaxW }) {
+function HomeHeroBannerCopy({ hero, titleSize }) {
   return (
     <>
       <Stack gap="1">
@@ -10,15 +10,20 @@ function HomeHeroBannerCopy({ hero, titleSize, titleMaxW }) {
           textStyle="display"
           color="fg.heading"
           fontSize={titleSize}
-          maxW={titleMaxW}
           lineHeight="1.1"
           mb="1"
+          maxW={{ base: "80%", md: "45%" }}
         >
           {hero?.title_en}
         </Heading>
 
-        <Text color="fg.muted" fontSize={{ base: "xs", md: "sm" }}>
-          {hero?.type} {hero?.genres?.length > 0 ? `• ${hero?.genres.join(", ")}` : ""}
+        <Text
+          color="fg.muted"
+          fontSize={{ base: "xs", md: "sm" }}
+          maxW={{ base: "80%", md: "45%" }}
+        >
+          {hero?.type}{" "}
+          {hero?.genres?.length > 0 ? `• ${hero?.genres.join(", ")}` : ""}
         </Text>
       </Stack>
 
@@ -26,10 +31,11 @@ function HomeHeroBannerCopy({ hero, titleSize, titleMaxW }) {
 
       <Text
         color="fg.muted"
-        fontSize={{ base: "sm", md: "md" }}
+        fontSize={{ base: "xs", md: "md" }}
         lineHeight={{ base: "1.45", md: "1.55" }}
-        maxW={{ base: "280px", md: "340px" }}
-        mb="4"
+        mb={5}
+        lineClamp={3}
+        maxW={{ base: "80%", md: "45%" }}
       >
         {hero?.description}
       </Text>
@@ -47,7 +53,6 @@ function HomeHeroBannerCopy({ hero, titleSize, titleMaxW }) {
         borderColor="whiteAlpha.100"
       >
         View Details
-
         <ArrowRight size={16} strokeWidth={1.5} style={{ marginLeft: "6px" }} />
       </Button>
     </>

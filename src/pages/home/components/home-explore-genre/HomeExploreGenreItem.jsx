@@ -1,10 +1,53 @@
-import { ArrowRight, Heart, Search, Sword } from "lucide-react";
+import { 
+  Activity, ArrowRight, Award, Baby, Book, BookOpen, Brain, Briefcase, Building, Clapperboard, Clock, 
+  Coffee, Compass, DoorOpen, Eye, Flame, Frown, Gamepad, Gamepad2, Ghost, GraduationCap, 
+  Heart, Hourglass, Map, Mic, Moon, Music, Rocket, RotateCcw, Search, Shield, Skull, 
+  Smile, Stethoscope, Sun, Sword, Swords, Tent, Users, Utensils, VenetianMask, Zap 
+} from "lucide-react";
 import { Box, Grid, HStack, Text, useBreakpointValue } from "@chakra-ui/react";
 
 const iconMap = {
-  sword: Sword,
+  activity: Activity,
+  award: Award,
+  baby: Baby,
+  book: Book,
+  "book-open": BookOpen,
+  brain: Brain,
+  briefcase: Briefcase,
+  building: Building,
+  clapperboard: Clapperboard,
+  clock: Clock,
+  coffee: Coffee,
+  compass: Compass,
+  "door-open": DoorOpen,
+  eye: Eye,
+  flame: Flame,
+  frown: Frown,
+  gamepad: Gamepad,
+  gamepad2: Gamepad2,
+  ghost: Ghost,
+  "graduation-cap": GraduationCap,
   heart: Heart,
+  hourglass: Hourglass,
+  map: Map,
+  mic: Mic,
+  moon: Moon,
+  music: Music,
+  rocket: Rocket,
+  "rotate-ccw": RotateCcw,
   search: Search,
+  shield: Shield,
+  skull: Skull,
+  smile: Smile,
+  stethoscope: Stethoscope,
+  sun: Sun,
+  sword: Sword,
+  swords: Swords,
+  tent: Tent,
+  users: Users,
+  utensils: Utensils,
+  "venetian-mask": VenetianMask,
+  zap: Zap,
 };
 
 function GenreItemWrapper({ children, ...props }) {
