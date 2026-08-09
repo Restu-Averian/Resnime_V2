@@ -31,6 +31,7 @@ app.get('/', (c) => {
 
 app.route('/health', healthRouter);
 app.route('/ready', readyRouter);
+
 app.route('/api/home', homeRouter);
 
 app.notFound((c) => {

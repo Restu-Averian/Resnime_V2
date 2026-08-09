@@ -63,7 +63,7 @@ homeRouter.use('*', async (c, next) => {
 	c.header('Cache-Control', 'no-store');
 });
 
-homeRouter.get('/api/home', async (c) => {
+homeRouter.get('/', async (c) => {
 	if (!c.env.TURSO_DATABASE_URL || !c.env.TURSO_AUTH_TOKEN) {
 		console.error('Turso local credentials must be configured.');
 
