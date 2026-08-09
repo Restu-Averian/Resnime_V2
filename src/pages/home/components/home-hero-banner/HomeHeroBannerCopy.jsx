@@ -14,11 +14,11 @@ function HomeHeroBannerCopy({ hero, titleSize, titleMaxW }) {
           lineHeight="1.1"
           mb="1"
         >
-          {hero.title}
+          {hero?.title}
         </Heading>
 
         <Text color="fg.muted" fontSize={{ base: "xs", md: "sm" }}>
-          {hero.meta}
+          {hero?.meta}
         </Text>
       </Stack>
 
@@ -31,7 +31,7 @@ function HomeHeroBannerCopy({ hero, titleSize, titleMaxW }) {
         maxW={{ base: "280px", md: "340px" }}
         mb="4"
       >
-        {hero.description}
+        {hero?.description}
       </Text>
 
       <Button
@@ -46,8 +46,9 @@ function HomeHeroBannerCopy({ hero, titleSize, titleMaxW }) {
         border="1px solid"
         borderColor="whiteAlpha.100"
       >
-        {hero.cta}
-        <ArrowRight size={16} strokeWidth={1.5} style={{ marginLeft: '6px' }} />
+        {hero?.cta}
+
+        <ArrowRight size={16} strokeWidth={1.5} style={{ marginLeft: "6px" }} />
       </Button>
     </>
   );

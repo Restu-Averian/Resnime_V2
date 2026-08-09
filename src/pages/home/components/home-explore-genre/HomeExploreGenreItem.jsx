@@ -7,10 +7,7 @@ const iconMap = {
   search: Search,
 };
 
-function HomeExploreGenreItem({ genre }) {
-  const Icon = iconMap[genre.icon];
-  const iconSize = useBreakpointValue({ base: 44, md: 32 });
-
+function GenreItemWrapper({ children, ...props }) {
   return (
     <Grid
       role="group"
@@ -39,7 +36,19 @@ function HomeExploreGenreItem({ genre }) {
         borderColor: "border.emphasized",
         bg: "bg.surface",
       }}
+      {...props}
     >
+      {children}
+    </Grid>
+  );
+}
+
+function HomeExploreGenreItem({ genre }) {
+  const Icon = iconMap[genre.icon];
+  const iconSize = useBreakpointValue({ base: 44, md: 32 });
+
+  return (
+    <GenreItemWrapper>
       <Box color={genre.color || "accent.primary"} transition="color 0.2s">
         <Icon size={iconSize} strokeWidth={1.25} />
       </Box>
@@ -83,7 +92,7 @@ function HomeExploreGenreItem({ genre }) {
           <ArrowRight size={20} strokeWidth={1.6} />
         </Box>
       </HStack>
-    </Grid>
+    </GenreItemWrapper>
   );
 }
 

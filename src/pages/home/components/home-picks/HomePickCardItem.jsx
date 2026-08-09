@@ -61,8 +61,11 @@ function HomePickCardItem({ pick, imageUrl, variant = "default" }) {
             color="var(--resnime-colors-rating-default)"
             strokeWidth={1.3}
           />
+
           <Text>{pick.rating}</Text>
+
           <Text color="accent.warmMuted">•</Text>
+
           <Text>{pick.type}</Text>
         </HStack>
       </Flex>
