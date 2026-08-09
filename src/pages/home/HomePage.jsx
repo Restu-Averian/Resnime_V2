@@ -1,9 +1,10 @@
-import { Box, Center, Container, Grid, Spinner, Stack, Text } from "@chakra-ui/react";
+import { Box, Container, Grid, Stack, Text } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import HomeExploreGenre from "./components/home-explore-genre";
 import HomeFinderAnime from "./components/HomeFinderAnime";
 import HomeHeroBanner from "./components/home-hero-banner";
 import HomePicksSection from "./components/home-picks";
+import HomeSkeleton from "./components/HomeSkeleton";
 import { finderPromo } from "./data/home.data";
 import { getHomeData } from "./services/home.service";
 
@@ -27,34 +28,34 @@ function HomePage() {
             </Box>
           )}
 
-          {isLoading && (
-            <Center py="10">
-              <Spinner size="xl" color="accent.primary" />
-            </Center>
+          {isLoading ? (
+            <HomeSkeleton />
+          ) : (
+            <>
+              {homeData?.featured && Object.keys(homeData.featured).length > 0 && (
+                <HomeHeroBanner hero={homeData.featured} />
+              )}
+
+              {homeData?.tonights_picks && homeData.tonights_picks.length > 0 && (
+                <HomePicksSection picks={homeData.tonights_picks} />
+              )}
+
+              <Grid
+                templateColumns={{
+                  base: "minmax(0, 1fr)",
+                  lg: "repeat(2, minmax(0, 1fr))",
+                }}
+                gap={{ base: "7", md: "4" }}
+                minW="0"
+              >
+                <HomeFinderAnime promo={finderPromo} />
+
+                {homeData?.genres && homeData.genres.length > 0 && (
+                  <HomeExploreGenre genres={homeData.genres} />
+                )}
+              </Grid>
+            </>
           )}
-
-          {!isLoading && homeData?.featured && Object.keys(homeData.featured).length > 0 && (
-            <HomeHeroBanner hero={homeData.featured} />
-          )}
-
-          {!isLoading && homeData?.tonights_picks && homeData.tonights_picks.length > 0 && (
-            <HomePicksSection picks={homeData.tonights_picks} />
-          )}
-
-          <Grid
-            templateColumns={{
-              base: "minmax(0, 1fr)",
-              lg: "repeat(2, minmax(0, 1fr))",
-            }}
-            gap={{ base: "7", md: "4" }}
-            minW="0"
-          >
-            <HomeFinderAnime promo={finderPromo} />
-
-            {!isLoading && homeData?.genres && homeData.genres.length > 0 && (
-              <HomeExploreGenre genres={homeData.genres} />
-            )}
-          </Grid>
         </Stack>
       </Container>
     </Box>
