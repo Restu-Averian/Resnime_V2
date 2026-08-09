@@ -1,7 +1,7 @@
 import { Star } from "lucide-react";
 import { Box, Flex, HStack, Image, Text } from "@chakra-ui/react";
 
-function HomePickCardItem({ pick, imageUrl, variant = "default" }) {
+function HomePickCardItem({ pick, variant = "desktop" }) {
   const isMobile = variant === "mobile";
 
   return (
@@ -21,7 +21,7 @@ function HomePickCardItem({ pick, imageUrl, variant = "default" }) {
         overflow="hidden"
       >
         <Image
-          src={imageUrl}
+          src={pick?.photo}
           alt=""
           w="100%"
           h="100%"
@@ -47,7 +47,7 @@ function HomePickCardItem({ pick, imageUrl, variant = "default" }) {
           noOfLines={2}
           lineHeight="1.3"
         >
-          {pick.title}
+          {pick?.title_en}
         </Text>
 
         <HStack

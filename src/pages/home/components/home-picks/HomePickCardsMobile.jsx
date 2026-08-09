@@ -1,7 +1,7 @@
 import { Box, HStack } from "@chakra-ui/react";
 import HomePickCardItem from "./HomePickCardItem";
 
-function HomePickCardsMobile({ picks, imageUrl }) {
+function HomePickCardsMobile({ picks }) {
   return (
     <Box
       overflowX="auto"
@@ -14,9 +14,8 @@ function HomePickCardsMobile({ picks, imageUrl }) {
       <HStack align="stretch" gap="4" w="max-content" pr="4">
         {picks.map((pick) => (
           <HomePickCardItem
-            key={pick.title}
+            key={pick.id}
             pick={pick}
-            imageUrl={imageUrl}
             variant="mobile"
           />
         ))}

@@ -85,7 +85,7 @@ function HomeExploreGenreItem({ genre }) {
           lineHeight="1.2"
           whiteSpace="nowrap"
         >
-          {genre.count} Anime
+          {genre.anime_count} Anime
         </Text>
 
         <Box display={{ base: "none", md: "block" }}>

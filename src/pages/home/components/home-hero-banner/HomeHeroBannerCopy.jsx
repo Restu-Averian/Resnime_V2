@@ -14,11 +14,11 @@ function HomeHeroBannerCopy({ hero, titleSize, titleMaxW }) {
           lineHeight="1.1"
           mb="1"
         >
-          {hero?.title}
+          {hero?.title_en}
         </Heading>
 
         <Text color="fg.muted" fontSize={{ base: "xs", md: "sm" }}>
-          {hero?.meta}
+          {hero?.type} {hero?.genres?.length > 0 ? `• ${hero?.genres.join(", ")}` : ""}
         </Text>
       </Stack>
 
@@ -46,7 +46,7 @@ function HomeHeroBannerCopy({ hero, titleSize, titleMaxW }) {
         border="1px solid"
         borderColor="whiteAlpha.100"
       >
-        {hero?.cta}
+        View Details
 
         <ArrowRight size={16} strokeWidth={1.5} style={{ marginLeft: "6px" }} />
       </Button>

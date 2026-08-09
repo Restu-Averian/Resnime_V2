@@ -10,16 +10,29 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import Layout from "./components/global/layout";
 import { Provider } from "./components/ui/provider.jsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./style/main.css";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      retry: 3,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Provider>
-      <BrowserRouter>
-        <Layout>
-          <App />
-        </Layout>
-      </BrowserRouter>
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <Provider>
+        <BrowserRouter>
+          <Layout>
+            <App />
+          </Layout>
+        </BrowserRouter>
+      </Provider>
+    </QueryClientProvider>
   </React.StrictMode>,
 );

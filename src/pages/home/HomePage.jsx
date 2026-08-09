@@ -1,24 +1,45 @@
-import { Box, Container, Grid, Stack } from "@chakra-ui/react";
+import { Box, Center, Container, Grid, Spinner, Stack, Text } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import HomeExploreGenre from "./components/home-explore-genre";
 import HomeFinderAnime from "./components/HomeFinderAnime";
 import HomeHeroBanner from "./components/home-hero-banner";
 import HomePicksSection from "./components/home-picks";
-import {
-  animeThumbnail,
-  finderPromo,
-  genres,
-  hero,
-  tonightPicks,
-} from "./data/home.data";
+import { finderPromo } from "./data/home.data";
+import { getHomeData } from "./services/home.service";
 
 function HomePage() {
+  const {
+    data: homeData,
+    isPending: isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["home"],
+    queryFn: getHomeData,
+  });
+
   return (
     <Box minH="100vh" bg="bg.canvas" pb={{ base: "28", md: "0" }}>
       <Container maxW="1600px" px={{ base: "4", md: "5", xl: "10" }} py="3">
         <Stack gap={{ base: "7", md: "4" }}>
-          <HomeHeroBanner hero={hero} />
+          {error && (
+            <Box p="4" bg="red.500" color="white" borderRadius="md">
+              <Text>Failed to load data: {error}</Text>
+            </Box>
+          )}
 
-          <HomePicksSection picks={tonightPicks} imageUrl={animeThumbnail} />
+          {isLoading && (
+            <Center py="10">
+              <Spinner size="xl" color="accent.primary" />
+            </Center>
+          )}
+
+          {!isLoading && homeData?.featured && Object.keys(homeData.featured).length > 0 && (
+            <HomeHeroBanner hero={homeData.featured} />
+          )}
+
+          {!isLoading && homeData?.tonights_picks && homeData.tonights_picks.length > 0 && (
+            <HomePicksSection picks={homeData.tonights_picks} />
+          )}
 
           <Grid
             templateColumns={{
@@ -30,7 +51,9 @@ function HomePage() {
           >
             <HomeFinderAnime promo={finderPromo} />
 
-            <HomeExploreGenre genres={genres} />
+            {!isLoading && homeData?.genres && homeData.genres.length > 0 && (
+              <HomeExploreGenre genres={homeData.genres} />
+            )}
           </Grid>
         </Stack>
       </Container>

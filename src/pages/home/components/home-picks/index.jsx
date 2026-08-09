@@ -11,7 +11,7 @@ import SectionHeader from "../global/SectionHeader";
 import HomePickCardsDesktop from "./HomePickCardsDesktop";
 import HomePickCardsMobile from "./HomePickCardsMobile";
 
-function HomePicksSection({ picks, imageUrl }) {
+function HomePicksSection({ picks }) {
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   return (
@@ -20,13 +20,13 @@ function HomePicksSection({ picks, imageUrl }) {
 
       {isMobile ? (
         <>
-          <HomePickCardsMobile picks={picks} imageUrl={imageUrl} />
+          <HomePickCardsMobile picks={picks} />
 
           <Stack align="center" gap="3" pt="2">
             <HStack gap="4">
               {picks.map((pick, index) => (
                 <Box
-                  key={pick.title}
+                  key={pick.id}
                   w="2"
                   h="2"
                   borderRadius="999px"
@@ -47,7 +47,7 @@ function HomePicksSection({ picks, imageUrl }) {
           </Stack>
         </>
       ) : (
-        <HomePickCardsDesktop picks={picks} imageUrl={imageUrl} />
+        <HomePickCardsDesktop picks={picks} />
       )}
     </Stack>
   );
