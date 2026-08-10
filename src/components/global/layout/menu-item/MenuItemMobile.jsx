@@ -1,6 +1,6 @@
 import { Flex, Link, Text } from "@chakra-ui/react";
 import { Home, List, Search } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link as RouterLink } from "react-router-dom";
 
 const mobileNavItems = [
   { label: "Home", href: "/", icon: Home },
@@ -38,7 +38,8 @@ function MenuItemMobile() {
         return (
           <Link
             key={item.label}
-            href={item.href}
+            as={RouterLink}
+            to={item.href}
             display="flex"
             flexDirection="column"
             alignItems="center"

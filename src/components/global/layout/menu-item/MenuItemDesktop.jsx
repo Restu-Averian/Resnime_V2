@@ -1,12 +1,14 @@
 import { HStack, Link } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
 
 function MenuItemDesktop({ items }) {
   return (
     <HStack as="nav" display={{ base: "none", md: "flex" }} gap="9">
       {items.map((item) => (
         <Link
+          as={RouterLink}
+          to={item.href}
           key={item.label}
-          href={item.href}
           position="relative"
           color={item.isActive ? "accent.primary" : "fg.heading"}
           fontFamily="heading"

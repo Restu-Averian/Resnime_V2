@@ -1,10 +1,7 @@
 import { Box, HStack } from "@chakra-ui/react";
-import { useState } from "react";
 import { tabs } from "../../../pages/anime-list/data/anime-list.data";
 
-function AnimeListTabs() {
-  const [activeTab, setActiveTab] = useState(tabs[0]);
-
+function AnimeListTabs({ activeTab, onTabChange }) {
   return (
     <HStack
       as="nav"
@@ -19,6 +16,7 @@ function AnimeListTabs() {
     >
       {tabs.map((tab) => {
         const isActive = activeTab === tab;
+        const isDisabled = tab !== "All Anime";
 
         return (
           <Box
@@ -33,10 +31,13 @@ function AnimeListTabs() {
             fontSize={{ base: "lg", md: "xl" }}
             fontWeight="600"
             whiteSpace="nowrap"
-            onClick={() => setActiveTab(tab)}
-            cursor="pointer"
-            _hover={{ color: "accent.hover" }}
-            _focusVisible={{ layerStyle: "focusRing" }}
+            onClick={() => !isDisabled && onTabChange(tab)}
+            cursor={isDisabled ? "not-allowed" : "pointer"}
+            opacity={isDisabled ? 0.5 : 1}
+            disabled={isDisabled}
+            aria-disabled={isDisabled}
+            _hover={{ color: isDisabled ? undefined : "accent.hover" }}
+            _focusVisible={isDisabled ? undefined : { layerStyle: "focusRing" }}
           >
             {tab}
           </Box>

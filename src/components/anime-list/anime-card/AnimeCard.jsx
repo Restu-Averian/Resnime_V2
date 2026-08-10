@@ -16,8 +16,8 @@ function AnimeCard({ anime }) {
     >
       <Box aspectRatio="1.55" overflow="hidden">
         <Image
-          src={anime.image}
-          alt=""
+          src={anime.photo}
+          alt={anime.title_en}
           w="full"
           h="full"
           objectFit="cover"
@@ -40,7 +40,7 @@ function AnimeCard({ anime }) {
           fontSize={{ base: "lg", xl: "xl" }}
           lineClamp="1"
         >
-          {anime.title}
+          {anime.title_en}
         </Text>
 
         <HStack gap="2" color="fg.muted" fontSize="sm">

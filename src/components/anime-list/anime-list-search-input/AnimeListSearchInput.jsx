@@ -2,16 +2,18 @@ import { Box, Input } from "@chakra-ui/react";
 import { Search } from "lucide-react";
 import { useState, useEffect } from "react";
 
-function AnimeListSearchInput() {
+function AnimeListSearchInput({ onSearchChange }) {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      // Debounced search logic goes here in the future
+      if (onSearchChange) {
+        onSearchChange(search.trim());
+      }
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [search]);
+  }, [search, onSearchChange]);
 
   return (
     <Box position="relative" w={{ base: "full", md: "360px" }}>
