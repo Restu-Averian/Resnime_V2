@@ -1,13 +1,16 @@
 import { Flex, Link, Text } from "@chakra-ui/react";
 import { Home, List, Search } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 const mobileNavItems = [
-  { label: "Home", href: "#", icon: Home, isActive: true },
-  { label: "Anime List", href: "#", icon: List },
+  { label: "Home", href: "/", icon: Home },
+  { label: "Anime List", href: "/anime", icon: List },
   { label: "Anime Finder", href: "#", icon: Search },
 ];
 
 function MenuItemMobile() {
+  const { pathname } = useLocation();
+
   return (
     <Flex
       as="nav"
@@ -29,6 +32,8 @@ function MenuItemMobile() {
     >
       {mobileNavItems.map((item) => {
         const Icon = item.icon;
+        const isActive =
+          item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
 
         return (
           <Link
@@ -39,8 +44,8 @@ function MenuItemMobile() {
             alignItems="center"
             justifyContent="center"
             gap="1"
-            color={item.isActive ? "accent.primary" : "fg.heading"}
-            bg={item.isActive ? "rgba(103, 198, 186, 0.12)" : "transparent"}
+            color={isActive ? "accent.primary" : "fg.heading"}
+            bg={isActive ? "accent.subtle" : "transparent"}
             fontFamily="heading"
             fontSize="md"
             lineHeight="1"

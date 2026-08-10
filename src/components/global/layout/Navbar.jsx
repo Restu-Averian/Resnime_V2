@@ -1,14 +1,22 @@
 import MenuItemDesktop from "./menu-item/MenuItemDesktop";
 import { Search } from "lucide-react";
 import { Box, Container, Flex, IconButton, Text } from "@chakra-ui/react";
+import { useLocation } from "react-router-dom";
 
 const navItems = [
-  { label: "Home", href: "#", isActive: true },
-  { label: "Anime List", href: "#" },
+  { label: "Home", href: "/" },
+  { label: "Anime List", href: "/anime" },
   { label: "Anime Finder", href: "#" },
 ];
 
 function Navbar() {
+  const { pathname } = useLocation();
+  const items = navItems.map((item) => ({
+    ...item,
+    isActive:
+      item.href === "/" ? pathname === "/" : pathname.startsWith(item.href),
+  }));
+
   return (
     <Box
       as="header"
@@ -28,7 +36,7 @@ function Navbar() {
         >
           <Text
             as="a"
-            href="#"
+            href="/"
             textStyle="display"
             fontSize={{ base: "4xl", md: "4xl" }}
             color="fg.heading"
@@ -37,7 +45,7 @@ function Navbar() {
             Resnime
           </Text>
 
-          <MenuItemDesktop items={navItems} />
+          <MenuItemDesktop items={items} />
 
           <IconButton
             aria-label="Search anime"
