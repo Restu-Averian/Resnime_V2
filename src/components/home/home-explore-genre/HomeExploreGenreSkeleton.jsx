@@ -1,6 +1,6 @@
 import { Flex, Skeleton, Stack } from "@chakra-ui/react";
 import { Feather } from "lucide-react";
-import SectionHeader from "../global/SectionHeader";
+import HomeSectionHeader from "../HomeSectionHeader";
 
 function HomeExploreGenreSkeleton() {
   return (
@@ -11,7 +11,7 @@ function HomeExploreGenreSkeleton() {
       minW="0"
       p={{ base: "0", md: "7" }}
     >
-      <SectionHeader icon={Feather} title="Explore by Genre" />
+      <HomeSectionHeader icon={Feather} title="Explore by Genre" />
       <Stack gap="0" w="full">
         {[1, 2, 3].map((i) => (
           <Flex

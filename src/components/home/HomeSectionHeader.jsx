@@ -1,6 +1,6 @@
 import { HStack, Heading } from "@chakra-ui/react";
 
-function SectionHeader({ icon: Icon, title }) {
+function HomeSectionHeader({ icon: Icon, title }) {
   return (
     <HStack gap="3" align="center">
       {Icon ? (
@@ -18,4 +18,4 @@ function SectionHeader({ icon: Icon, title }) {
   );
 }
 
-export default SectionHeader;
+export default HomeSectionHeader;

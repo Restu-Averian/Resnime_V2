@@ -1,13 +1,13 @@
 import { Box, Flex, HStack, SimpleGrid, Skeleton, Stack, useBreakpointValue } from "@chakra-ui/react";
 import { Sparkles, Star } from "lucide-react";
-import SectionHeader from "../global/SectionHeader";
+import HomeSectionHeader from "../HomeSectionHeader";
 
 function HomePicksSkeleton() {
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   return (
     <Stack as="section" gap="3">
-      <SectionHeader icon={Sparkles} title="Tonight’s Picks" />
+      <HomeSectionHeader icon={Sparkles} title="Tonight’s Picks" />
 
       {isMobile ? (
         <HStack gap="4" overflowX="hidden" pb="2">

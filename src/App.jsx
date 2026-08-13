@@ -1,8 +1,8 @@
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
-import AnimeListPage from "./pages/anime-list/AnimeListPage";
-import HomePage from "./pages/home/HomePage";
+import AnimeListPage from "./pages/AnimeListPage";
+import HomePage from "./pages/HomePage";
 
 const ThemePreview = lazy(() => import("./dev/ThemePreview"));
 

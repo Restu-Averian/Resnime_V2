@@ -1,19 +1,19 @@
 import { useState, useCallback } from "react";
 import { Box, Container, Flex, Stack, Text, Center } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import AnimeListHeader from "../../components/anime-list/AnimeListHeader";
-import AnimeListSearchInput from "../../components/anime-list/AnimeListSearchInput";
-import AnimeListFilters from "../../components/anime-list/anime-list-filters/AnimeListFilters";
-import AnimeListDatas from "../../components/anime-list/anime-list-datas";
-import AnimeListDatasSkeleton from "../../components/anime-list/anime-list-datas/AnimeListDatasSkeleton";
-import AnimeListPagination from "../../components/anime-list/anime-list-pagination/AnimeListPagination";
-import AnimeListPaginationSkeleton from "../../components/anime-list/anime-list-pagination/AnimeListPaginationSkeleton";
+import AnimeListHeader from "../components/anime-list/AnimeListHeader";
+import AnimeListSearchInput from "../components/anime-list/AnimeListSearchInput";
+import AnimeListFilters from "../components/anime-list/anime-list-filters/AnimeListFilters";
+import AnimeListDatas from "../components/anime-list/anime-list-datas";
+import AnimeListDatasSkeleton from "../components/anime-list/anime-list-datas/AnimeListDatasSkeleton";
+import AnimeListPagination from "../components/anime-list/anime-list-pagination/AnimeListPagination";
+import AnimeListPaginationSkeleton from "../components/anime-list/anime-list-pagination/AnimeListPaginationSkeleton";
 import {
   DEFAULT_FILTERS,
   ORDER_VALUE_MAP,
   LIMIT,
-} from "../../constants/anime-list";
-import { getAnimeList } from "../../services/anime-list.service";
+} from "../constants/anime-list";
+import { getAnimeList } from "../services/anime-list.service";
 
 function AnimeListPage() {
   const [search, setSearch] = useState("");

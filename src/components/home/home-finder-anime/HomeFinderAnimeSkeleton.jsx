@@ -1,6 +1,6 @@
 import { Box, Flex, Skeleton, Stack } from "@chakra-ui/react";
 import { ScanSearch } from "lucide-react";
-import SectionHeader from "./global/SectionHeader";
+import HomeSectionHeader from "../HomeSectionHeader";
 
 function HomeFinderAnimeSkeleton() {
   return (
@@ -20,7 +20,7 @@ function HomeFinderAnimeSkeleton() {
       </Box>
       <Stack gap="5" w="full" maxW="430px">
         <Stack gap="3">
-          <SectionHeader icon={ScanSearch} title="Can't remember the anime?" iconSize={24} />
+          <HomeSectionHeader icon={ScanSearch} title="Can't remember the anime?" iconSize={24} />
           <Skeleton h="16px" w="100%" borderRadius="sm" />
           <Skeleton h="16px" w="70%" borderRadius="sm" />
         </Stack>

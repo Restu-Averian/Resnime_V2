@@ -1,12 +1,12 @@
 import { Box, Container, Grid, Stack, Text } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import HomeExploreGenre from "./components/home-explore-genre";
-import HomeFinderAnime from "./components/HomeFinderAnime";
-import HomeHeroBanner from "./components/home-hero-banner";
-import HomePicksSection from "./components/home-picks";
-import HomeSkeleton from "./components/HomeSkeleton";
-import { finderPromo } from "./data/home.data";
-import { getHomeData } from "../../services/home.service";
+import HomeExploreGenre from "../components/home/home-explore-genre";
+import HomeFinderAnime from "../components/home/home-finder-anime/HomeFinderAnime";
+import HomeHeroBanner from "../components/home/home-hero-banner";
+import HomePicksSection from "../components/home/home-picks";
+import HomeSkeleton from "../components/home/HomeSkeleton";
+import { FINDER_PROMO } from "../constants/home";
+import { getHomeData } from "../services/home.service";
 
 function HomePage() {
   const {
@@ -48,7 +48,7 @@ function HomePage() {
                 gap={{ base: "7", md: "4" }}
                 minW="0"
               >
-                <HomeFinderAnime promo={finderPromo} />
+                <HomeFinderAnime promo={FINDER_PROMO} />
 
                 {homeData?.genres && homeData.genres.length > 0 && (
                   <HomeExploreGenre genres={homeData.genres} />

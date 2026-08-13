@@ -1,13 +1,13 @@
 import { Feather } from "lucide-react";
 import { Box, HStack, Stack } from "@chakra-ui/react";
 import HomeExploreGenreItem from "./HomeExploreGenreItem";
-import SectionHeader from "../global/SectionHeader";
-import { genreMetadata } from "../../data/home.data";
+import HomeSectionHeader from "../HomeSectionHeader";
+import { GENRE_METADATA } from "../../../constants/home";
 
 function HomeExploreGenre({ genres }) {
   const enhancedGenres = genres.map(g => ({
     ...g,
-    ...(genreMetadata[g.name] || {
+    ...(GENRE_METADATA[g.name] || {
       description: "Explore this genre and find your next favorite anime.",
       icon: "search",
       color: "fg.muted"
@@ -21,7 +21,7 @@ function HomeExploreGenre({ genres }) {
       minW="0"
       p={{ base: "0", md: "7" }}
     >
-      <SectionHeader icon={Feather} title="Explore by Genre" />
+      <HomeSectionHeader icon={Feather} title="Explore by Genre" />
 
       <Box
         w="full"

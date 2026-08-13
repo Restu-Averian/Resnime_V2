@@ -1,17 +1,17 @@
-export const navItems = [
+export const NAV_ITEMS = [
   { label: "Home", href: "#", isActive: true },
   { label: "Anime List", href: "#" },
   { label: "Anime Finder", href: "#" },
 ];
 
-export const finderPromo = {
+export const FINDER_PROMO = {
   title: "Can’t remember the anime?",
   description:
     "Upload a screenshot from an anime episode and let Resnime help identify it.",
   cta: "Find the anime",
 };
 
-export const genreMetadata = {
+export const GENRE_METADATA = {
   Action: {
     description: "High-stakes battles and thrilling sequences.",
     icon: "swords",

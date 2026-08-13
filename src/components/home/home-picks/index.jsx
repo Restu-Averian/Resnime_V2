@@ -7,7 +7,7 @@ import {
   Text,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import SectionHeader from "../global/SectionHeader";
+import HomeSectionHeader from "../HomeSectionHeader";
 import HomePickCardsDesktop from "./HomePickCardsDesktop";
 import HomePickCardsMobile from "./HomePickCardsMobile";
 
@@ -16,7 +16,7 @@ function HomePicksSection({ picks }) {
 
   return (
     <Stack as="section" gap="3">
-      <SectionHeader icon={Sparkles} title="Tonight’s Picks" />
+      <HomeSectionHeader icon={Sparkles} title="Tonight’s Picks" />
 
       {isMobile ? (
         <>
