@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/react";
 import AnimeDetailsEpisodesThumbnail from "./AnimeDetailsEpisodesThumbnail";
 import AnimeDetailsEpisodesInfo from "./AnimeDetailsEpisodesInfo";
 
-function AnimeDetailsEpisodesCard({ episode }) {
+function AnimeDetailsEpisodesItem({ episode }) {
   return (
     <Box
       as="article"
@@ -18,4 +18,4 @@ function AnimeDetailsEpisodesCard({ episode }) {
   );
 }
 
-export default AnimeDetailsEpisodesCard;
+export default AnimeDetailsEpisodesItem;

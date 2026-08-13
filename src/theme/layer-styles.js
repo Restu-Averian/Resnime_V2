@@ -23,6 +23,7 @@ export const layerStyles = {
       borderColor: "border.default",
       borderRadius: "{radii.control}",
       transition: "all 0.2s",
+      cursor: "pointer",
       _hover: {
         bg: "bg.interactive",
         transform: "translateY(-2px)",

@@ -1,6 +1,6 @@
 import { Box, Flex, Stack, Text } from "@chakra-ui/react";
 import { useRef } from "react";
-import AnimeDetailsEpisodesCard from "./AnimeDetailsEpisodesCard";
+import AnimeDetailsEpisodesItem from "./AnimeDetailsEpisodesItem";
 import AnimeDetailsHeaderSection from "../AnimeDetailsHeaderSection";
 
 function AnimeDetailsEpisodes({ episodes, pagination, isError }) {
@@ -41,14 +41,18 @@ function AnimeDetailsEpisodes({ episodes, pagination, isError }) {
             ref={scrollerRef}
             gap="4"
             overflowX="auto"
-            pb="2"
+            pt="4"
+            pb="4"
+            px="4"
+            mx="-4"
+            mt="-4"
             scrollSnapType="x proximity"
             css={{
               scrollbarWidth: "thin",
             }}
           >
             {episodes.map((episode) => (
-              <AnimeDetailsEpisodesCard
+              <AnimeDetailsEpisodesItem
                 key={episode.episode_number}
                 episode={episode}
               />
