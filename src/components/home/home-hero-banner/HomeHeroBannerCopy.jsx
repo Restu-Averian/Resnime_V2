@@ -1,7 +1,10 @@
 import { ArrowRight } from "lucide-react";
 import { Box, Button, Heading, Stack, Text } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 function HomeHeroBannerCopy({ hero, titleSize }) {
+  const navigate = useNavigate();
+
   return (
     <>
       <Stack gap="1">
@@ -51,6 +54,7 @@ function HomeHeroBannerCopy({ hero, titleSize }) {
         fontSize={{ base: "sm", md: "md" }}
         border="1px solid"
         borderColor="whiteAlpha.100"
+        onClick={() => navigate(`/anime/${hero?.id}`)}
       >
         View Details
         <ArrowRight size={16} strokeWidth={1.5} style={{ marginLeft: "6px" }} />
