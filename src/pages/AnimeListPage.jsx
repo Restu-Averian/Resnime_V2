@@ -7,7 +7,7 @@ import AnimeListFilters from "../components/anime-list/anime-list-filters/AnimeL
 import AnimeListFiltersSkeleton from "../components/skeletons/anime-list/AnimeListFiltersSkeleton";
 import AnimeListDatas from "../components/anime-list/anime-list-datas";
 import AnimeListDatasSkeleton from "../components/skeletons/anime-list/AnimeListDatasSkeleton";
-import AnimeListPagination from "../components/anime-list/anime-list-pagination/AnimeListPagination";
+import AnimeListPagination from "../components/anime-list/AnimeListPagination";
 import AnimeListPaginationSkeleton from "../components/skeletons/anime-list/AnimeListPaginationSkeleton";
 import {
   DEFAULT_FILTERS,

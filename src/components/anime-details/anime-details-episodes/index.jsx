@@ -1,7 +1,7 @@
-import { Box, Flex, HStack, IconButton, Stack, Text } from "@chakra-ui/react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Box, Flex, Stack, Text } from "@chakra-ui/react";
 import { useRef } from "react";
-import AnimeDetailsEpisodeCard from "./AnimeDetailsEpisodeCard";
+import AnimeDetailsEpisodesCard from "./AnimeDetailsEpisodesCard";
+import AnimeDetailsHeaderSection from "../AnimeDetailsHeaderSection";
 
 function AnimeDetailsEpisodes({ episodes, pagination, isError }) {
   const scrollerRef = useRef(null);
@@ -17,38 +17,16 @@ function AnimeDetailsEpisodes({ episodes, pagination, isError }) {
   return (
     <Box as="section" id="anime-details-episodes" scrollMarginTop="96px">
       <Stack gap="4">
-        <Flex align="center" justify="space-between" gap="4">
-          <HStack gap="3">
-            <Text as="h2" textStyle="sectionTitle" color="fg.heading">
-              Episodes
-            </Text>
+        <AnimeDetailsHeaderSection
+          title="Episodes"
+          suffixTitle={
             <Text color="fg.muted" fontSize="sm">
               {total} episodes
             </Text>
-          </HStack>
-
-          {episodes.length > 0 && (
-            <HStack gap="2" display={{ base: "none", md: "flex" }}>
-              <IconButton
-                aria-label="Scroll episodes left"
-                variant="outline"
-                size="sm"
-                onClick={() => scrollBy(-1)}
-              >
-                <ChevronLeft size={17} />
-              </IconButton>
-
-              <IconButton
-                aria-label="Scroll episodes right"
-                variant="outline"
-                size="sm"
-                onClick={() => scrollBy(1)}
-              >
-                <ChevronRight size={17} />
-              </IconButton>
-            </HStack>
-          )}
-        </Flex>
+          }
+          showArrows={episodes.length > 0}
+          onScroll={scrollBy}
+        />
 
         {isError ? (
           <Box layerStyle="panel" p="5">
@@ -70,7 +48,7 @@ function AnimeDetailsEpisodes({ episodes, pagination, isError }) {
             }}
           >
             {episodes.map((episode) => (
-              <AnimeDetailsEpisodeCard
+              <AnimeDetailsEpisodesCard
                 key={episode.episode_number}
                 episode={episode}
               />

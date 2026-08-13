@@ -1,4 +1,5 @@
 import { Box, Flex, Stack, Text } from "@chakra-ui/react";
+import AnimeDetailsHeaderSection from "./AnimeDetailsHeaderSection";
 import {
   ANIME_DETAILS_DATE_FORMATTER,
   ANIME_DETAILS_STATUS_LABELS,
@@ -24,6 +25,7 @@ function AnimeDetailsOverview({ anime }) {
 
     return `${fromLabel} - ${toLabel}`;
   };
+
   const rows = {
     Type: ANIME_DETAILS_TYPE_LABELS[anime.type] ?? anime.type ?? "—",
     Status: ANIME_DETAILS_STATUS_LABELS[anime.status] ?? anime.status ?? "—",
@@ -40,9 +42,7 @@ function AnimeDetailsOverview({ anime }) {
   return (
     <Box as="aside" layerStyle="panelElevated" p={{ base: "5", md: "6" }}>
       <Stack gap="5">
-        <Text as="h2" textStyle="sectionTitle" color="fg.heading">
-          Overview
-        </Text>
+        <AnimeDetailsHeaderSection title="Overview" />
 
         <Stack gap="3.5">
           {Object.keys(rows).map((label) => (

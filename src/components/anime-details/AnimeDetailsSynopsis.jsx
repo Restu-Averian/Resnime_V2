@@ -1,12 +1,12 @@
 import { Box, Stack, Text } from "@chakra-ui/react";
+import AnimeDetailsHeaderSection from "./AnimeDetailsHeaderSection";
 
 function AnimeDetailsSynopsis({ synopsis }) {
   return (
     <Box as="section" layerStyle="panel" p={{ base: "5", md: "7" }}>
       <Stack gap="4">
-        <Text as="h2" textStyle="sectionTitle" color="fg.heading">
-          Synopsis
-        </Text>
+        <AnimeDetailsHeaderSection title="Synopsis" />
+
         <Text
           color="fg.default"
           lineHeight="1.9"

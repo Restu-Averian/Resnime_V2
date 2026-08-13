@@ -1,7 +1,7 @@
-import { Box, Flex, HStack, IconButton, Stack, Text } from "@chakra-ui/react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Box, Flex, Stack, Text } from "@chakra-ui/react";
 import { useRef } from "react";
 import AnimeDetailsCharacterItem from "./AnimeDetailsCharacterItem";
+import AnimeDetailsHeaderSection from "../AnimeDetailsHeaderSection";
 
 function AnimeDetailsCharacters({ characters, isError }) {
   const scrollerRef = useRef(null);
@@ -16,33 +16,11 @@ function AnimeDetailsCharacters({ characters, isError }) {
   return (
     <Box as="section">
       <Stack gap="4">
-        <Flex align="center" justify="space-between" gap="4">
-          <Text as="h2" textStyle="sectionTitle" color="fg.heading">
-            Characters & Voice Cast
-          </Text>
-
-          {characters.length > 0 && (
-            <HStack gap="2" display={{ base: "none", md: "flex" }}>
-              <IconButton
-                aria-label="Scroll characters left"
-                variant="outline"
-                size="sm"
-                onClick={() => scrollBy(-1)}
-              >
-                <ChevronLeft size={17} />
-              </IconButton>
-
-              <IconButton
-                aria-label="Scroll characters right"
-                variant="outline"
-                size="sm"
-                onClick={() => scrollBy(1)}
-              >
-                <ChevronRight size={17} />
-              </IconButton>
-            </HStack>
-          )}
-        </Flex>
+        <AnimeDetailsHeaderSection
+          title="Characters & Voice Cast"
+          showArrows={characters.length > 0}
+          onScroll={scrollBy}
+        />
 
         {isError ? (
           <Box layerStyle="panel" p="5">

@@ -10,8 +10,8 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useRef } from "react";
 import { Link as RouterLink, useParams } from "react-router-dom";
-import AnimeDetailsCharacters from "../components/anime-details/AnimeDetailsCharacters";
-import AnimeDetailsEpisodes from "../components/anime-details/AnimeDetailsEpisodes";
+import AnimeDetailsCharacters from "../components/anime-details/anime-details-character";
+import AnimeDetailsEpisodes from "../components/anime-details/anime-details-episodes";
 import AnimeDetailsHero from "../components/anime-details/anime-details-hero";
 import AnimeDetailsOverview from "../components/anime-details/AnimeDetailsOverview";
 import AnimeDetailsSynopsis from "../components/anime-details/AnimeDetailsSynopsis";
@@ -67,6 +67,7 @@ function AnimeDetailsPage() {
           <Text as="h1" textStyle="sectionTitle" color="fg.heading">
             Anime not found
           </Text>
+
           <Text color="fg.muted">MAL ID must be a positive number.</Text>
           <Button as={RouterLink} to="/anime">
             Back to Anime List

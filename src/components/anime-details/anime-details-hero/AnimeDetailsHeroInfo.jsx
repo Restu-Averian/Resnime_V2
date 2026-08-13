@@ -7,9 +7,12 @@ import {
 
 function AnimeDetailsHeroInfo({ anime }) {
   const typeLabel = ANIME_DETAILS_TYPE_LABELS[anime.type] ?? anime.type ?? "—";
+
   const statusLabel =
     ANIME_DETAILS_STATUS_LABELS[anime.status] ?? anime.status ?? "—";
+
   const seasonYear = [anime.season, anime.year].filter(Boolean).join(" ");
+
   const episodeLabel = `${anime.episodes_count ?? 0} Episodes`;
 
   return (
