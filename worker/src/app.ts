@@ -13,7 +13,14 @@ const app = new Hono<{ Bindings: Bindings }>();
 app.use(
 	'*',
 	cors({
-		origin: ['http://localhost:5173', 'https://resnime.my.id', 'https://www.resnime.my.id'],
+		origin: [
+			'http://localhost:5173',
+			'http://127.0.0.1:5173',
+			'http://localhost:5174',
+			'http://127.0.0.1:5174',
+			'https://resnime.my.id',
+			'https://www.resnime.my.id',
+		],
 		allowMethods: ['GET', 'POST', 'OPTIONS'],
 		allowHeaders: ['Content-Type', 'Authorization'],
 		maxAge: 86400,

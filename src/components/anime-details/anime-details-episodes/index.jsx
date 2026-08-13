@@ -3,7 +3,7 @@ import { useRef } from "react";
 import AnimeDetailsEpisodesItem from "./AnimeDetailsEpisodesItem";
 import AnimeDetailsHeaderSection from "../AnimeDetailsHeaderSection";
 
-function AnimeDetailsEpisodes({ episodes, pagination, isError }) {
+function AnimeDetailsEpisodes({ malId, episodes, pagination, isError }) {
   const scrollerRef = useRef(null);
   const total = pagination?.total ?? episodes.length;
 
@@ -54,6 +54,7 @@ function AnimeDetailsEpisodes({ episodes, pagination, isError }) {
             {episodes.map((episode) => (
               <AnimeDetailsEpisodesItem
                 key={episode.episode_number}
+                malId={malId}
                 episode={episode}
               />
             ))}

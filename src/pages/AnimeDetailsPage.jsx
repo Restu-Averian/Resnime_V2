@@ -126,6 +126,7 @@ function AnimeDetailsPage() {
 
           <Box ref={episodesRef}>
             <AnimeDetailsEpisodes
+              malId={malId}
               episodes={episodes}
               pagination={episodesQuery.data?.pagination}
               isError={episodesQuery.isError}

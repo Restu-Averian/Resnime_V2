@@ -39,7 +39,10 @@ function AnimeDetailsHero({ anime, onJumpToEpisodes }) {
 
           <AnimeDetailsHeroGenre anime={anime} />
 
-          <AnimeDetailsHeroAction onJumpToEpisodes={onJumpToEpisodes} />
+          <AnimeDetailsHeroAction
+            anime={anime}
+            onJumpToEpisodes={onJumpToEpisodes}
+          />
         </Stack>
       </Flex>
     </Box>
