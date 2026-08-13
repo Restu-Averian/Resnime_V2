@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import AnimeListHeader from "../components/anime-list/AnimeListHeader";
 import AnimeListSearchInput from "../components/anime-list/AnimeListSearchInput";
 import AnimeListFilters from "../components/anime-list/anime-list-filters/AnimeListFilters";
+import AnimeListFiltersSkeleton from "../components/skeletons/anime-list/AnimeListFiltersSkeleton";
 import AnimeListDatas from "../components/anime-list/anime-list-datas";
 import AnimeListDatasSkeleton from "../components/skeletons/anime-list/AnimeListDatasSkeleton";
 import AnimeListPagination from "../components/anime-list/anime-list-pagination/AnimeListPagination";
@@ -53,7 +54,7 @@ function AnimeListPage() {
 
   const {
     data: animeData,
-    isPending,
+    isPending: isLoadingAnimeList,
     isError,
     error,
   } = useQuery({
@@ -88,12 +89,16 @@ function AnimeListPage() {
               <AnimeListSearchInput onSearchChange={handleSearchChange} />
             </Flex>
 
-            <AnimeListFilters
-              filters={filters}
-              onFilterChange={updateFilter}
-              onRemoveFilter={removeFilter}
-              onClearFilters={clearFilters}
-            />
+            {isLoadingAnimeList ? (
+              <AnimeListFiltersSkeleton />
+            ) : (
+              <AnimeListFilters
+                filters={filters}
+                onFilterChange={updateFilter}
+                onRemoveFilter={removeFilter}
+                onClearFilters={clearFilters}
+              />
+            )}
           </Stack>
 
           {isError ? (
@@ -103,7 +108,7 @@ function AnimeListPage() {
                   "Failed to load anime."}
               </Text>
             </Center>
-          ) : isPending ? (
+          ) : isLoadingAnimeList ? (
             <>
               <AnimeListDatasSkeleton />
 
