@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 import AnimeListPage from "./pages/AnimeListPage";
+import AnimeDetailsPage from "./pages/AnimeDetailsPage";
 import HomePage from "./pages/HomePage";
 
 const ThemePreview = lazy(() => import("./dev/ThemePreview"));
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/anime" element={<AnimeListPage />} />
+        <Route path="/anime/:mal_id" element={<AnimeDetailsPage />} />
         <Route path="/dev/theme" element={<ThemePreview />} />
       </Routes>
     </Suspense>

@@ -1,8 +1,10 @@
 import { Star } from "lucide-react";
 import { Box, Flex, HStack, Image, Text } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 function HomePickCardItem({ pick, variant = "desktop" }) {
   const isMobile = variant === "mobile";
+  const navigate = useNavigate();
 
   return (
     <Flex
@@ -14,6 +16,7 @@ function HomePickCardItem({ pick, variant = "desktop" }) {
       align="stretch"
       boxShadow="media"
       cursor="pointer"
+      onClick={() => navigate(`/anime/${pick?.id}`)}
       transition="transform 0.2s ease, box-shadow 0.2s ease"
       _hover={{
         transform: "translateY(-2px)",

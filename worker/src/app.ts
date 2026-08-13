@@ -6,6 +6,7 @@ import healthRouter from './routes/health';
 import readyRouter from './routes/ready';
 import homeRouter from './routes/home';
 import animeListRouter from './routes/anime-list';
+import animeDetailsRouter from './routes/anime-details';
 
 const app = new Hono<{ Bindings: Bindings }>();
 
@@ -35,6 +36,7 @@ app.route('/ready', readyRouter);
 
 app.route('/api/home', homeRouter);
 app.route('/api/anime', animeListRouter);
+app.route('/api/anime/:mal_id', animeDetailsRouter);
 
 app.notFound((c) => {
 	return c.json(errorResponse('NOT_FOUND', 'Route not found'), 404);

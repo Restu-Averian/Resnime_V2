@@ -19,8 +19,7 @@ readyRouter.get('/', async (c) => {
 
 	try {
 		const dbClient = createDatabaseClient(c.env);
-		const result = await dbClient?.execute('SELECT title_en FROM anime_info LIMIT 5');
-		// await checkDatabaseReadiness(dbClient);
+		await checkDatabaseReadiness(dbClient);
 
 		return c.json(
 			successResponse({
@@ -28,7 +27,6 @@ readyRouter.get('/', async (c) => {
 				status: 'ready',
 				database: 'connected',
 				timestamp: new Date().toISOString(),
-				result,
 			}),
 		);
 	} catch (err) {

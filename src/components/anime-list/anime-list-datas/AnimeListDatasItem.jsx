@@ -1,10 +1,12 @@
 import { Box, Flex, HStack, Image, Text } from "@chakra-ui/react";
 import { Star } from "lucide-react";
+import { Link as RouterLink } from "react-router-dom";
 
 function AnimeListDatasItem({ anime }) {
   return (
     <Box
-      as="button"
+      as={RouterLink}
+      to={`/anime/${anime.id}`}
       display="block"
       w="full"
       textAlign="left"
