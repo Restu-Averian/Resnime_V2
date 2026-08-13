@@ -14,6 +14,7 @@ const orderByMap: Record<string, string> = {
 
 animeListRouter.use('*', async (c, next) => {
 	await next();
+
 	c.header('Cache-Control', 'no-store');
 });
 
@@ -59,7 +60,7 @@ animeListRouter.get('/', async (c) => {
 	const args: any[] = [];
 
 	if (search) {
-		conditions.push(`(title_en COLLATE NOCASE LIKE ? OR title_romaji COLLATE NOCASE LIKE ? OR title_native COLLATE NOCASE LIKE ?)`);
+		conditions.push(`(title_en LIKE ? OR title_romaji LIKE ? OR title_native LIKE ?)`);
 		const searchPattern = `%${search}%`;
 		args.push(searchPattern, searchPattern, searchPattern);
 	}
@@ -70,17 +71,17 @@ animeListRouter.get('/', async (c) => {
 	}
 
 	if (type) {
-		conditions.push(`type = ?`);
+		conditions.push(`type = ? COLLATE NOCASE`);
 		args.push(type);
 	}
 
 	if (status) {
-		conditions.push(`status = ?`);
+		conditions.push(`status = ? COLLATE NOCASE`);
 		args.push(status);
 	}
 
 	if (season) {
-		conditions.push(`season = ?`);
+		conditions.push(`season = ? COLLATE NOCASE`);
 		args.push(season);
 	}
 

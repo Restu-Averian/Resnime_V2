@@ -1,10 +1,9 @@
 import { Button, HStack, Text } from "@chakra-ui/react";
 import { X } from "lucide-react";
+import { CHIP_FILTERS } from "../../../constants/anime-list";
 
-const chipFilters = ["genre", "type", "status", "season"];
-
-function ActiveFilters({ filters, onRemove, onClear }) {
-  const activeFilters = chipFilters.filter((key) => filters[key] !== "Any");
+function AnimeListFiltersItems({ filters, onRemove, onClear }) {
+  const activeFilters = CHIP_FILTERS.filter((key) => filters[key] !== "Any");
 
   if (activeFilters.length === 0) {
     return null;
@@ -23,6 +22,7 @@ function ActiveFilters({ filters, onRemove, onClear }) {
           onClick={() => onRemove(key)}
         >
           {filters[key]}
+
           <X size={14} strokeWidth={1.6} />
         </Button>
       ))}
@@ -34,4 +34,4 @@ function ActiveFilters({ filters, onRemove, onClear }) {
   );
 }
 
-export default ActiveFilters;
+export default AnimeListFiltersItems;

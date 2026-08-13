@@ -1,27 +1,26 @@
 import { Box, Flex, HStack, Image, Text } from "@chakra-ui/react";
 import { Star } from "lucide-react";
 
-function AnimeCard({ anime }) {
+function AnimeListDatasItem({ anime }) {
   return (
     <Box
-      as="article"
+      as="button"
+      display="block"
+      w="full"
+      textAlign="left"
       layerStyle="interactiveSurface"
       overflow="hidden"
       boxShadow="media"
-      transition="transform 0.2s ease, border-color 0.2s ease"
-      _hover={{
-        transform: "translateY(-2px)",
-        borderColor: "border.interactive",
-      }}
+      cursor="pointer"
     >
-      <Box aspectRatio="1.55" overflow="hidden">
+      <Box aspectRatio="1.2" overflow="hidden">
         <Image
           src={anime.photo}
           alt={anime.title_en}
           w="full"
           h="full"
           objectFit="cover"
-          objectPosition="center top"
+          objectPosition="center"
           filter="saturate(0.9) contrast(1.05)"
         />
       </Box>
@@ -38,7 +37,7 @@ function AnimeCard({ anime }) {
           textStyle="cardTitle"
           color="fg.heading"
           fontSize={{ base: "lg", xl: "xl" }}
-          lineClamp="1"
+          lineClamp="2"
         >
           {anime.title_en}
         </Text>
@@ -51,7 +50,9 @@ function AnimeCard({ anime }) {
             strokeWidth={1.4}
           />
           <Text>{anime.rating.toFixed(1)}</Text>
+
           <Text color="accent.warmMuted">•</Text>
+
           <Text>{anime.type}</Text>
         </HStack>
       </Flex>
@@ -59,4 +60,4 @@ function AnimeCard({ anime }) {
   );
 }
 
-export default AnimeCard;
+export default AnimeListDatasItem;

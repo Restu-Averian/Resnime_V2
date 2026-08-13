@@ -1,64 +1,52 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { Box, Container, Flex, Stack, Text, Center } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
+import AnimeListHeader from "../../components/anime-list/AnimeListHeader";
+import AnimeListSearchInput from "../../components/anime-list/AnimeListSearchInput";
+import AnimeListFilters from "../../components/anime-list/anime-list-filters/AnimeListFilters";
+import AnimeListDatas from "../../components/anime-list/anime-list-datas";
+import AnimeListDatasSkeleton from "../../components/anime-list/anime-list-datas/AnimeListDatasSkeleton";
+import AnimeListPagination from "../../components/anime-list/anime-list-pagination/AnimeListPagination";
+import AnimeListPaginationSkeleton from "../../components/anime-list/anime-list-pagination/AnimeListPaginationSkeleton";
 import {
-  Box,
-  Container,
-  Flex,
-  Stack,
-  Text,
-  Center,
-  Spinner,
-} from "@chakra-ui/react";
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import AnimeListHeader from "../../components/anime-list/anime-list-header/AnimeListHeader";
-import AnimeListSearchInput from "../../components/anime-list/anime-list-search-input/AnimeListSearchInput";
-import AnimeFilters from "../../components/anime-list/anime-filter/AnimeFilters";
-import AnimeGrid from "../../components/anime-list/anime-grid/AnimeGrid";
-import AnimeListTabs from "../../components/anime-list/anime-list-tabs/AnimeListTabs";
-import AnimePagination from "../../components/anime-list/anime-pagination/AnimePagination";
-import { defaultFilters, tabs, orderValueMap } from "./data/anime-list.data";
+  DEFAULT_FILTERS,
+  ORDER_VALUE_MAP,
+  LIMIT,
+} from "../../constants/anime-list";
 import { getAnimeList } from "./services/anime-list.service";
 
-const LIMIT = 20;
-
 function AnimeListPage() {
-  const [activeTab, setActiveTab] = useState(tabs[0]);
   const [search, setSearch] = useState("");
-  const [filters, setFilters] = useState(defaultFilters);
+  const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const [page, setPage] = useState(1);
 
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-    setPage(1);
-  };
-
-  const handleSearchChange = (value) => {
+  const handleSearchChange = useCallback((value) => {
     setSearch(value);
     setPage(1);
-  };
+  }, []);
 
-  const updateFilter = (name, value) => {
+  const updateFilter = useCallback((name, value) => {
     setFilters((current) => ({ ...current, [name]: value }));
     setPage(1);
-  };
+  }, []);
 
-  const removeFilter = (name) => {
+  const removeFilter = useCallback((name) => {
     setFilters((current) => ({ ...current, [name]: "Any" }));
     setPage(1);
-  };
+  }, []);
 
-  const clearFilters = () => {
-    setFilters(defaultFilters);
+  const clearFilters = useCallback(() => {
+    setFilters(DEFAULT_FILTERS);
     setPage(1);
-  };
+  }, []);
 
   const params = {
-    tab: activeTab === "All Anime" ? "all" : "all", // only 'all' is supported
     search: search || undefined,
     genre: filters.genre === "Any" ? undefined : filters.genre,
     type: filters.type === "Any" ? undefined : filters.type,
     status: filters.status === "Any" ? undefined : filters.status,
     season: filters.season === "Any" ? undefined : filters.season,
-    order: orderValueMap[filters.order] ?? "highest_rated",
+    order: ORDER_VALUE_MAP[filters.order] ?? "highest_rated",
     page,
     limit: LIMIT,
   };
@@ -71,7 +59,6 @@ function AnimeListPage() {
   } = useQuery({
     queryKey: ["anime-list", params],
     queryFn: () => getAnimeList(params),
-    placeholderData: keepPreviousData,
   });
 
   return (
@@ -82,25 +69,32 @@ function AnimeListPage() {
         py={{ base: "7", md: "10" }}
       >
         <Stack gap={{ base: "7", md: "8" }}>
-          <Flex
-            align={{ base: "stretch", md: "end" }}
-            justify="space-between"
-            direction={{ base: "column", md: "row" }}
-            gap="6"
+          <Stack
+            position="sticky"
+            top="75"
+            zIndex="10"
+            bg="bg.canvas"
+            gap={{ base: "7", md: "8" }}
+            pb="2"
           >
-            <AnimeListHeader />
+            <Flex
+              align={{ base: "stretch", md: "end" }}
+              justify="space-between"
+              direction={{ base: "column", md: "row" }}
+              gap="6"
+            >
+              <AnimeListHeader />
 
-            <AnimeListSearchInput onSearchChange={handleSearchChange} />
-          </Flex>
+              <AnimeListSearchInput onSearchChange={handleSearchChange} />
+            </Flex>
 
-          <AnimeListTabs activeTab={activeTab} onTabChange={handleTabChange} />
-
-          <AnimeFilters
-            filters={filters}
-            onFilterChange={updateFilter}
-            onRemoveFilter={removeFilter}
-            onClearFilters={clearFilters}
-          />
+            <AnimeListFilters
+              filters={filters}
+              onFilterChange={updateFilter}
+              onRemoveFilter={removeFilter}
+              onClearFilters={clearFilters}
+            />
+          </Stack>
 
           {isError ? (
             <Center py="20">
@@ -110,17 +104,20 @@ function AnimeListPage() {
               </Text>
             </Center>
           ) : isPending ? (
-            <Center py="20">
-              <Spinner size="xl" color="accent.primary" />
-            </Center>
+            <>
+              <AnimeListDatasSkeleton />
+
+              <AnimeListPaginationSkeleton />
+            </>
           ) : animeData?.items?.length === 0 ? (
             <Center py="20">
               <Text color="fg.muted">No anime found.</Text>
             </Center>
           ) : (
             <>
-              <AnimeGrid anime={animeData?.items ?? []} />
-              <AnimePagination
+              <AnimeListDatas anime={animeData?.items ?? []} />
+
+              <AnimeListPagination
                 pagination={animeData?.pagination}
                 onPageChange={setPage}
               />
