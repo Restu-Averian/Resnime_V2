@@ -6,7 +6,7 @@ import HomeHeroBanner from "./components/home-hero-banner";
 import HomePicksSection from "./components/home-picks";
 import HomeSkeleton from "./components/HomeSkeleton";
 import { finderPromo } from "./data/home.data";
-import { getHomeData } from "./services/home.service";
+import { getHomeData } from "../../services/home.service";
 
 function HomePage() {
   const {

@@ -1,4 +1,4 @@
-import api from "../../../lib/api";
+import api from "../lib/api";
 
 export async function getAnimeList(params) {
   const response = await api.get("/api/anime", {

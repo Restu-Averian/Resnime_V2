@@ -13,7 +13,7 @@ import {
   ORDER_VALUE_MAP,
   LIMIT,
 } from "../../constants/anime-list";
-import { getAnimeList } from "./services/anime-list.service";
+import { getAnimeList } from "../../services/anime-list.service";
 
 function AnimeListPage() {
   const [search, setSearch] = useState("");
