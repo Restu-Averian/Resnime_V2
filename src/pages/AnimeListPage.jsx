@@ -5,9 +5,9 @@ import AnimeListHeader from "../components/anime-list/AnimeListHeader";
 import AnimeListSearchInput from "../components/anime-list/AnimeListSearchInput";
 import AnimeListFilters from "../components/anime-list/anime-list-filters/AnimeListFilters";
 import AnimeListDatas from "../components/anime-list/anime-list-datas";
-import AnimeListDatasSkeleton from "../components/anime-list/anime-list-datas/AnimeListDatasSkeleton";
+import AnimeListDatasSkeleton from "../components/skeletons/anime-list/AnimeListDatasSkeleton";
 import AnimeListPagination from "../components/anime-list/anime-list-pagination/AnimeListPagination";
-import AnimeListPaginationSkeleton from "../components/anime-list/anime-list-pagination/AnimeListPaginationSkeleton";
+import AnimeListPaginationSkeleton from "../components/skeletons/anime-list/AnimeListPaginationSkeleton";
 import {
   DEFAULT_FILTERS,
   ORDER_VALUE_MAP,

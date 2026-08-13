@@ -1,6 +1,6 @@
 import { Box, Flex, HStack, SimpleGrid, Skeleton, Stack, useBreakpointValue } from "@chakra-ui/react";
 import { Sparkles, Star } from "lucide-react";
-import HomeSectionHeader from "../HomeSectionHeader";
+import HomeSectionHeader from "../../home/HomeSectionHeader";
 
 function HomePicksSkeleton() {
   const isMobile = useBreakpointValue({ base: true, md: false });

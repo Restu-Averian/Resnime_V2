@@ -1,6 +1,6 @@
 import { Box, Flex, Skeleton, Stack } from "@chakra-ui/react";
 import { ScanSearch } from "lucide-react";
-import HomeSectionHeader from "../HomeSectionHeader";
+import HomeSectionHeader from "../../home/HomeSectionHeader";
 
 function HomeFinderAnimeSkeleton() {
   return (

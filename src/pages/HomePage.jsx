@@ -4,7 +4,7 @@ import HomeExploreGenre from "../components/home/home-explore-genre";
 import HomeFinderAnime from "../components/home/home-finder-anime/HomeFinderAnime";
 import HomeHeroBanner from "../components/home/home-hero-banner";
 import HomePicksSection from "../components/home/home-picks";
-import HomeSkeleton from "../components/home/HomeSkeleton";
+import HomeSkeleton from "../components/skeletons/home";
 import { FINDER_PROMO } from "../constants/home";
 import { getHomeData } from "../services/home.service";
 

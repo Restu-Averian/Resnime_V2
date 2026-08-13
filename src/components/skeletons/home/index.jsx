@@ -1,8 +1,8 @@
 import { Grid } from "@chakra-ui/react";
-import HomeHeroBannerSkeleton from "./home-hero-banner/HomeHeroBannerSkeleton";
-import HomePicksSkeleton from "./home-picks/HomePicksSkeleton";
-import HomeFinderAnimeSkeleton from "./home-finder-anime/HomeFinderAnimeSkeleton";
-import HomeExploreGenreSkeleton from "./home-explore-genre/HomeExploreGenreSkeleton";
+import HomeHeroBannerSkeleton from "./HomeHeroBannerSkeleton";
+import HomePicksSkeleton from "./HomePicksSkeleton";
+import HomeFinderAnimeSkeleton from "./HomeFinderAnimeSkeleton";
+import HomeExploreGenreSkeleton from "./HomeExploreGenreSkeleton";
 
 function HomeSkeleton() {
   return (

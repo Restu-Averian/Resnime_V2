@@ -1,6 +1,6 @@
 import { Flex, Skeleton, Stack } from "@chakra-ui/react";
 import { Feather } from "lucide-react";
-import HomeSectionHeader from "../HomeSectionHeader";
+import HomeSectionHeader from "../../home/HomeSectionHeader";
 
 function HomeExploreGenreSkeleton() {
   return (
