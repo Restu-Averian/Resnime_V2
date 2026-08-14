@@ -4,7 +4,6 @@ import { ANIME_STREAMING_EPISODES_LIMIT } from "../../../constants/anime-streami
 import AnimeStreamingEpisodesItem from "./AnimeStreamingEpisodesItem";
 
 function AnimeStreamingEpisodes({
-  malId,
   episodes,
   currentEpisodeNumber,
   pagination,
@@ -76,7 +75,6 @@ function AnimeStreamingEpisodes({
           {episodes.map((episode) => (
             <AnimeStreamingEpisodesItem
               key={episode.episode_number}
-              malId={malId}
               episode={episode}
               isActive={Number(episode.episode_number) === currentEpisodeNumber}
             />

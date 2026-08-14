@@ -1,17 +1,9 @@
 import { Box, Image, Stack, Text } from "@chakra-ui/react";
-import { Link as RouterLink } from "react-router-dom";
-import { ANIME_STREAMING_DATE_FORMATTER } from "../../../constants/anime-streaming";
+import { Link as RouterLink, useParams } from "react-router-dom";
+import { formatDate as formatEpisodeDate } from "../../../lib/formatDate";
 
-const formatEpisodeDate = (value) => {
-  if (!value) return "—";
-
-  const date = new Date(value);
-  return Number.isNaN(date.getTime())
-    ? "—"
-    : ANIME_STREAMING_DATE_FORMATTER.format(date);
-};
-
-function AnimeStreamingEpisodesItem({ malId, episode, isActive }) {
+function AnimeStreamingEpisodesItem({ episode, isActive }) {
+  const { mal_id: malId } = useParams();
   const episodeNumber = Number(episode.episode_number);
 
   return (

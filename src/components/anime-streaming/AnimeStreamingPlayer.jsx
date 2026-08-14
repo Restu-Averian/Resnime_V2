@@ -1,9 +1,15 @@
-import { Button, Center, Stack, Text } from "@chakra-ui/react";
-import { ExternalLink } from "lucide-react";
+import { Center, Text } from "@chakra-ui/react";
 import { useEffect, useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
 
-function AnimeStreamingPlayer({ selectedEmbedUrl, poster }) {
+function AnimeStreamingPlayer({
+  selectedEmbedUrl,
+  poster,
+  episodeNumber,
+}) {
+  const { mal_id: malId } = useParams();
   const [hasPlaybackError, setHasPlaybackError] = useState(false);
+
   const isDirectVideoUrl = useMemo(() => {
     if (!selectedEmbedUrl) return false;
 
@@ -34,14 +40,13 @@ function AnimeStreamingPlayer({ selectedEmbedUrl, poster }) {
           No streaming server is available for this episode.
         </Text>
       ) : hasPlaybackError ? (
-        <Stack align="center" gap="4" px="4" textAlign="center">
-          <Text color="fg.muted">
-            This streaming server blocked playback in the browser.
-          </Text>
-          <Button as="a" href={selectedEmbedUrl} target="_blank" rel="noreferrer" variant="outline">
-            Open server <ExternalLink size={16} />
-          </Button>
-        </Stack>
+        <iframe
+          src={`https://megaplay.buzz/stream/mal/${malId}/${episodeNumber}/sub`}
+          width="100%"
+          height="100%"
+          allowFullScreen
+          title="Anime Player Fallback"
+        />
       ) : isDirectVideoUrl ? (
         <video
           key={selectedEmbedUrl}

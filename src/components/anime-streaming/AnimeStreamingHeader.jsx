@@ -1,8 +1,9 @@
 import { HStack, Stack, Text } from "@chakra-ui/react";
 import { ArrowLeft } from "lucide-react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useParams } from "react-router-dom";
 
-function AnimeStreamingHeader({ malId, episode }) {
+function AnimeStreamingHeader({ episode }) {
+  const { mal_id: malId } = useParams();
   return (
     <Stack gap="2">
       <HStack

@@ -1,18 +1,12 @@
-import {
-  Box,
-  Button,
-  Center,
-  Container,
-  Separator,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Container, Separator, Stack } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { Link as RouterLink, useParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
 import AnimeStreamingEpisodeNavigation from "../components/anime-streaming/AnimeStreamingEpisodeNavigation";
 import AnimeStreamingEpisodes from "../components/anime-streaming/anime-streaming-episodes";
+import AnimeStreamingError from "../components/anime-streaming/AnimeStreamingError";
 import AnimeStreamingHeader from "../components/anime-streaming/AnimeStreamingHeader";
+import AnimeStreamingNotFound from "../components/anime-streaming/AnimeStreamingNotFound";
 import AnimeStreamingPlayer from "../components/anime-streaming/AnimeStreamingPlayer";
 import AnimeStreamingServerSelector from "../components/anime-streaming/AnimeStreamingServerSelector";
 import AnimeStreamingSkeleton from "../components/skeletons/anime-streaming/AnimeStreamingSkeleton";
@@ -22,22 +16,37 @@ import { getAnimeStreamingEpisode } from "../services/anime-streaming";
 
 function AnimeStreamingPage() {
   const { mal_id: malId, episode_number: episodeNumberParam } = useParams();
-  const currentEpisodeNumber = Number(episodeNumberParam);
-  const isValidMalId = /^\d+$/.test(malId ?? "") && Number(malId) > 0;
-  const isValidEpisodeNumber =
-    /^\d+$/.test(episodeNumberParam ?? "") &&
-    Number.isSafeInteger(currentEpisodeNumber) &&
-    currentEpisodeNumber > 0;
-  const initialPage = Math.ceil(
-    (currentEpisodeNumber || 1) / ANIME_STREAMING_EPISODES_LIMIT,
-  );
-  const [page, setPage] = useState(initialPage);
-  const [selectedServerIndex, setSelectedServerIndex] = useState(0);
 
-  useEffect(() => {
-    setPage(initialPage);
-    setSelectedServerIndex(0);
-  }, [initialPage]);
+  const {
+    currentEpisodeNumber,
+    isValidMalId,
+    isValidEpisodeNumber,
+    initialPage,
+  } = useMemo(() => {
+    const currentEpisodeNumber = Number(episodeNumberParam);
+
+    const isValidMalId = /^\d+$/.test(malId ?? "") && Number(malId) > 0;
+
+    const isValidEpisodeNumber =
+      /^\d+$/.test(episodeNumberParam ?? "") &&
+      Number.isSafeInteger(currentEpisodeNumber) &&
+      currentEpisodeNumber > 0;
+
+    const initialPage = Math.ceil(
+      (currentEpisodeNumber || 1) / ANIME_STREAMING_EPISODES_LIMIT,
+    );
+
+    return {
+      currentEpisodeNumber,
+      isValidMalId,
+      isValidEpisodeNumber,
+      initialPage,
+    };
+  }, [malId, episodeNumberParam]);
+
+  const [page, setPage] = useState(initialPage);
+
+  const [selectedServerIndex, setSelectedServerIndex] = useState(0);
 
   const episodeQuery = useQuery({
     queryKey: ["anime-streaming", malId, episodeNumberParam],
@@ -61,22 +70,40 @@ function AnimeStreamingPage() {
     enabled: isValidMalId && isValidEpisodeNumber,
   });
 
+  useEffect(() => {
+    setPage(initialPage);
+    setSelectedServerIndex(0);
+  }, [initialPage]);
+
+  const { episode, links, episodes, currentEpisode, selectedEmbedUrl } =
+    useMemo(() => {
+      const episode = episodeQuery.data;
+
+      const links = episode?.links ?? [];
+
+      const episodes = episode?.items ?? [];
+
+      const currentEpisode = episodes.find(
+        (item) => Number(item.episode_number) === currentEpisodeNumber,
+      );
+      const selectedEmbedUrl = links[selectedServerIndex]?.embed_url;
+
+      return {
+        episode,
+        links,
+        episodes,
+        currentEpisode,
+        selectedEmbedUrl,
+      };
+    }, [
+      episodeQuery.data,
+      episodesQuery.data,
+      currentEpisodeNumber,
+      selectedServerIndex,
+    ]);
+
   if (!isValidMalId || !isValidEpisodeNumber) {
-    return (
-      <Center minH="70vh" bg="bg.canvas" px="4">
-        <Stack layerStyle="panel" p="7" gap="5" align="center">
-          <Text as="h1" textStyle="sectionTitle" color="fg.heading">
-            Episode not found
-          </Text>
-          <Text color="fg.muted">
-            MAL ID and episode number must be positive numbers.
-          </Text>
-          <Button as={RouterLink} to="/anime">
-            Back to Anime List
-          </Button>
-        </Stack>
-      </Center>
-    );
+    return <AnimeStreamingNotFound />;
   }
 
   if (episodeQuery.isPending) {
@@ -84,35 +111,8 @@ function AnimeStreamingPage() {
   }
 
   if (episodeQuery.isError) {
-    const errorCode = episodeQuery.error?.response?.data?.error?.code;
-    const backPath =
-      errorCode === "ANIME_NOT_FOUND" ? "/anime" : `/anime/${malId}`;
-
-    return (
-      <Center minH="70vh" bg="bg.canvas" px="4">
-        <Stack layerStyle="panel" p="7" gap="5" align="center" maxW="480px">
-          <Text as="h1" textStyle="sectionTitle" color="fg.heading">
-            Failed to load episode
-          </Text>
-          <Text color="fg.muted" textAlign="center">
-            {episodeQuery.error?.response?.data?.error?.message ||
-              "Failed to load streaming episode."}
-          </Text>
-          <Button as={RouterLink} to={backPath}>
-            Go back
-          </Button>
-        </Stack>
-      </Center>
-    );
+    return <AnimeStreamingError error={episodeQuery.error} />;
   }
-
-  const episode = episodeQuery.data;
-  const links = episode.links ?? [];
-  const episodes = episodesQuery.data?.items ?? [];
-  const currentEpisode = episodes.find(
-    (item) => Number(item.episode_number) === currentEpisodeNumber,
-  );
-  const selectedEmbedUrl = links[selectedServerIndex]?.embed_url;
 
   return (
     <Box minH="100vh" bg="bg.canvas" pb={{ base: "28", md: "12" }}>
@@ -122,27 +122,31 @@ function AnimeStreamingPage() {
         py={{ base: "6", md: "7" }}
       >
         <Stack gap={{ base: "5", md: "6" }}>
-          <AnimeStreamingHeader malId={malId} episode={episode} />
+          <AnimeStreamingHeader episode={episode} />
 
           <AnimeStreamingPlayer
             selectedEmbedUrl={selectedEmbedUrl}
             poster={currentEpisode?.thumbnail_url}
+            episodeNumber={currentEpisodeNumber}
           />
 
-          <AnimeStreamingEpisodeNavigation malId={malId} episode={episode} />
+          <AnimeStreamingEpisodeNavigation episode={episode} />
 
-          <Separator borderColor="border.subtle" />
+          {links.length > 1 && (
+            <>
+              <Separator borderColor="border.subtle" />
 
-          <AnimeStreamingServerSelector
-            links={links}
-            selectedIndex={selectedServerIndex}
-            onSelect={setSelectedServerIndex}
-          />
+              <AnimeStreamingServerSelector
+                links={links}
+                selectedIndex={selectedServerIndex}
+                onSelect={setSelectedServerIndex}
+              />
+            </>
+          )}
 
           <Separator borderColor="border.subtle" />
 
           <AnimeStreamingEpisodes
-            malId={malId}
             episodes={episodes}
             currentEpisodeNumber={currentEpisodeNumber}
             pagination={episodesQuery.data?.pagination}

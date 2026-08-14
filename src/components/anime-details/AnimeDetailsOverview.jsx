@@ -1,20 +1,12 @@
 import { Box, Flex, Stack, Text } from "@chakra-ui/react";
 import AnimeDetailsHeaderSection from "./AnimeDetailsHeaderSection";
 import {
-  ANIME_DETAILS_DATE_FORMATTER,
   ANIME_DETAILS_STATUS_LABELS,
   ANIME_DETAILS_TYPE_LABELS,
 } from "../../constants/anime-details";
+import { formatDate } from "../../lib/formatDate";
 
 function AnimeDetailsOverview({ anime }) {
-  const formatDate = (value) => {
-    if (!value) return "—";
-
-    const date = new Date(value);
-    return Number.isNaN(date.getTime())
-      ? "—"
-      : ANIME_DETAILS_DATE_FORMATTER.format(date);
-  };
 
   const formatAired = (from, to) => {
     const fromLabel = formatDate(from);

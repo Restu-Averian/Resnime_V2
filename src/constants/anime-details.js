@@ -22,8 +22,3 @@ export const ANIME_DETAILS_ROLE_LABELS = {
   Supporting: "Supporting",
 };
 
-export const ANIME_DETAILS_DATE_FORMATTER = new Intl.DateTimeFormat("en", {
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-});
